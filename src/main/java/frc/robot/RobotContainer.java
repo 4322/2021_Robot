@@ -34,9 +34,9 @@ import frc.robot.commands.Hood_Manual;
 import frc.robot.commands.Hopper_Eject;
 import frc.robot.commands.Hopper_Intake;
 import frc.robot.commands.Hopper_Stop;
-import frc.robot.commands.Retract_Climber;
+// import frc.robot.commands.Retract_Climber;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Climber;
+// import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -64,7 +64,7 @@ public class RobotContainer {
   public final Kicker kicker = new Kicker();
   public final Collector collector = new Collector();
   public final Arm arm = new Arm();
-  public final Climber climber = new Climber();
+  // public final Climber climber = new Climber();
   public final Hopper hopper = new Hopper();
   
 
@@ -83,8 +83,8 @@ public class RobotContainer {
   public final Collector_Eject collectorEject = new Collector_Eject(collector);
   public final Collector_Stop collectorStop = new Collector_Stop(collector);
 
-  public final Extend_Climber extendClimber = new Extend_Climber(climber);
-  public final Retract_Climber retractClimber = new Retract_Climber(climber);
+  // public final Extend_Climber extendClimber = new Extend_Climber(climber);
+  // public final Retract_Climber retractClimber = new Retract_Climber(climber);
   
   public final Arm_Manual armManual = new Arm_Manual(arm);
 
@@ -133,8 +133,8 @@ public class RobotContainer {
     pilot.lt.whileHeld(collectorCollect, true);
     pilot.rt.whileHeld(collectorEject, true);
 
-    coPilot.y.whenPressed(extendClimber);
-    coPilot.a.whenPressed(retractClimber);
+    // coPilot.y.whenPressed(extendClimber);
+    // coPilot.a.whenPressed(retractClimber);
 
     
 

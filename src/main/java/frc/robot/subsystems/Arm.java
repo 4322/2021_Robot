@@ -34,12 +34,12 @@ public class Arm extends SubsystemBase {
       leftArm = new CANSparkMax(Constants.ArmConstants.leftMotor_ID, MotorType.kBrushless);
       rightArm = new CANSparkMax(Constants.ArmConstants.rightMotor_ID, MotorType.kBrushless);
 
-      leftArm_encoder = new CANEncoder(leftArm);
-      rightArm_encoder = new CANEncoder(rightArm);
+      leftArm_encoder = leftArm.getEncoder();
+      rightArm_encoder = rightArm.getEncoder();
 
       // ArmPidController = rightArm.getPIDController(); 
 
-      rightArm.follow(leftArm, true);
+      // rightArm.follow(leftArm, true);
 
       // ArmPidController.setP(Constants.ArmConstants.PID_Values.kP);
       // ArmPidController.setI(Constants.ArmConstants.PID_Values.kI);
@@ -79,6 +79,7 @@ public class Arm extends SubsystemBase {
   {
     SmartDashboard.putNumber("Arm power", power);
     leftArm.set(power);
+    rightArm.set(power);
   }
 
   public void reachStartingConfiguration()

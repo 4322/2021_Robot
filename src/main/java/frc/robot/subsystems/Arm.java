@@ -34,8 +34,8 @@ public class Arm extends SubsystemBase {
       leftArm = new CANSparkMax(Constants.ArmConstants.leftMotor_ID, MotorType.kBrushless);
       rightArm = new CANSparkMax(Constants.ArmConstants.rightMotor_ID, MotorType.kBrushless);
 
-      // leftArm_encoder = new CANEncoder(leftArm);
-      // rightArm_encoder = new CANEncoder(rightArm);
+      leftArm_encoder = new CANEncoder(leftArm);
+      rightArm_encoder = new CANEncoder(rightArm);
 
       // ArmPidController = rightArm.getPIDController(); 
 
@@ -70,25 +70,25 @@ public class Arm extends SubsystemBase {
     SmartDashboard.putNumber("Arm Encoder Velocity", getArmEncoderVelocity());
   }
 
-  // public void reachCollectPosition()
-  // {
-  //   ArmPidController.setReference(Constants.ArmConstants.collectSetpoint, ControlType.kSmartMotion);
-  // }
+  public void reachCollectPosition()
+  {
+    // ArmPidController.setReference(Constants.ArmConstants.collectSetpoint, ControlType.kSmartMotion);
+  }
 
   public void set(double power)
   {
     leftArm.set(power);
   }
 
-  // public void reachStartingConfiguration()
-  // {
-  //   ArmPidController.setReference(Constants.ArmConstants.startingConfigSetpoint, ControlType.kSmartMotion);
-  // }
+  public void reachStartingConfiguration()
+  {
+    // ArmPidController.setReference(Constants.ArmConstants.startingConfigSetpoint, ControlType.kSmartMotion);
+  }
 
-  // public void reachClimbPosition()
-  // {
-  //   ArmPidController.setReference(Constants.ArmConstants.climbSetpoint, ControlType.kSmartMotion);
-  // }
+  public void reachClimbPosition()
+  {
+    // ArmPidController.setReference(Constants.ArmConstants.climbSetpoint, ControlType.kSmartMotion);
+  }
 
 
   @Override

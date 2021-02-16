@@ -77,6 +77,7 @@ public class Arm extends SubsystemBase {
 
   public void set(double power)
   {
+    SmartDashboard.putNumber("Arm power", power);
     leftArm.set(power);
   }
 

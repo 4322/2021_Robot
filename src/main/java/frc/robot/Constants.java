@@ -31,11 +31,17 @@ public final class Constants {
 
         public static final int SparkMax_CurrentLimit = 60;
 
-        public static final double kTrackwidthMeters = .68;
+        // CHARACTERIZED DRIVE VALUES
+        public static final double kTrackwidthMeters = 0.6771275509857637;
+        // 2020: 0.68
 
-        public static final double kMaxSpeedMetersPerSecond = 2.438;
+        public static final double kMaxSpeedMetersPerSecond = 4.572/6; // divide by 6 to slow down
+        // 2020: 2.438
+        // 2021: 4.572
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        // 2020: 3
 
+        // RAMESETE STANDARD VALUES FROM WPILIB DOCS
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
 
@@ -50,12 +56,17 @@ public final class Constants {
             public static final double kP = 0;
             public static final double kI = 0;
             public static final double kD = 0;
-            public static final double ksVolts = 0.361;
-            public static final double kvVoltSecondsPerMeter = 3.73;
-            public static final double kaVoltSecondsSquaredPerMeter = 0.55;
+            public static final double ksVolts = 0.153;
+            // 2020: 0.361
+            public static final double kvVoltSecondsPerMeter = 2.7;
+            // 2020: 3.73
+            public static final double kaVoltSecondsSquaredPerMeter = 0.478;
+            // 2020: 0.55
 
-            public static final double kPDriveVel = 16.9;
- 
+            public static final double kPDriveVel = 0.00742;
+            // 2020: 16.9
+            // 2021.1: 16.1
+            // 2021.1: 0.00742
 
         }
     }

@@ -37,6 +37,8 @@ public class Arm extends SubsystemBase {
       leftArm_encoder = leftArm.getEncoder();
       rightArm_encoder = rightArm.getEncoder();
 
+      rightArm.setInverted(true);
+
       // ArmPidController = rightArm.getPIDController(); 
 
       // rightArm.follow(leftArm, true);

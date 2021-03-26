@@ -114,7 +114,7 @@ public class Drivebase extends SubsystemBase {
   public void periodic() {
     
     // Odometry Calculates the Robot's Position On The Field so It Will Constantly Update by Reading Encoder and Gyro Values
-    odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftEncoders_Position(), getRightEncoders_Position());
+    odometry.update(navX.getRotation2d(), getLeftEncoders_Position(), getRightEncoders_Position());
 
   }
 
@@ -141,7 +141,8 @@ public class Drivebase extends SubsystemBase {
 
   // Gets Heading Angle from the Gyro (NavX)
   public double getHeading() {
-    return Math.IEEEremainder(navX.getAngle(), 360);
+    return navX.getRotation2d().getDegrees();
+    // return Math.IEEEremainder(navX.getAngle(), 360);
   }
 
   // Gets Speed at Which the Robot is Turning

@@ -30,6 +30,7 @@ import frc.robot.commands.Disable_Shooter;
 import frc.robot.commands.Drive_Manual;
 import frc.robot.commands.Enable_Kicker;
 import frc.robot.commands.Enable_Shooter;
+import frc.robot.commands.Enable_ShooterPower;
 import frc.robot.commands.Extend_Climber;
 import frc.robot.commands.Hood_Manual;
 import frc.robot.commands.Hopper_Eject;
@@ -73,6 +74,7 @@ public class RobotContainer {
 
   public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
+  public final Enable_ShooterPower enableShooterPower = new Enable_ShooterPower(shooter);
 
   public final Enable_Kicker enableKicker = new Enable_Kicker(kicker);
   public final Disable_Kicker disableKicker = new Disable_Kicker(kicker);
@@ -119,7 +121,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    coPilot.lb.whenPressed(enableShooter);
+    // coPilot.lb.whenPressed(enableShooter);
+    coPilot.lb.whenActive(enableShooterPower);
     coPilot.rb.whenPressed(disableShooter);
 
     coPilot.x.whenPressed(enableKicker);

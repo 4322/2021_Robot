@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 
 public class Shooter extends PIDSubsystem {
   /**
@@ -36,8 +38,9 @@ public class Shooter extends PIDSubsystem {
   private CANEncoder flywheelOne_Encoder;
   private CANEncoder flywheelTwo_Encoder;
   
-
-
+  private double rpm = Constants.Shooter_Constants.maxRPM;
+  private double power = 0.7;
+  private boolean shooterOn = false;
 
 
   public Shooter() {
@@ -82,6 +85,17 @@ public class Shooter extends PIDSubsystem {
     super.periodic();
 
     displayEncoderValues();
+    // SmartDashboard.putNumber("Shoter RPM", rpm);
+    // if (RobotContainer.coPilot.dPad.up.get() && rpm < Constants.Shooter_Constants.maxRPM) rpm = rpm + 200;
+    // else if (RobotContainer.coPilot.dPad.down.get() && rpm > 100) rpm = rpm - 200;
+    SmartDashboard.putNumber("Shooter Power", power);
+    if (RobotContainer.coPilot.dPad.up.get() && power < 1) {
+      power = power + 0.05;
+    }
+    else if (RobotContainer.coPilot.dPad.down.get() && power > 0) {
+      power = power - 0.05;
+    }
+    if (shooterOn) flywheelOne.set(power);
   }
 
   @Override
@@ -95,21 +109,31 @@ public class Shooter extends PIDSubsystem {
     return 0;
   }
 
+  public double getRPM() {
+    return rpm;
+  }
+
+  public void setPower(double newRPM) {
+    rpm = newRPM;
+  }
+  
   public void stopShooter()
   {
+    shooterOn = false;
     flywheelOne.set(0);
   }
 
 
   public void spinShooter()
   {
-    flywheelOne.set(.7);
+    shooterOn = true;
+    flywheelOne.set(power);
   }
 
 
   public void reachSetpoint()
   {
-    pidController.setReference(Constants.Shooter_Constants.maxRPM, ControlType.kVelocity);
+    pidController.setReference(rpm, ControlType.kVelocity);
   }
 
 

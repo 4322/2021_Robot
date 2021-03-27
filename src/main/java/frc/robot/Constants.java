@@ -110,11 +110,14 @@ public final class Constants {
 
         public static class PID_Values  {
 
-            public static final double kP = .4;
+            public static final double kP = .01;
+            // 2020: 0.4
             public static final double kI = 0;
             public static final double kD = 0;
+            // 2020: 0
             public static final double kIz = 0;
-            public static final double kFF = 0.01;
+            public static final double kFF = 0;
+            // 2020: 0.01;
             public static final int kMax = 1;
             public static final int kMin = -1;
 

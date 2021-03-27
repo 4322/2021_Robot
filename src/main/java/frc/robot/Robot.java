@@ -15,6 +15,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Limelight;
 
 
@@ -26,6 +27,7 @@ import frc.robot.subsystems.Limelight;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  // private Drivebase m_drivebase;
 
   private RobotContainer m_robotContainer;
   // private Compressor compressor = new Compressor(0);
@@ -57,10 +59,10 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-
-    
-
-    
+    // SmartDashboard.putNumber("l_encoder_rate", m_drivebase.getLeftEncoders_Velocity());
+    // SmartDashboard.putNumber("l_encoder_pos", m_drivebase.getLeftEncoders_Velocity());
+    // SmartDashboard.putNumber("r_encoder_rate", m_drivebase.getRightEncoders_Velocity());
+    // SmartDashboard.putNumber("r_encoder_pos", m_drivebase.getRightEncoders_Velocity());
     
   }
 

@@ -7,12 +7,15 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -20,6 +23,9 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -60,6 +66,14 @@ public class Drivebase extends SubsystemBase {
 
   // Drive Object to Enable Various Modes
   private DifferentialDrive drive;
+
+  // SHUFFLEBOARD
+  private ShuffleboardTab tab = Shuffleboard.getTab("Drive");
+  private NetworkTableEntry maxSpeed =
+    tab.add("Max Speed", 1)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("min", 0, "max", 1))
+    .getEntry();
 
   /**
    * Creates a new Drivebase.
@@ -116,6 +130,22 @@ public class Drivebase extends SubsystemBase {
     // Odometry Calculates the Robot's Position On The Field so It Will Constantly Update by Reading Encoder and Gyro Values
     odometry.update(navX.getRotation2d(), getLeftEncoders_Position(), getRightEncoders_Position());
 
+  }
+
+  public void changePower(String direction) {
+    double max = maxSpeed.getDouble(1.0);
+
+    switch(direction) {
+      case "up": {
+        if (max < 1.0) maxSpeed.setDouble(max + 0.1);
+        break;
+      }
+      case "down": {
+        if (max > 0) maxSpeed.setDouble(max - 0.1);
+        break;
+      }
+      default: break;
+    }
   }
 
   /****************************************************
@@ -204,17 +234,20 @@ public class Drivebase extends SubsystemBase {
    ****************************************************/
   public void curveDrive(double power, double turn, boolean quickTurn)
   {
-    drive.curvatureDrive(power, turn, quickTurn);
+    double max = maxSpeed.getDouble(1.0);
+    drive.curvatureDrive(power * max, turn * max, quickTurn);
   }
 
   public void arcadeDrive(double power, double turn, boolean squaredInputs)
   {
-    drive.arcadeDrive(power, turn, squaredInputs);
+    double max = maxSpeed.getDouble(1.0);
+    drive.arcadeDrive(power * max, turn * max, squaredInputs);
   }
 
   public void tankDrive(double left, double right)
   {
-    drive.tankDrive(left, right);
+    double max = maxSpeed.getDouble(1.0);
+    drive.tankDrive(left * max, right * max);
   }
 
 

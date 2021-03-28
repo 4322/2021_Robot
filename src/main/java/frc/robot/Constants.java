@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 
 /** 
@@ -146,6 +149,18 @@ public final class Constants {
     }
     public static class Limelight_Constants
     {
+        // Network Tables for Vision (from Robojacks 2019 https://github.com/Robojacks/FRC-2019-Rampage/blob/master/src/main/java/frc/robot/Constants.java)
+        public static final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+            
+        public static final NetworkTableEntry tx = table.getEntry("tx");
+        public static final NetworkTableEntry ty = table.getEntry("ty");
+        public static final NetworkTableEntry ta = table.getEntry("ta");
+        public static final NetworkTableEntry tv = table.getEntry("tv");
+
+        public static final NetworkTableEntry ledMode = table.getEntry("ledMode");
+        public static final NetworkTableEntry camMode = table.getEntry("camMode");
+        public static final NetworkTableEntry pipeline = table.getEntry("pipeline");
+
         public static final double limelightAngle = 30; //NEED TO CALCULATE IN DEGREES
         public static final double targetHeight = 98; //NEED TO MEASURE IN INCHES
         public static final double limelightHeight = 22.5; //NEED TO MEASURE IN INCHES

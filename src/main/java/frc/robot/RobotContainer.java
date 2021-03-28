@@ -112,7 +112,6 @@ public class RobotContainer {
     collector.setDefaultCommand(collectorStop);
     arm.setDefaultCommand(armManual);
     hopper.setDefaultCommand(hopperStop);
-
   }
 
   /**
@@ -129,6 +128,8 @@ public class RobotContainer {
     new JoystickButton(coPilot, XboxController.Button.kBumperLeft.value).whenPressed(enableShooterPower);
     new JoystickButton(coPilot, XboxController.Button.kBumperRight.value).whenPressed(disableShooter);
     // coPilot.lb.whenPressed(enableShooter);
+    new POVButton(coPilot, 0).whenPressed(() -> shooter.changePower("up")); // 0 deg is UP
+    new POVButton(coPilot, 180).whenPressed(() -> shooter.changePower("down")); // 0 deg is UP
 
     new JoystickButton(coPilot, XboxController.Button.kX.value).whenPressed(enableKicker);
     new JoystickButton(coPilot, XboxController.Button.kB.value).whenPressed(disableKicker);

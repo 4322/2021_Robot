@@ -7,13 +7,13 @@
 
 package frc.robot.subsystems;
 
-// import com.fasterxml.jackson.annotation.JacksonInject.Value;
 import com.revrobotics.CANEncoder;
-// import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-// import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -29,6 +29,9 @@ public class Arm extends SubsystemBase {
   private CANEncoder rightArm_encoder;
 
   // private CANPIDController ArmPidController;
+
+  // SHUFFLEBOARD
+  private ShuffleboardTab tab = Shuffleboard.getTab("Arm");
   
   public Arm() {
       leftArm = new CANSparkMax(Constants.ArmConstants.leftMotor_ID, MotorType.kBrushless);
@@ -57,6 +60,10 @@ public class Arm extends SubsystemBase {
     
       // ArmPidController.setSmartMotionAllowedClosedLoopError(Constants.ArmConstants.PID_Values.allowed_error, smartmotionslot);
   
+      tab.add("Arm Position", getArmEncoderPosition())
+      .withWidget(BuiltInWidgets.kGraph);
+      tab.add("Arm Velocity", getArmEncoderVelocity())
+      .withWidget(BuiltInWidgets.kGraph);
   }
 
   public double getArmEncoderPosition() {
@@ -65,11 +72,6 @@ public class Arm extends SubsystemBase {
 
   public double getArmEncoderVelocity() {
     return (leftArm_encoder.getVelocity() + leftArm_encoder.getVelocity()) /2;
-  }
-
-  public void displayArmEncoderValues() {
-    SmartDashboard.putNumber("Arm Encoder Position", getArmEncoderPosition());
-    SmartDashboard.putNumber("Arm Encoder Velocity", getArmEncoderVelocity());
   }
 
   public void reachCollectPosition()
@@ -98,6 +100,5 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    displayArmEncoderValues();
   }
 }

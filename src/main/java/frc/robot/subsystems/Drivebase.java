@@ -12,7 +12,6 @@ import java.util.Map;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -29,10 +28,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class Drivebase extends SubsystemBase {
 
@@ -59,16 +55,16 @@ public class Drivebase extends SubsystemBase {
   private SpeedControllerGroup leftMotors;
 
   // PID Controller that Controls Turning the Robot Using Values From the Limelight
-  private PIDController limelightPidController;
+  // private PIDController limelightPidController;
 
   // Limelight Object to Access Vision Values
-  private Limelight limelight;
+  // private Limelight limelight;
 
   // Drive Object to Enable Various Modes
   private DifferentialDrive drive;
 
   // SHUFFLEBOARD
-  private ShuffleboardTab tab = Shuffleboard.getTab("Drive");
+  private ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
   private NetworkTableEntry maxSpeed =
     tab.add("Max Speed", 1)
     .withWidget(BuiltInWidgets.kNumberSlider)
@@ -84,8 +80,8 @@ public class Drivebase extends SubsystemBase {
     navX = new AHRS(SPI.Port.kMXP);
 
     // Creates Limlight and Limelight PID Controller
-    limelightPidController = new PIDController(Constants.Limelight_Constants.PID_Values.kP, Constants.Limelight_Constants.PID_Values.kI, Constants.Limelight_Constants.PID_Values.kD);
-    limelight = new Limelight();
+    // limelightPidController = new PIDController(Constants.Limelight_Constants.PID_Values.kP, Constants.Limelight_Constants.PID_Values.kI, Constants.Limelight_Constants.PID_Values.kD);
+    // limelight = new Limelight();
   
     // Creates Drivebase Motors
     rightMaster = new CANSparkMax(Constants.Drivebase_Constants.rightMasterSpark_ID, MotorType.kBrushless);
@@ -201,31 +197,31 @@ public class Drivebase extends SubsystemBase {
   // Automatically Turns the Robot to Face the Vision Target Using a PID Controller
   public void limelightAim_PID()
   {
-    double offset = limelight.getX_Offset();
-    double error = offset * .01;
-    limelightPidController.setTolerance(.02);
-    double motorOutput = limelightPidController.calculate(error, 0);
-    SmartDashboard.putNumber("Turn Output", motorOutput);
-    tankDrive(motorOutput, -motorOutput);
+    // double offset = limelight.getX_Offset();
+    // double error = offset * .01;
+    // limelightPidController.setTolerance(.02);
+    // double motorOutput = limelightPidController.calculate(error, 0);
+    // SmartDashboard.putNumber("Turn Output", motorOutput);
+    // tankDrive(motorOutput, -motorOutput);
   }
 
   // Automatically Turns the Robot to Face the Vision Target Using a Predefined P Constant and Tolerances
   public void limelightAim_Simple()
   {
-    double kP = -0.1;
-    double minCommand = .05;
-    double heading_error = -limelight.getX_Offset();
-    double steering_adjust = 0.0f;
+    // double kP = -0.1;
+    // double minCommand = .05;
+    // double heading_error = -limelight.getX_Offset();
+    // double steering_adjust = 0.0f;
 
-        if (limelight.getX_Offset() > 1.0)
-        {
-                steering_adjust = kP * heading_error - minCommand;
-        }
-        else if (limelight.getX_Offset() < 1.0)
-        {
-                steering_adjust = kP * heading_error + minCommand;
-        }
-    drive.tankDrive(steering_adjust, -steering_adjust);
+    //     if (limelight.getX_Offset() > 1.0)
+    //     {
+    //             steering_adjust = kP * heading_error - minCommand;
+    //     }
+    //     else if (limelight.getX_Offset() < 1.0)
+    //     {
+    //             steering_adjust = kP * heading_error + minCommand;
+    //     }
+    // drive.tankDrive(steering_adjust, -steering_adjust);
   }
 
   

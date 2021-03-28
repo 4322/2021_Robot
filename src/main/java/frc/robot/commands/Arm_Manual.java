@@ -7,7 +7,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Arm;
@@ -34,7 +34,7 @@ public class Arm_Manual extends CommandBase {
   @Override
   public void execute() {
 
-    double power = RobotContainer.coPilot.rightStick.getY();
+    double power = RobotContainer.coPilot.getY(Hand.kRight);
     arm.set(power);
 
   }

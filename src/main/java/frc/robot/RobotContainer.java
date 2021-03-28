@@ -31,7 +31,7 @@ import frc.robot.commands.Drive_Manual;
 import frc.robot.commands.Enable_Kicker;
 import frc.robot.commands.Enable_Shooter;
 import frc.robot.commands.Enable_ShooterPower;
-import frc.robot.commands.Extend_Climber;
+// import frc.robot.commands.Extend_Climber;
 import frc.robot.commands.Hood_Manual;
 import frc.robot.commands.Hopper_Eject;
 import frc.robot.commands.Hopper_Intake;
@@ -47,8 +47,11 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter_Hood;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+// import edu.wpi.first.wpilibj2.command.CommandScheduler;
+// import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -68,6 +71,7 @@ public class RobotContainer {
   // public final Climber climber = new Climber();
   public final Hopper hopper = new Hopper();
   
+  // Define robot commands
   public final Drive_Manual driveManual = new Drive_Manual(drivebase);
 
   public final Hood_Manual hoodManual = new Hood_Manual(shooterHood);
@@ -92,11 +96,9 @@ public class RobotContainer {
   public final Hopper_Eject hopperEject = new Hopper_Eject(hopper);
   public final Hopper_Stop hopperStop = new Hopper_Stop(hopper);
 
-  public static frc.robot.XboxController pilot = new frc.robot.XboxController(0);
-  public static frc.robot.XboxController coPilot = new frc.robot.XboxController(1);
-
-  
-
+  // Define controllers
+  public static XboxController pilot = new XboxController(0);
+  public static XboxController coPilot = new XboxController(1);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -121,25 +123,24 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    // coPilot.lb.whenPressed(enableShooter);
-    coPilot.lb.whenActive(enableShooterPower);
-    coPilot.rb.whenPressed(disableShooter);
-
-    coPilot.x.whenPressed(enableKicker);
-    coPilot.b.whenPressed(disableKicker);
+    new POVButton(pilot, 0).whenPressed(() -> drivebase.changePower("up")); // 0 deg is UP
+    new POVButton(pilot, 180).whenPressed(() -> drivebase.changePower("down")); // 0 deg is UP
     
-    coPilot.lt.whileHeld(hopperEject);
-    coPilot.rt.whileHeld(hopperIntake);
+    new JoystickButton(coPilot, XboxController.Button.kBumperLeft.value).whenPressed(enableShooterPower);
+    new JoystickButton(coPilot, XboxController.Button.kBumperRight.value).whenPressed(disableShooter);
+    // coPilot.lb.whenPressed(enableShooter);
 
-    pilot.lt.whileHeld(collectorCollect, true);
-    pilot.rt.whileHeld(collectorEject, true);
+    new JoystickButton(coPilot, XboxController.Button.kX.value).whenPressed(enableKicker);
+    new JoystickButton(coPilot, XboxController.Button.kB.value).whenPressed(disableKicker);
+    
+    new JoystickButton(coPilot, XboxController.Axis.kLeftTrigger.value).whenHeld(hopperEject);
+    new JoystickButton(coPilot, XboxController.Axis.kRightTrigger.value).whenHeld(hopperIntake);
+
+    new JoystickButton(pilot, XboxController.Axis.kLeftTrigger.value).whenHeld(collectorCollect, true);
+    new JoystickButton(pilot, XboxController.Axis.kRightTrigger.value).whenHeld(collectorEject, true);
 
     // coPilot.y.whenPressed(extendClimber);
     // coPilot.a.whenPressed(retractClimber);
-
-    
-
-    
   }
 
 

@@ -89,10 +89,10 @@ public class Shooter extends PIDSubsystem {
     // if (RobotContainer.coPilot.dPad.up.get() && rpm < Constants.Shooter_Constants.maxRPM) rpm = rpm + 200;
     // else if (RobotContainer.coPilot.dPad.down.get() && rpm > 100) rpm = rpm - 200;
     SmartDashboard.putNumber("Shooter Power", power);
-    if (RobotContainer.coPilot.dPad.up.get() && power < 1) {
+    if (RobotContainer.coPilot.getPOV() == 0 && power < 1) {
       power = power + 0.05;
     }
-    else if (RobotContainer.coPilot.dPad.down.get() && power > 0) {
+    else if (RobotContainer.coPilot.getPOV() == 180 && power > 0) {
       power = power - 0.05;
     }
     if (shooterOn) flywheelOne.set(power);

@@ -7,12 +7,16 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,6 +36,10 @@ public class Arm extends SubsystemBase {
 
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Arm");
+  NetworkTableEntry armPower = tab.add("Arm Power", 0)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", 0, "max", 1))
+      .getEntry();
   
   public Arm() {
       leftArm = new CANSparkMax(Constants.ArmConstants.leftMotor_ID, MotorType.kBrushless);
@@ -59,7 +67,7 @@ public class Arm extends SubsystemBase {
       // ArmPidController.setSmartMotionMaxAccel(Constants.ArmConstants.PID_Values.maxAcceleration, smartmotionslot);
     
       // ArmPidController.setSmartMotionAllowedClosedLoopError(Constants.ArmConstants.PID_Values.allowed_error, smartmotionslot);
-  
+
       tab.add("Arm Position", getArmEncoderPosition())
       .withWidget(BuiltInWidgets.kGraph);
       tab.add("Arm Velocity", getArmEncoderVelocity())
@@ -81,7 +89,7 @@ public class Arm extends SubsystemBase {
 
   public void set(double power)
   {
-    SmartDashboard.putNumber("Arm power", power);
+    armPower.setDouble(power);
     leftArm.set(power);
     rightArm.set(power);
   }

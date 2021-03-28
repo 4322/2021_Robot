@@ -25,7 +25,7 @@ public class Limelight extends SubsystemBase {
   ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
 
   public Limelight() {
-    tab.add("_X Offset", getX_Offset());
+    tab.add("X Offset", getX_Offset());
     tab.add("Y Offset", getY_Offset());
     tab.add("Target Visible", getTarget())
     .withWidget(BuiltInWidgets.kBooleanBox);

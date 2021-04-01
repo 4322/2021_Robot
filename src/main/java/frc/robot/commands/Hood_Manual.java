@@ -7,7 +7,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shooter_Hood;
@@ -36,7 +35,7 @@ public class Hood_Manual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    power = RobotContainer.coPilot.getY(Hand.kLeft) * -1;
+    power = RobotContainer.coPilot.leftStick.getY();
     shooterHood.setHood(power);
   }
 

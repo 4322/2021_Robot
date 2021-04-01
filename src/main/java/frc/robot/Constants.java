@@ -21,8 +21,6 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final double deadband = 0.2;
-    public static final double differentialDriveDeadband = 0.15;
 
     public static class Drivebase_Constants {
 

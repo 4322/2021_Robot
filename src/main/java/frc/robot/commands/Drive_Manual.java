@@ -7,10 +7,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivebase;
 
@@ -20,9 +17,7 @@ public class Drive_Manual extends CommandBase {
    */
 
    private Drivebase drivebase;
-   private double _power;
    private double power;
-   private double _turn;
    private double turn;
    private boolean quickTurnState;
 
@@ -42,13 +37,9 @@ public class Drive_Manual extends CommandBase {
   @Override
   public void execute() {
     
-    // _power = RobotContainer.pilot.getY(Hand.kLeft);
-    // if(_power >= Constants.deadband || _power <= (-1 * Constants.deadband)) power = _power * -1;
-    // _turn = RobotContainer.pilot.getX(Hand.kRight);
-    // if(_turn >= Constants.deadband || _turn <= (-1 * Constants.deadband)) turn = _turn;
-    power = RobotContainer.pilot.getY(Hand.kLeft) * -1;
-    turn = RobotContainer.pilot.getX(Hand.kRight);
-    quickTurnState = RobotContainer.pilot.getBumper(Hand.kLeft);
+    power = RobotContainer.pilot.leftStick.getY();
+    turn = RobotContainer.pilot.rightStick.getX();
+    quickTurnState = RobotContainer.pilot.lb.get();
 
     // SmartDashboard.putNumber("Power Value", power);
     // SmartDashboard.putNumber("Turn Value", turn);

@@ -116,7 +116,6 @@ public class Drivebase extends SubsystemBase {
 
     //Creates New Drive Object to Allow for Tank, Arcade, and Curvature Drive
     drive = new DifferentialDrive(leftMotors, rightMotors);
-    drive.setDeadband(Constants.differentialDriveDeadband);
     
     tab.add("Drivetrain", drive)
     .withWidget(BuiltInWidgets.kDifferentialDrive);

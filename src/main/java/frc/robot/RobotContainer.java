@@ -9,9 +9,6 @@ package frc.robot;
 
 import java.util.List;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -32,14 +29,11 @@ import frc.robot.commands.Drive_Manual;
 import frc.robot.commands.Enable_Kicker;
 import frc.robot.commands.Enable_Shooter;
 import frc.robot.commands.Enable_ShooterPower;
-// import frc.robot.commands.Extend_Climber;
 import frc.robot.commands.Hood_Manual;
 import frc.robot.commands.Hopper_Eject;
 import frc.robot.commands.Hopper_Intake;
 import frc.robot.commands.Hopper_Stop;
-// import frc.robot.commands.Retract_Climber;
 import frc.robot.subsystems.Arm;
-// import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Drivebase;
 import frc.robot.subsystems.Hopper;
@@ -48,11 +42,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter_Hood;
 import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.CommandScheduler;
-// import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -123,28 +113,23 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new POVButton(pilot, 0).whenPressed(() -> drivebase.changePower("up")); // 0 deg is UP
-    new POVButton(pilot, 180).whenPressed(() -> drivebase.changePower("down")); // 0 deg is UP
+    pilot.dPad.up.whenPressed(() -> drivebase.changePower("up"));
+    pilot.dPad.down.whenPressed(() -> drivebase.changePower("down"));
+
+    pilot.lt.whileHeld(collectorEject, true);
+    pilot.rt.whileHeld(collectorCollect, true);
     
-    new JoystickButton(coPilot, XboxController.Button.kBumperLeft.value).whenPressed(enableShooterPower);
-    new JoystickButton(coPilot, XboxController.Button.kBumperRight.value).whenPressed(disableShooter);
-    // coPilot.lb.whenPressed(enableShooter);
-    new POVButton(coPilot, 0).whenPressed(() -> shooter.changePower("up")); // 0 deg is UP
-    new POVButton(coPilot, 180).whenPressed(() -> shooter.changePower("down")); // 0 deg is UP
+    coPilot.dPad.up.whenPressed(() -> shooter.changePower("up"));
+    coPilot.dPad.down.whenPressed(() -> shooter.changePower("down"));
 
-    new JoystickButton(coPilot, XboxController.Button.kX.value).whenPressed(enableKicker);
-    new JoystickButton(coPilot, XboxController.Button.kB.value).whenPressed(disableKicker);
+    coPilot.lb.whenPressed(enableShooter);
+    coPilot.rb.whenPressed(disableShooter);
+
+    coPilot.x.whenPressed(enableKicker);
+    coPilot.b.whenPressed(disableKicker);
     
-    // new JoystickButton(coPilot, XboxController.Axis.kLeftTrigger.value).whenPressed(hopperEject);
-    // new JoystickButton(coPilot, XboxController.Axis.kRightTrigger.value).whenPressed(hopperIntake);
-    new JoystickButton(coPilot, XboxController.Button.kA.value).whileHeld(hopperEject);
-    new JoystickButton(coPilot, XboxController.Button.kY.value).whileHeld(hopperIntake);
-
-    // new JoystickButton(pilot, XboxController.Axis.kLeftTrigger.value).whileActiveOnce(collectorCollect, true);
-    // new JoystickButton(pilot, XboxController.Axis.kRightTrigger.value).whileActiveOnce(collectorEject, true);
-    new JoystickButton(pilot, XboxController.Button.kY.value).whileHeld(collectorCollect, true);
-    new JoystickButton(pilot, XboxController.Button.kA.value).whileHeld(collectorEject, true);
-
+    coPilot.lt.whileHeld(hopperEject);
+    coPilot.rt.whileHeld(hopperIntake);
 
     // coPilot.y.whenPressed(extendClimber);
     // coPilot.a.whenPressed(retractClimber);

@@ -7,9 +7,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Arm;
 
@@ -34,11 +32,8 @@ public class Arm_Manual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    double power = RobotContainer.coPilot.getY(Hand.kRight);
-    if (power >= Constants.deadband || power <= (-1 * Constants.deadband)) arm.set(power);
-    else arm.set(0);
-
+    double power = RobotContainer.coPilot.rightStick.getY();
+    arm.set(power);
   }
 
   // Called once the command ends or is interrupted.

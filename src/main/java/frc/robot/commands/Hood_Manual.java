@@ -36,7 +36,7 @@ public class Hood_Manual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    power = RobotContainer.coPilot.getY(Hand.kLeft);
+    power = RobotContainer.coPilot.getY(Hand.kLeft) * -1;
     shooterHood.setHood(power);
   }
 

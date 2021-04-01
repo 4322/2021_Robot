@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.Constants;
 
 public class Drivebase extends SubsystemBase {
@@ -70,7 +69,16 @@ public class Drivebase extends SubsystemBase {
     .withWidget(BuiltInWidgets.kNumberSlider)
     .withProperties(Map.of("min", 0, "max", 1))
     .getEntry();
-
+  private NetworkTableEntry Shuffle_power =
+    tab.add("Power", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -1, "max", 1))
+    .getEntry();
+  private NetworkTableEntry Shuffle_turn =
+    tab.add("Turn", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -1, "max", 1))
+    .getEntry();
   /**
    * Creates a new Drivebase.
    */
@@ -108,6 +116,10 @@ public class Drivebase extends SubsystemBase {
 
     //Creates New Drive Object to Allow for Tank, Arcade, and Curvature Drive
     drive = new DifferentialDrive(leftMotors, rightMotors);
+    drive.setDeadband(Constants.differentialDriveDeadband);
+    
+    tab.add("Drivetrain", drive)
+    .withWidget(BuiltInWidgets.kDifferentialDrive);
 
     //Creates an Odometry Object That Is Used To Allow the Robot to Follow Trajectories
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
@@ -232,12 +244,16 @@ public class Drivebase extends SubsystemBase {
   {
     double max = maxSpeed.getDouble(1.0);
     drive.curvatureDrive(power * max, turn * max, quickTurn);
+    Shuffle_power.setDouble(power * max);
+    Shuffle_turn.setDouble(turn * max);
   }
 
   public void arcadeDrive(double power, double turn, boolean squaredInputs)
   {
     double max = maxSpeed.getDouble(1.0);
     drive.arcadeDrive(power * max, turn * max, squaredInputs);
+    Shuffle_power.setDouble(power * max);
+    Shuffle_turn.setDouble(turn * max);
   }
 
   public void tankDrive(double left, double right)
@@ -430,12 +446,5 @@ public class Drivebase extends SubsystemBase {
     leftMaster_encoder.setPosition(0);
     leftSlave1_encoder.setPosition(0);
   }
-
-
-  
-  
-
- 
-
   
 }

@@ -11,6 +11,7 @@ import java.util.List;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -134,11 +135,16 @@ public class RobotContainer {
     new JoystickButton(coPilot, XboxController.Button.kX.value).whenPressed(enableKicker);
     new JoystickButton(coPilot, XboxController.Button.kB.value).whenPressed(disableKicker);
     
-    new JoystickButton(coPilot, XboxController.Axis.kLeftTrigger.value).whenHeld(hopperEject);
-    new JoystickButton(coPilot, XboxController.Axis.kRightTrigger.value).whenHeld(hopperIntake);
+    // new JoystickButton(coPilot, XboxController.Axis.kLeftTrigger.value).whenPressed(hopperEject);
+    // new JoystickButton(coPilot, XboxController.Axis.kRightTrigger.value).whenPressed(hopperIntake);
+    new JoystickButton(coPilot, XboxController.Button.kA.value).whileHeld(hopperEject);
+    new JoystickButton(coPilot, XboxController.Button.kY.value).whileHeld(hopperIntake);
 
-    new JoystickButton(pilot, XboxController.Axis.kLeftTrigger.value).whenHeld(collectorCollect, true);
-    new JoystickButton(pilot, XboxController.Axis.kRightTrigger.value).whenHeld(collectorEject, true);
+    // new JoystickButton(pilot, XboxController.Axis.kLeftTrigger.value).whileActiveOnce(collectorCollect, true);
+    // new JoystickButton(pilot, XboxController.Axis.kRightTrigger.value).whileActiveOnce(collectorEject, true);
+    new JoystickButton(pilot, XboxController.Button.kY.value).whileHeld(collectorCollect, true);
+    new JoystickButton(pilot, XboxController.Button.kA.value).whileHeld(collectorEject, true);
+
 
     // coPilot.y.whenPressed(extendClimber);
     // coPilot.a.whenPressed(retractClimber);

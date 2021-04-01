@@ -10,15 +10,14 @@ package frc.robot.subsystems;
 import java.util.Map;
 
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -32,7 +31,7 @@ public class Arm extends SubsystemBase {
   private CANEncoder leftArm_encoder;
   private CANEncoder rightArm_encoder;
 
-  // private CANPIDController ArmPidController;
+  private CANPIDController ArmPidController;
 
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Arm");
@@ -50,23 +49,23 @@ public class Arm extends SubsystemBase {
 
       rightArm.setInverted(true);
 
-      // ArmPidController = rightArm.getPIDController(); 
+      ArmPidController = rightArm.getPIDController(); 
 
-      // rightArm.follow(leftArm, true);
+      rightArm.follow(leftArm, true);
 
-      // ArmPidController.setP(Constants.ArmConstants.PID_Values.kP);
-      // ArmPidController.setI(Constants.ArmConstants.PID_Values.kI);
-      // ArmPidController.setD(Constants.ArmConstants.PID_Values.kD);
-      // ArmPidController.setIZone(Constants.ArmConstants.PID_Values.kIz);
-      // ArmPidController.setFF(Constants.ArmConstants.PID_Values.kFF);
-      // ArmPidController.setOutputRange(Constants.ArmConstants.PID_Values.kMinOutput,Constants.ArmConstants.PID_Values.kMaxOutput);
+      ArmPidController.setP(Constants.ArmConstants.PID_Values.kP);
+      ArmPidController.setI(Constants.ArmConstants.PID_Values.kI);
+      ArmPidController.setD(Constants.ArmConstants.PID_Values.kD);
+      ArmPidController.setIZone(Constants.ArmConstants.PID_Values.kIz);
+      ArmPidController.setFF(Constants.ArmConstants.PID_Values.kFF);
+      ArmPidController.setOutputRange(Constants.ArmConstants.PID_Values.kMinOutput,Constants.ArmConstants.PID_Values.kMaxOutput);
 
-      // int smartmotionslot = 0;
-      // ArmPidController.setSmartMotionMaxVelocity(Constants.ArmConstants.PID_Values.maxVelocity, smartmotionslot);
-      // ArmPidController.setSmartMotionMinOutputVelocity(Constants.ArmConstants.PID_Values.minVelocity, smartmotionslot);
-      // ArmPidController.setSmartMotionMaxAccel(Constants.ArmConstants.PID_Values.maxAcceleration, smartmotionslot);
+      int smartmotionslot = 0;
+      ArmPidController.setSmartMotionMaxVelocity(Constants.ArmConstants.PID_Values.maxVelocity, smartmotionslot);
+      ArmPidController.setSmartMotionMinOutputVelocity(Constants.ArmConstants.PID_Values.minVelocity, smartmotionslot);
+      ArmPidController.setSmartMotionMaxAccel(Constants.ArmConstants.PID_Values.maxAcceleration, smartmotionslot);
     
-      // ArmPidController.setSmartMotionAllowedClosedLoopError(Constants.ArmConstants.PID_Values.allowed_error, smartmotionslot);
+      ArmPidController.setSmartMotionAllowedClosedLoopError(Constants.ArmConstants.PID_Values.allowed_error, smartmotionslot);
 
       tab.add("Arm Position", getArmEncoderPosition())
       .withWidget(BuiltInWidgets.kGraph);

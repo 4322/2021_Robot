@@ -180,7 +180,8 @@ public class XboxController extends Joystick
 	 */
 	public void setRumble(HAND hand, double intensity)
 	{
-		final float amount = new Float(intensity);
+		// final float amount = new Float(intensity);
+		final float amount = (float)intensity;
 
 		if(hand == HAND.LEFT)
 		{
@@ -199,7 +200,7 @@ public class XboxController extends Joystick
 	 */
 	public void setRumble(double intensity)
 	{
-		final float amount = new Float(intensity);
+		final float amount = (float)intensity;
 
 		controller.setRumble(RumbleType.kLeftRumble, amount);
 		controller.setRumble(RumbleType.kRightRumble, amount);

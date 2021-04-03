@@ -11,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -23,27 +22,26 @@ public class Shooter_Hood extends SubsystemBase {
    private WPI_TalonSRX shooterHood;
    private Encoder hoodEncoder;
    private PIDController hoodPIDController;
-   private Limelight limelight;
+  //  private Limelight limelight;
 
   public Shooter_Hood() {
         // The PIDController used by the subsystem
         hoodPIDController = new PIDController(Constants.Hood_Constants.PID_Values.kP, Constants.Hood_Constants.PID_Values.kI, Constants.Hood_Constants.PID_Values.kD);
         shooterHood = new WPI_TalonSRX(Constants.Hood_Constants.hoodTalon_ID);
         hoodEncoder = new Encoder(0, 1);
-        limelight = new Limelight();
-        
-        
+        // limelight = new Limelight();
   }
 
   
 
   public double generateSetpoint()
   {
-    double distance = limelight.getDistance();
-    double x = distance;
+    // double distance = limelight.getDistance();
+    // double x = distance;
 
-    double hoodPosition = Math.pow(x, 2); //NEED TO MAKE FUNCTION USING REGRESSION AND TESTED POINTS
-    return hoodPosition;
+    // double hoodPosition = Math.pow(x, 2); //NEED TO MAKE FUNCTION USING REGRESSION AND TESTED POINTS
+    // return hoodPosition;
+    return 0;
   }
 
   public double getPosition()

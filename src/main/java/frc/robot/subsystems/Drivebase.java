@@ -7,12 +7,14 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -20,13 +22,12 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class Drivebase extends SubsystemBase {
 
@@ -53,14 +54,31 @@ public class Drivebase extends SubsystemBase {
   private SpeedControllerGroup leftMotors;
 
   // PID Controller that Controls Turning the Robot Using Values From the Limelight
-  private PIDController limelightPidController;
+  // private PIDController limelightPidController;
 
   // Limelight Object to Access Vision Values
-  private Limelight limelight;
+  // private Limelight limelight;
 
   // Drive Object to Enable Various Modes
   private DifferentialDrive drive;
 
+  // SHUFFLEBOARD
+  private ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
+  private NetworkTableEntry maxSpeed =
+    tab.add("Max Speed", 1)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("min", 0, "max", 1))
+    .getEntry();
+  private NetworkTableEntry Shuffle_power =
+    tab.add("Power", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -1, "max", 1))
+    .getEntry();
+  private NetworkTableEntry Shuffle_turn =
+    tab.add("Turn", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -1, "max", 1))
+    .getEntry();
   /**
    * Creates a new Drivebase.
    */
@@ -70,8 +88,8 @@ public class Drivebase extends SubsystemBase {
     navX = new AHRS(SPI.Port.kMXP);
 
     // Creates Limlight and Limelight PID Controller
-    limelightPidController = new PIDController(Constants.Limelight_Constants.PID_Values.kP, Constants.Limelight_Constants.PID_Values.kI, Constants.Limelight_Constants.PID_Values.kD);
-    limelight = new Limelight();
+    // limelightPidController = new PIDController(Constants.Limelight_Constants.PID_Values.kP, Constants.Limelight_Constants.PID_Values.kI, Constants.Limelight_Constants.PID_Values.kD);
+    // limelight = new Limelight();
   
     // Creates Drivebase Motors
     rightMaster = new CANSparkMax(Constants.Drivebase_Constants.rightMasterSpark_ID, MotorType.kBrushless);
@@ -98,6 +116,9 @@ public class Drivebase extends SubsystemBase {
 
     //Creates New Drive Object to Allow for Tank, Arcade, and Curvature Drive
     drive = new DifferentialDrive(leftMotors, rightMotors);
+    
+    tab.add("Drivetrain", drive)
+    .withWidget(BuiltInWidgets.kDifferentialDrive);
 
     //Creates an Odometry Object That Is Used To Allow the Robot to Follow Trajectories
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
@@ -114,8 +135,24 @@ public class Drivebase extends SubsystemBase {
   public void periodic() {
     
     // Odometry Calculates the Robot's Position On The Field so It Will Constantly Update by Reading Encoder and Gyro Values
-    odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftEncoders_Position(), getRightEncoders_Position());
+    odometry.update(navX.getRotation2d(), getLeftEncoders_Position(), getRightEncoders_Position());
 
+  }
+
+  public void changePower(String direction) {
+    double max = maxSpeed.getDouble(1.0);
+
+    switch(direction) {
+      case "up": {
+        if (max < 1.0) maxSpeed.setDouble(max + 0.1);
+        break;
+      }
+      case "down": {
+        if (max > 0) maxSpeed.setDouble(max - 0.1);
+        break;
+      }
+      default: break;
+    }
   }
 
   /****************************************************
@@ -141,7 +178,8 @@ public class Drivebase extends SubsystemBase {
 
   // Gets Heading Angle from the Gyro (NavX)
   public double getHeading() {
-    return Math.IEEEremainder(navX.getAngle(), 360);
+    return navX.getRotation2d().getDegrees();
+    // return Math.IEEEremainder(navX.getAngle(), 360);
   }
 
   // Gets Speed at Which the Robot is Turning
@@ -170,31 +208,31 @@ public class Drivebase extends SubsystemBase {
   // Automatically Turns the Robot to Face the Vision Target Using a PID Controller
   public void limelightAim_PID()
   {
-    double offset = limelight.getX_Offset();
-    double error = offset * .01;
-    limelightPidController.setTolerance(.02);
-    double motorOutput = limelightPidController.calculate(error, 0);
-    SmartDashboard.putNumber("Turn Output", motorOutput);
-    tankDrive(motorOutput, -motorOutput);
+    // double offset = limelight.getX_Offset();
+    // double error = offset * .01;
+    // limelightPidController.setTolerance(.02);
+    // double motorOutput = limelightPidController.calculate(error, 0);
+    // SmartDashboard.putNumber("Turn Output", motorOutput);
+    // tankDrive(motorOutput, -motorOutput);
   }
 
   // Automatically Turns the Robot to Face the Vision Target Using a Predefined P Constant and Tolerances
   public void limelightAim_Simple()
   {
-    double kP = -0.1;
-    double minCommand = .05;
-    double heading_error = -limelight.getX_Offset();
-    double steering_adjust = 0.0f;
+    // double kP = -0.1;
+    // double minCommand = .05;
+    // double heading_error = -limelight.getX_Offset();
+    // double steering_adjust = 0.0f;
 
-        if (limelight.getX_Offset() > 1.0)
-        {
-                steering_adjust = kP * heading_error - minCommand;
-        }
-        else if (limelight.getX_Offset() < 1.0)
-        {
-                steering_adjust = kP * heading_error + minCommand;
-        }
-    drive.tankDrive(steering_adjust, -steering_adjust);
+    //     if (limelight.getX_Offset() > 1.0)
+    //     {
+    //             steering_adjust = kP * heading_error - minCommand;
+    //     }
+    //     else if (limelight.getX_Offset() < 1.0)
+    //     {
+    //             steering_adjust = kP * heading_error + minCommand;
+    //     }
+    // drive.tankDrive(steering_adjust, -steering_adjust);
   }
 
   
@@ -203,17 +241,24 @@ public class Drivebase extends SubsystemBase {
    ****************************************************/
   public void curveDrive(double power, double turn, boolean quickTurn)
   {
-    drive.curvatureDrive(power, turn, quickTurn);
+    double max = maxSpeed.getDouble(1.0);
+    drive.curvatureDrive(power * max, turn * max, quickTurn);
+    Shuffle_power.setDouble(power * max);
+    Shuffle_turn.setDouble(turn * max);
   }
 
   public void arcadeDrive(double power, double turn, boolean squaredInputs)
   {
-    drive.arcadeDrive(power, turn, squaredInputs);
+    double max = maxSpeed.getDouble(1.0);
+    drive.arcadeDrive(power * max, turn * max, squaredInputs);
+    Shuffle_power.setDouble(power * max);
+    Shuffle_turn.setDouble(turn * max);
   }
 
   public void tankDrive(double left, double right)
   {
-    drive.tankDrive(left, right);
+    double max = maxSpeed.getDouble(1.0);
+    drive.tankDrive(left * max, right * max);
   }
 
 
@@ -400,12 +445,5 @@ public class Drivebase extends SubsystemBase {
     leftMaster_encoder.setPosition(0);
     leftSlave1_encoder.setPosition(0);
   }
-
-
-  
-  
-
- 
-
   
 }

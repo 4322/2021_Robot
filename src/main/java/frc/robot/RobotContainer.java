@@ -9,7 +9,6 @@ package frc.robot;
 
 import java.util.List;
 
-import frc.robot.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -150,25 +149,8 @@ public class RobotContainer {
         new SimpleMotorFeedforward(Constants.Drivebase_Constants.PID_Values.ksVolts,
                                    Constants.Drivebase_Constants.PID_Values.kaVoltSecondsSquaredPerMeter,
                                    Constants.Drivebase_Constants.PID_Values.kvVoltSecondsPerMeter),
-                                   Constants.Drivebase_Constants.kinematics, 10);
+        Constants.Drivebase_Constants.kinematics, 10);
 
-    // TrajectoryConfig config = new TrajectoryConfig(Constants.Drivebase_Constants.kMaxSpeedMetersPerSecond, Constants.Drivebase_Constants.kMaxAccelerationMetersPerSecondSquared)
-    // .setKinematics(Constants.Drivebase_Constants.kinematics)
-    // .addConstraint(autoVoltageConstraint);
-
-    // Trajectory driveForward = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),  
-    
-    // List.of
-    // (
-    //   new Translation2d(.5, 0),
-    //   new Translation2d(1, 0)
-    // ),
-    //   new Pose2d(2, 0, new Rotation2d(0)), config);
-    
-    
-    
-    //   return m_autoCommand;
-    // Create config for trajectory
     TrajectoryConfig config =
         new TrajectoryConfig(Constants.Drivebase_Constants.kMaxSpeedMetersPerSecond,
                              Constants.Drivebase_Constants.kMaxAccelerationMetersPerSecondSquared)

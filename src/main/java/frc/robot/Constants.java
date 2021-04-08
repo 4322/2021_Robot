@@ -49,7 +49,10 @@ public final class Constants {
         public static final double kRamseteZeta = 0.7;
 
         public static final double distPerPulse = .0011114506; // In Meters
+        // public static final double distPerPulse = 1;
+
         public static final double velocityConversion = .0007780154; // In Meters
+        // public static final double velocityConversion = 1;
 
 
         public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackwidthMeters);

@@ -34,35 +34,28 @@ public class Shooter_Hood extends SubsystemBase {
 
   
 
-  // public double generateSetpoint()
-  // {
-  //   // double distance = limelight.getDistance();
-  //   // double x = distance;
+  public double generateSetpoint()
+  {
+    // double distance = limelight.getDistance();
+    // double x = distance;
 
-  //   // double hoodPosition = Math.pow(x, 2); //NEED TO MAKE FUNCTION USING REGRESSION AND TESTED POINTS
-  //   // return hoodPosition;
-  //   return 0;
-  // }
+    // double hoodPosition = Math.pow(x, 2); //NEED TO MAKE FUNCTION USING REGRESSION AND TESTED POINTS
+    // return hoodPosition;
+    return 0;
+  }
 
   public double getPosition()
   {
     return hoodEncoder.getDistance(); 
   }
 
-  // public void reachSetpoint()
-  // {
-  //   double error = getPosition() - generateSetpoint();
-  // }
+  public void reachSetpoint()
+  {
+    double error = getPosition() - generateSetpoint();
+  }
 
   public void setHood(double power)
   {
     shooterHood.set(power);
-  }
-
-  public void clearEncoder() {
-    int x = shooterHood.isFwdLimitSwitchClosed();
-    if (x == 1) {
-      hoodEncoder.reset();
-    }
   }
 }

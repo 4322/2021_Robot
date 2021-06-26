@@ -56,11 +56,26 @@ public class Shooter_Hood extends SubsystemBase {
 
   public void setHood(double power)
   {
-    shooterHood.set(power);
+    double encValue = this.getPosition();
+    if (this.getPosition() >= -4800 || power < 0) {
+      if (this.getPosition() <= -4200 && power > 0) {
+        double _power = power * ((4800 - (-encValue))/600);
+        if (_power < 0.1) {
+          _power = 0.1;
+        }
+        shooterHood.set(_power);
+      }
+      else {
+        shooterHood.set(power);
+      }
+    }
+    else {
+      shooterHood.stopMotor();
+    }
   }
 
   public void clearEncoder() {
-    int x = shooterHood.isFwdLimitSwitchClosed();
+    int x = shooterHood.isRevLimitSwitchClosed();
     if (x == 1) {
       hoodEncoder.reset();
     }

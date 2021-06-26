@@ -80,4 +80,8 @@ public class Shooter_Hood extends SubsystemBase {
       hoodEncoder.reset();
     }
   }
+
+  public int isHome() {
+    return shooterHood.isRevLimitSwitchClosed();
+  }
 }

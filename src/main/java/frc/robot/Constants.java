@@ -111,6 +111,8 @@ public final class Constants {
 
         public static final int maxRPM = 4900;
 
+        public static final double setPoint = 3000;
+
         public static class PID_Values  {
 
             public static final double kP = .01;

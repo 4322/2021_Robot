@@ -51,36 +51,17 @@ public class Shooter extends SubsystemBase {
     .withWidget(BuiltInWidgets.kNumberSlider)
     .withProperties(Map.of("min", 100, "max", Constants.Shooter_Constants.maxRPM))
     .getEntry();
+  private NetworkTableEntry shooterVelocity =
+    tab.add("Shoter Velocity", 0)
+    .withWidget(BuiltInWidgets.kGraph)
+    .getEntry();
 
   public Shooter() {
-    // flywheelOne = new CANSparkMax(Constants.Shooter_Constants.flywheelOneSpark_ID, MotorType.kBrushless);
-    // flywheelTwo = new CANSparkMax(Constants.Shooter_Constants.flywheelTwoSpark_ID, MotorType.kBrushless);
+    flywheelOne = new CANSparkMax(Constants.Shooter_Constants.flywheelOneSpark_ID, MotorType.kBrushless);
+    flywheelTwo = new CANSparkMax(Constants.Shooter_Constants.flywheelTwoSpark_ID, MotorType.kBrushless);
 
-    // flywheelOne_Encoder = new CANEncoder(flywheelOne);
-    // flywheelTwo_Encoder = new CANEncoder(flywheelTwo);
-    
-    // pidController = new CANPIDController(flywheelOne);
-
-    // flywheelOne.setIdleMode(IdleMode.kCoast);
-    // flywheelTwo.setIdleMode(IdleMode.kCoast);
-
-    // flywheelOne.burnFlash();
-    // flywheelTwo.burnFlash();
-
-    // pidController.setP(Constants.Shooter_Constants.PID_Values.kP);
-    // pidController.setI(Constants.Shooter_Constants.PID_Values.kI);
-    // pidController.setD(Constants.Shooter_Constants.PID_Values.kD);
-    // pidController.setIZone(Constants.Shooter_Constants.PID_Values.kIz);
-    // pidController.setFF(Constants.Shooter_Constants.PID_Values.kFF);
-    // pidController.setOutputRange(Constants.Shooter_Constants.PID_Values.kMin, Constants.Shooter_Constants.PID_Values.kMax);
-
-    // flywheelOne.setInverted(true);
-    // flywheelTwo.follow(flywheelOne, true);
-
-    // tab.add("Shooter Velocity", getShooterEncoder_Velocity())
-    // .withWidget(BuiltInWidgets.kGraph);
-    // tab.add("Shooter Position", getShooterEncoder_Position())
-    // .withWidget(BuiltInWidgets.kGraph);
+    flywheelOne_Encoder = new CANEncoder(flywheelOne);
+    flywheelTwo_Encoder = new CANEncoder(flywheelTwo);
 
     flywheelPID = flywheelOne.getPIDController();
 
@@ -98,6 +79,10 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // TODO Auto-generated method stub
+    SmartDashboard.putNumber("Flywheel1", flywheelOne_Encoder.getVelocity());
+    SmartDashboard.putNumber("Flywheel2", flywheelTwo_Encoder.getVelocity());
+
+    shooterVelocity.setDouble(flywheelOne_Encoder.getVelocity());
   }
 
   // @Override
@@ -158,9 +143,8 @@ public class Shooter extends SubsystemBase {
   {
     // double _rpm = rpm.getDouble(Constants.Shooter_Constants.maxRPM);
     flywheelPID.setReference(setPoint, ControlType.kVelocity);
-    
+
     SmartDashboard.putNumber("SetPoint", setPoint);
-    SmartDashboard.putNumber("ProcessVariable", flywheelOne_Encoder.getVelocity());
   }
 
   public double getShooterEncoder_Position()

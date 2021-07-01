@@ -68,9 +68,7 @@ public class Shooter extends SubsystemBase {
     flywheelOne.setInverted(true);
     flywheelTwo.follow(flywheelOne, true);
 
-    flywheelPID.setP(Constants.Shooter_Constants.PID_Values.kP);
-    flywheelPID.setI(Constants.Shooter_Constants.PID_Values.kI);
-    flywheelPID.setD(Constants.Shooter_Constants.PID_Values.kD);
+    this.refreshPID();
     flywheelPID.setIZone(Constants.Shooter_Constants.PID_Values.kIz);
     flywheelPID.setFF(Constants.Shooter_Constants.PID_Values.kFF);
     flywheelPID.setOutputRange(Constants.Shooter_Constants.PID_Values.kMin, Constants.Shooter_Constants.PID_Values.kMax);
@@ -155,5 +153,11 @@ public class Shooter extends SubsystemBase {
   public double getShooterEncoder_Velocity()
   {
     return ((flywheelOne_Encoder.getVelocity() + flywheelTwo_Encoder.getVelocity() / 2));
+  }
+
+  public void refreshPID() {
+    flywheelPID.setP(SmartDashboard.getNumber("kP", Constants.Shooter_Constants.PID_Values.kP));
+    flywheelPID.setI(SmartDashboard.getNumber("kI", Constants.Shooter_Constants.PID_Values.kI));
+    flywheelPID.setD(SmartDashboard.getNumber("kD", Constants.Shooter_Constants.PID_Values.kD));
   }
 }

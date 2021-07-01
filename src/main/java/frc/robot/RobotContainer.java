@@ -135,6 +135,7 @@ public class RobotContainer {
     coPilot.rt.whileHeld(hopperIntake);
 
     coPilot.a.whenPressed(hoodReset);
+    coPilot.y.whenActive();
 
     // coPilot.y.whenPressed(extendClimber);
     // coPilot.a.whenPressed(retractClimber);

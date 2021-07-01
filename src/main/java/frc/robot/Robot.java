@@ -40,7 +40,9 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     // compressor.start();
-
+    SmartDashboard.putNumber("kP", Constants.Shooter_Constants.PID_Values.kP);
+    SmartDashboard.putNumber("kI", Constants.Shooter_Constants.PID_Values.kI);
+    SmartDashboard.putNumber("kD", Constants.Shooter_Constants.PID_Values.kD);
   }
 
   /**

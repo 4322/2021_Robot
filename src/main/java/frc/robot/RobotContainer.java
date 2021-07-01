@@ -30,11 +30,13 @@ import frc.robot.commands.Drive_Manual;
 import frc.robot.commands.Enable_Kicker;
 import frc.robot.commands.Enable_Shooter;
 import frc.robot.commands.Enable_ShooterPower;
+import frc.robot.commands.Refresh_PID;
 import frc.robot.commands.Hood_Manual;
 import frc.robot.commands.Hood_Reset;
 import frc.robot.commands.Hopper_Eject;
 import frc.robot.commands.Hopper_Intake;
 import frc.robot.commands.Hopper_Stop;
+import frc.robot.commands.Refresh_PID;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Drivebase;
@@ -73,6 +75,7 @@ public class RobotContainer {
   public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
   public final Enable_ShooterPower enableShooterPower = new Enable_ShooterPower(shooter);
+  public final Refresh_PID refreshPID = new Refresh_PID(shooter);
 
   public final Enable_Kicker enableKicker = new Enable_Kicker(kicker);
   public final Disable_Kicker disableKicker = new Disable_Kicker(kicker);
@@ -135,7 +138,7 @@ public class RobotContainer {
     coPilot.rt.whileHeld(hopperIntake);
 
     coPilot.a.whenPressed(hoodReset);
-    coPilot.y.whenActive();
+    coPilot.y.whenActive(refreshPID);
 
     // coPilot.y.whenPressed(extendClimber);
     // coPilot.a.whenPressed(retractClimber);

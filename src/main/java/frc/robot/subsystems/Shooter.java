@@ -30,14 +30,14 @@ public class Shooter extends SubsystemBase {
    */
 
   private CANSparkMax flywheelOne;
-  private CANSparkMax flywheelTwo;
+  // private CANSparkMax flywheelTwo;
 
   private CANPIDController flywheelPID;
 
   // private CANPIDController pidController;
 
   private CANEncoder flywheelOne_Encoder;
-  private CANEncoder flywheelTwo_Encoder;
+  // private CANEncoder flywheelTwo_Encoder;
   
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
@@ -58,15 +58,15 @@ public class Shooter extends SubsystemBase {
 
   public Shooter() {
     flywheelOne = new CANSparkMax(Constants.Shooter_Constants.flywheelOneSpark_ID, MotorType.kBrushless);
-    flywheelTwo = new CANSparkMax(Constants.Shooter_Constants.flywheelTwoSpark_ID, MotorType.kBrushless);
+    // flywheelTwo = new CANSparkMax(Constants.Shooter_Constants.flywheelTwoSpark_ID, MotorType.kBrushless);
 
     flywheelOne_Encoder = new CANEncoder(flywheelOne);
-    flywheelTwo_Encoder = new CANEncoder(flywheelTwo);
+    // flywheelTwo_Encoder = new CANEncoder(flywheelTwo);
 
     flywheelPID = flywheelOne.getPIDController();
 
     flywheelOne.setInverted(true);
-    flywheelTwo.follow(flywheelOne, true);
+    // flywheelTwo.follow(flywheelOne, true);
 
     this.refreshPID();
     flywheelPID.setIZone(Constants.Shooter_Constants.PID_Values.kIz);
@@ -78,7 +78,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // TODO Auto-generated method stub
     SmartDashboard.putNumber("Flywheel1", flywheelOne_Encoder.getVelocity());
-    SmartDashboard.putNumber("Flywheel2", flywheelTwo_Encoder.getVelocity());
+    // SmartDashboard.putNumber("Flywheel2", flywheelTwo_Encoder.getVelocity());
 
     shooterVelocity.setDouble(flywheelOne_Encoder.getVelocity());
   }
@@ -145,15 +145,15 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("SetPoint", setPoint);
   }
 
-  public double getShooterEncoder_Position()
-  {
-    return ((flywheelOne_Encoder.getPosition() + flywheelTwo_Encoder.getPosition()) / 2);
-  }
+  // public double getShooterEncoder_Position()
+  // {
+  //   return ((flywheelOne_Encoder.getPosition() + flywheelTwo_Encoder.getPosition()) / 2);
+  // }
 
-  public double getShooterEncoder_Velocity()
-  {
-    return ((flywheelOne_Encoder.getVelocity() + flywheelTwo_Encoder.getVelocity() / 2));
-  }
+  // public double getShooterEncoder_Velocity()
+  // {
+  //   return ((flywheelOne_Encoder.getVelocity() + flywheelTwo_Encoder.getVelocity() / 2));
+  // }
 
   public void refreshPID() {
     flywheelPID.setP(SmartDashboard.getNumber("kP", Constants.Shooter_Constants.PID_Values.kP));

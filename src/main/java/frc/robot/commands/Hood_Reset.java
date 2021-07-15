@@ -8,21 +8,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.Shooter;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shooter_Hood;
 
-public class Enable_Shooter extends CommandBase {
+public class Hood_Reset extends CommandBase {
   /**
-   * Creates a new Enable_Shooter.
+   * Creates a new Hood_Manual.
    */
 
-  private Shooter shooter;
+   private Shooter_Hood shooterHood;
+   private double power;
 
-
-  public Enable_Shooter(Shooter shooterSubsystem) {
+  public Hood_Reset(Shooter_Hood shooterHoodSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    shooter = shooterSubsystem;
-    addRequirements(shooter);
+
+    shooterHood = shooterHoodSubsystem;
+    addRequirements(shooterHood);
+  
   }
 
   // Called when the command is initially scheduled.
@@ -33,7 +35,7 @@ public class Enable_Shooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.reachSetpoint(Constants.Shooter_Constants.setPoint);
+    shooterHood.setHood(-1);
   }
 
   // Called once the command ends or is interrupted.
@@ -44,6 +46,9 @@ public class Enable_Shooter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (shooterHood.isHome() == 1) {
+      return true;
+    }
+    else return false;
   }
 }

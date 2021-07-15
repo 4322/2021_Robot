@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 
-public class Enable_Shooter extends CommandBase {
+public class Shooter_ResetPID extends CommandBase {
   /**
    * Creates a new Enable_Shooter.
    */
@@ -19,7 +19,7 @@ public class Enable_Shooter extends CommandBase {
   private Shooter shooter;
 
 
-  public Enable_Shooter(Shooter shooterSubsystem) {
+  public Shooter_ResetPID(Shooter shooterSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     shooter = shooterSubsystem;
     addRequirements(shooter);
@@ -33,7 +33,7 @@ public class Enable_Shooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.reachSetpoint(Constants.Shooter_Constants.setPoint);
+    shooter.refreshPID();
   }
 
   // Called once the command ends or is interrupted.
@@ -44,6 +44,6 @@ public class Enable_Shooter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

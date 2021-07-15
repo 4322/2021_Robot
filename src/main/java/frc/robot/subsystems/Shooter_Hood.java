@@ -34,28 +34,54 @@ public class Shooter_Hood extends SubsystemBase {
 
   
 
-  public double generateSetpoint()
-  {
-    // double distance = limelight.getDistance();
-    // double x = distance;
+  // public double generateSetpoint()
+  // {
+  //   // double distance = limelight.getDistance();
+  //   // double x = distance;
 
-    // double hoodPosition = Math.pow(x, 2); //NEED TO MAKE FUNCTION USING REGRESSION AND TESTED POINTS
-    // return hoodPosition;
-    return 0;
-  }
+  //   // double hoodPosition = Math.pow(x, 2); //NEED TO MAKE FUNCTION USING REGRESSION AND TESTED POINTS
+  //   // return hoodPosition;
+  //   return 0;
+  // }
 
   public double getPosition()
   {
     return hoodEncoder.getDistance(); 
   }
 
-  public void reachSetpoint()
-  {
-    double error = getPosition() - generateSetpoint();
-  }
+  // public void reachSetpoint()
+  // {
+  //   double error = getPosition() - generateSetpoint();
+  // }
 
   public void setHood(double power)
   {
-    shooterHood.set(power);
+    double encValue = this.getPosition();
+    if (this.getPosition() >= -4800 || power < 0) {
+      if (this.getPosition() <= -4200 && power > 0) {
+        double _power = power * ((4800 - (-encValue))/600);
+        if (_power < 0.1) {
+          _power = 0.1;
+        }
+        shooterHood.set(_power);
+      }
+      else {
+        shooterHood.set(power);
+      }
+    }
+    else {
+      shooterHood.stopMotor();
+    }
+  }
+
+  public void clearEncoder() {
+    int x = shooterHood.isRevLimitSwitchClosed();
+    if (x == 1) {
+      hoodEncoder.reset();
+    }
+  }
+
+  public int isHome() {
+    return shooterHood.isRevLimitSwitchClosed();
   }
 }

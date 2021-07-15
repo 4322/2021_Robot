@@ -8,8 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
+import frc.robot.commands.Hood_Reset;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,6 +28,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   // private Compressor compressor = new Compressor(0);
 
+  private Hood_Reset m_hoodReset;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -34,7 +40,9 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     // compressor.start();
-    
+    SmartDashboard.putNumber("kP", Constants.Shooter_Constants.PID_Values.kP);
+    SmartDashboard.putNumber("kI", Constants.Shooter_Constants.PID_Values.kI);
+    SmartDashboard.putNumber("kD", Constants.Shooter_Constants.PID_Values.kD);
   }
 
   /**
@@ -51,6 +59,8 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    SmartDashboard.putNumber("hoodEncoder", m_robotContainer.shooterHood.getPosition());
+    m_robotContainer.shooterHood.clearEncoder();
     // SmartDashboard.putNumber("l_encoder_rate", m_drivebase.getLeftEncoders_Velocity());
     // SmartDashboard.putNumber("l_encoder_pos", m_drivebase.getLeftEncoders_Velocity());
     // SmartDashboard.putNumber("r_encoder_rate", m_drivebase.getRightEncoders_Velocity());
@@ -74,12 +84,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    // new ScheduleCommand(m_hoodReset);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    
   }
 
   /**
@@ -98,6 +110,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    // new ScheduleCommand(m_hoodReset);
   }
 
   /**

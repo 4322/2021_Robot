@@ -15,14 +15,15 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends PIDSubsystem {
@@ -31,13 +32,23 @@ public class Shooter extends PIDSubsystem {
    */
 
   private CANSparkMax flywheelOne;
-  private CANSparkMax flywheelTwo;
+  // private CANSparkMax flywheelTwo;
 
+  private CANPIDController flywheelPID;
 
-  private CANPIDController pidController;
+  // private CANPIDController pidController;
 
   private CANEncoder flywheelOne_Encoder;
-  private CANEncoder flywheelTwo_Encoder;
+  // private CANEncoder flywheelTwo_Encoder;
+
+  private PIDController pid = new PIDController(
+    Constants.Shooter_Constants.PID_Values.kP,
+    Constants.Shooter_Constants.PID_Values.kI,
+    Constants.Shooter_Constants.PID_Values.kD
+  );
+
+  private final SimpleMotorFeedforward m_shooterFeedforward =
+    new SimpleMotorFeedforward(0.1, 0);
   
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
@@ -51,63 +62,59 @@ public class Shooter extends PIDSubsystem {
     .withWidget(BuiltInWidgets.kNumberSlider)
     .withProperties(Map.of("min", 100, "max", Constants.Shooter_Constants.maxRPM))
     .getEntry();
+  private NetworkTableEntry shooterVelocity =
+    tab.add("Shoter Velocity", 0)
+    .withWidget(BuiltInWidgets.kGraph)
+    .getEntry();
 
   public Shooter() {
     super(
-      // The PIDController used by the subsystem
       new PIDController(
         Constants.Shooter_Constants.PID_Values.kP,
-        Constants.Shooter_Constants.PID_Values.kI, 
+        Constants.Shooter_Constants.PID_Values.kI,
         Constants.Shooter_Constants.PID_Values.kD
         )
     );
 
-    
     flywheelOne = new CANSparkMax(Constants.Shooter_Constants.flywheelOneSpark_ID, MotorType.kBrushless);
-    flywheelTwo = new CANSparkMax(Constants.Shooter_Constants.flywheelTwoSpark_ID, MotorType.kBrushless);
+    // flywheelTwo = new CANSparkMax(Constants.Shooter_Constants.flywheelTwoSpark_ID, MotorType.kBrushless);
 
     flywheelOne_Encoder = new CANEncoder(flywheelOne);
-    flywheelTwo_Encoder = new CANEncoder(flywheelTwo);
-    
-    pidController = new CANPIDController(flywheelOne);
+    // flywheelTwo_Encoder = new CANEncoder(flywheelTwo);
 
-    flywheelOne.setIdleMode(IdleMode.kCoast);
-    flywheelTwo.setIdleMode(IdleMode.kCoast);
-
-    flywheelOne.burnFlash();
-    flywheelTwo.burnFlash();
-
-    pidController.setP(Constants.Shooter_Constants.PID_Values.kP);
-    pidController.setI(Constants.Shooter_Constants.PID_Values.kI);
-    pidController.setD(Constants.Shooter_Constants.PID_Values.kD);
-    pidController.setIZone(Constants.Shooter_Constants.PID_Values.kIz);
-    pidController.setFF(Constants.Shooter_Constants.PID_Values.kFF);
-    pidController.setOutputRange(Constants.Shooter_Constants.PID_Values.kMin, Constants.Shooter_Constants.PID_Values.kMax);
+    // flywheelPID = flywheelOne.getPIDController();
 
     flywheelOne.setInverted(true);
-    flywheelTwo.follow(flywheelOne, true);
+    // flywheelTwo.follow(flywheelOne, true);
 
-    tab.add("Shooter Velocity", getShooterEncoder_Velocity())
-    .withWidget(BuiltInWidgets.kGraph);
-    tab.add("Shooter Position", getShooterEncoder_Position())
-    .withWidget(BuiltInWidgets.kGraph);
+    this.refreshPID();
+    // flywheelPID.setIZone(Constants.Shooter_Constants.PID_Values.kIz);
+    // flywheelPID.setFF(Constants.Shooter_Constants.PID_Values.kFF);
+    // flywheelPID.setOutputRange(Constants.Shooter_Constants.PID_Values.kMin, Constants.Shooter_Constants.PID_Values.kMax);
   }
 
   @Override
   public void periodic() {
     // TODO Auto-generated method stub
-    super.periodic();
+    SmartDashboard.putNumber("Flywheel1", flywheelOne_Encoder.getVelocity());
+    // SmartDashboard.putNumber("Flywheel2", flywheelTwo_Encoder.getVelocity());
+
+    shooterVelocity.setDouble(flywheelOne_Encoder.getVelocity());
   }
 
   @Override
   public void useOutput(double output, double setpoint) {
     // Use the output here
+    var _output = output + m_shooterFeedforward.calculate(setpoint);
+
+    SmartDashboard.putNumber("Shooter output", _output);
+    flywheelOne.setVoltage(_output);
   }
 
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    return 0;
+    return flywheelOne_Encoder.getVelocity();
   }
 
   public void changePower(String direction) {
@@ -145,27 +152,44 @@ public class Shooter extends PIDSubsystem {
   public void stopShooter()
   {
     flywheelOne.set(0);
+    // disable();
   }
 
-  public void spinShooter()
+  // public void spinShooter()
+  // {
+  //   double speed = maxSpeed.getDouble(0.5);
+  //   flywheelOne.set(speed);
+  // }
+
+  public void reachSetpoint(double setPoint)
   {
-    double speed = maxSpeed.getDouble(0.5);
-    flywheelOne.set(speed);
+    // double _rpm = rpm.getDouble(Constants.Shooter_Constants.maxRPM);
+    // flywheelPID.setReference(setPoint, ControlType.kVelocity);
+
+    // setSetpoint(setPoint);
+    // enable();
+    flywheelOne.set(pid.calculate(this.getMeasurement(), setPoint));
+  
+    SmartDashboard.putNumber("Shooter Error", pid.getVelocityError());
+    SmartDashboard.putNumber("Shooter V", flywheelOne.getBusVoltage());
+
+    SmartDashboard.putNumber("SetPoint", setPoint);
+    SmartDashboard.putBoolean("Shooter enabled", isEnabled());
   }
 
-  public void reachSetpoint()
-  {
-    double _rpm = rpm.getDouble(Constants.Shooter_Constants.maxRPM);
-    pidController.setReference(_rpm, ControlType.kVelocity);
-  }
+  // public double getShooterEncoder_Position()
+  // {
+  //   return ((flywheelOne_Encoder.getPosition() + flywheelTwo_Encoder.getPosition()) / 2);
+  // }
 
-  public double getShooterEncoder_Position()
-  {
-    return ((flywheelOne_Encoder.getPosition() + flywheelTwo_Encoder.getPosition()) / 2);
-  }
+  // public double getShooterEncoder_Velocity()
+  // {
+  //   return ((flywheelOne_Encoder.getVelocity() + flywheelTwo_Encoder.getVelocity() / 2));
+  // }
 
-  public double getShooterEncoder_Velocity()
-  {
-    return ((flywheelOne_Encoder.getVelocity() + flywheelTwo_Encoder.getVelocity() / 2));
+  public void refreshPID() {
+    // flywheelPID.setP(SmartDashboard.getNumber("kP", Constants.Shooter_Constants.PID_Values.kP));
+    // flywheelPID.setI(SmartDashboard.getNumber("kI", Constants.Shooter_Constants.PID_Values.kI));
+    // flywheelPID.setD(SmartDashboard.getNumber("kD", Constants.Shooter_Constants.PID_Values.kD));
   }
 }

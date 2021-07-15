@@ -114,12 +114,14 @@ public final class Constants {
 
         public static final int maxRPM = 4900;
 
+        public static final double setPoint = 3000;
+
         public static class PID_Values  {
 
-            public static final double kP = .01;
+            public static final double kP = .001;
             // 2020: 0.4
             public static final double kI = 0;
-            public static final double kD = 0;
+            public static final double kD = 150;
             // 2020: 0
             public static final double kIz = 0;
             public static final double kFF = 0;

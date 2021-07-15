@@ -73,7 +73,7 @@ public class RobotContainer {
 
   public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
-  public final Enable_ShooterPower enableShooterPower = new Enable_ShooterPower(shooter);
+  // public final Enable_ShooterPower enableShooterPower = new Enable_ShooterPower(shooter);
   public final Shooter_ResetPID refreshPID = new Shooter_ResetPID(shooter);
 
   public final Enable_Kicker enableKicker = new Enable_Kicker(kicker);

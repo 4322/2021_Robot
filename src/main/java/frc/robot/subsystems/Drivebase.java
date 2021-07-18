@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -232,11 +231,13 @@ public class Drivebase extends SubsystemBase {
 
     switch(direction) {
       case "up": {
-        if (max < 1.0) maxSpeed.setDouble(max + 0.1);
+        if ((max + 0.1) <= 1.0) maxSpeed.setDouble(max + 0.1);
+        else maxSpeed.setDouble(1.0);
         break;
       }
       case "down": {
-        if (max > 0) maxSpeed.setDouble(max - 0.1);
+        if ((max - 0.1) >= 0) maxSpeed.setDouble(max - 0.1);
+        else maxSpeed.setDouble(0);
         break;
       }
       default: break;

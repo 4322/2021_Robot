@@ -80,9 +80,7 @@ public class Shooter_Hood extends SubsystemBase {
         }
         shooterHood.set(_power);
       }
-      else {
-        shooterHood.set(power);
-      }
+      else shooterHood.set(power);
     }
     else {
       shooterHood.stopMotor();

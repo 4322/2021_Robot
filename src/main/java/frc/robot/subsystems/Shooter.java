@@ -19,13 +19,17 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
   /**
    * Creates a new Shooter.
    */
+
+  private SendableChooser<String> shooterControlMethod = new SendableChooser<String>();
 
   private CANSparkMax flywheelOne;
   // private CANSparkMax flywheelTwo;
@@ -34,45 +38,80 @@ public class Shooter extends SubsystemBase {
   
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
-  // private NetworkTableEntry maxSpeed =
-  //   tab.add("Max Speed", 1)
-  //   .withWidget(BuiltInWidgets.kNumberSlider)
-  //   .withProperties(Map.of("min", 0, "max", 1))
-  //   .getEntry();
+
+  private NetworkTableEntry shooterEnabled =
+    tab.add("Shooter Enabled", false)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .withPosition(0,3)
+    .getEntry();
+  
+  private NetworkTableEntry power =
+    tab.add("Manual Power", 0.5)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("min", 0, "max", 1))
+    .withPosition(3,3)
+    .withSize(3,1)
+    .getEntry();
+
   private NetworkTableEntry targetRPM =
-    tab.add("RPM", Constants.Shooter_Constants.maxRPM)
+    tab.add("RPM", Constants.Shooter_Constants.setPoint)
     .withWidget(BuiltInWidgets.kNumberSlider)
     .withProperties(Map.of("min", 100, "max", Constants.Shooter_Constants.maxRPM))
+    .withSize(3,1)
+    .withPosition(3,0)
     .getEntry();
 
   private NetworkTableEntry shooterVelocity =
-    tab.add("Shooter Velocity", 0)
+    tab.add("Shooter Velocity Graph", 0)
     .withWidget(BuiltInWidgets.kGraph)
+    .withProperties(Map.of("unit", "RPM"))
+    .withPosition(0,0)
     .getEntry();
+
+  private NetworkTableEntry setpointError =
+    tab.add("Setpoint Error", 0)
+    .withWidget(BuiltInWidgets.kGraph)
+    .withProperties(Map.of("unit", "RPM difference"))
+    .withPosition(6,0)
+    .getEntry();
+
   private NetworkTableEntry appliedOutput =
     tab.add("Applied Output", 0)
     .withWidget(BuiltInWidgets.kGraph)
+    .withProperties(Map.of("unit", "Duty Cycles"))
+    .withPosition(6,3)
     .getEntry();
 
   private ShuffleboardLayout shufflePID =
     tab.getLayout("Shooter PID", BuiltInLayouts.kGrid)
-    .withSize(2,3);
+    .withProperties(Map.of("Label position", "RIGHT"))
+    .withSize(3,2)
+    .withPosition(3,1);
   private NetworkTableEntry kP =
-    shufflePID.add("kP", Constants.Shooter_Constants.PID_Values.kP).withPosition(0, 0).getEntry();
+    shufflePID.add("kP", Constants.Shooter_Constants.PID_Values.kP).withPosition(0,0).getEntry();
   private NetworkTableEntry kI =
-    shufflePID.add("kI", Constants.Shooter_Constants.PID_Values.kI).withPosition(0,1).getEntry();
+    shufflePID.add("kI", Constants.Shooter_Constants.PID_Values.kI).withPosition(1,0).getEntry();
   private NetworkTableEntry kD =
-    shufflePID.add("kD", Constants.Shooter_Constants.PID_Values.kD).withPosition(0,2).getEntry();
+    shufflePID.add("kD", Constants.Shooter_Constants.PID_Values.kD).withPosition(2,0).getEntry();
   private NetworkTableEntry kIz =
-    shufflePID.add("kIz", Constants.Shooter_Constants.PID_Values.kIz).withPosition(0,3).getEntry();
+    shufflePID.add("kIz", Constants.Shooter_Constants.PID_Values.kIz).withPosition(1,1).getEntry();
   private NetworkTableEntry kFF =
-    shufflePID.add("kFF", Constants.Shooter_Constants.PID_Values.kFF).withPosition(1,0).getEntry();
+    shufflePID.add("kFF", Constants.Shooter_Constants.PID_Values.kFF).withPosition(0,2).getEntry();
   private NetworkTableEntry kMaxOutput =
-    shufflePID.add("kMax", Constants.Shooter_Constants.PID_Values.kMax).withPosition(1,1).getEntry();
+    shufflePID.add("kMax", Constants.Shooter_Constants.PID_Values.kMax).withPosition(1,2).getEntry();
   private NetworkTableEntry kMinOutput =
-    shufflePID.add("kMin", Constants.Shooter_Constants.PID_Values.kMin).withPosition(1,2).getEntry();
+    shufflePID.add("kMin", Constants.Shooter_Constants.PID_Values.kMin).withPosition(2,2).getEntry();
+  private NetworkTableEntry pidEnabled =
+    shufflePID.add("PID Enabled", false).withPosition(2,1).getEntry();
 
   public Shooter() {
+    shooterControlMethod.setDefaultOption("PID Control (RPM)", "pid");
+    shooterControlMethod.addOption("Manual Control (power)", "manual");
+    tab.add("Shooter Control", shooterControlMethod)
+      .withWidget(BuiltInWidgets.kComboBoxChooser)
+      .withPosition(1,3)
+      .withSize(2,1);
+
     flywheelOne = new CANSparkMax(Constants.Shooter_Constants.flywheelOneSpark_ID, MotorType.kBrushless);
 
     flywheelOne.restoreFactoryDefaults();
@@ -99,11 +138,12 @@ public class Shooter extends SubsystemBase {
     double max = kMaxOutput.getDouble(0);
     double min = kMinOutput.getDouble(0);
 
+    // Refresh PID values from Shuffleboard
     if((p != kP.getDouble(0))) { flywheelPID.setP(p); kP.setDouble(p); }
-    if((p != kP.getDouble(0))) { flywheelPID.setI(i); kP.setDouble(i); }
-    if((p != kP.getDouble(0))) { flywheelPID.setD(d); kP.setDouble(d); }
-    if((p != kP.getDouble(0))) { flywheelPID.setIZone(iz); kP.setDouble(iz); }
-    if((p != kP.getDouble(0))) { flywheelPID.setFF(ff); kP.setDouble(ff); }
+    if((i != kI.getDouble(0))) { flywheelPID.setI(i); kI.setDouble(i); }
+    if((d != kD.getDouble(0))) { flywheelPID.setD(d); kD.setDouble(d); }
+    if((iz != kIz.getDouble(0))) { flywheelPID.setIZone(iz); kIz.setDouble(iz); }
+    if((ff != kFF.getDouble(0))) { flywheelPID.setFF(ff); kFF.setDouble(ff); }
     if((max != kMaxOutput.getDouble(0)) || (min != kMinOutput.getDouble(0))) {
       flywheelPID.setOutputRange(min, max);
       kMinOutput.setDouble(min); kMaxOutput.setDouble(max);
@@ -112,49 +152,85 @@ public class Shooter extends SubsystemBase {
     updateShuffleboard();
   }
 
-  // public void changePower(String direction) {
-  //   double max = maxSpeed.getDouble(1.0);
+  public void changeSpeed(String direction) {
+    double _power = power.getDouble(1);
+    double _rpm = targetRPM.getDouble(Constants.Shooter_Constants.setPoint);
 
-  //   switch(direction) {
-  //     case "up": {
-  //       if (max < 1.0) maxSpeed.setDouble(max + 0.1);
-  //       break;
-  //     }
-  //     case "down": {
-  //       if (max > 0) maxSpeed.setDouble(max - 0.1);
-  //       break;
-  //     }
-  //     default: break;
-  //   }
-  // }
-
-  public void changeRPM(String direction) {
-    double _rpm = targetRPM.getDouble(1.0);
-
-    switch(direction) {
-      case "up": {
-        if (_rpm < Constants.Shooter_Constants.maxRPM) targetRPM.setDouble(_rpm + 100);
+    switch(shooterControlMethod.getSelected()) {
+      case "manual": {
+        switch(direction) {
+          case "up": {
+            if ((_power + 0.2) <= 1) power.setDouble(_power + 0.1);
+            else power.setDouble(1);
+            break;
+          }
+          case "down": {
+            if ((_power - 0.2) >= 0) power.setDouble(_power - 0.1);
+            else power.setDouble(0);
+            break;
+          }
+          default: break;
+        }
         break;
       }
-      case "down": {
-        if (_rpm > 100) targetRPM.setDouble(_rpm - 100);
+      case "pid": {
+        switch(direction) {
+          case "up": {
+            if ((_rpm + 100) <= Constants.Shooter_Constants.maxRPM) targetRPM.setDouble(_rpm + 100);
+            else targetRPM.setDouble(Constants.Shooter_Constants.maxRPM);
+            break;
+          }
+          case "down": {
+            if ((_rpm - 100) >= 100) targetRPM.setDouble(_rpm - 100);
+            else targetRPM.setDouble(100);
+            break;
+          }
+          default: break;
+        }
         break;
       }
       default: break;
     }
+
+    
   }
   
   public void stopShooter() {
-    flywheelPID.setReference(0, ControlType.kVelocity);
+    flywheelOne.stopMotor();
+    setpointError.setDouble(0);
+    pidEnabled.setBoolean(false);
+
+    shooterEnabled.setBoolean(false);
+    RobotContainer.coPilot.setRumble(0);
   }
 
   public void startShooter() {
-    double rpm = targetRPM.getDouble(Constants.Shooter_Constants.maxRPM);
-    flywheelPID.setReference(rpm, ControlType.kVelocity);
+    switch(shooterControlMethod.getSelected()) {
+      case "pid": {
+        double rpm = targetRPM.getDouble(Constants.Shooter_Constants.setPoint);
+        if (!pidEnabled.getBoolean(false)) flywheelPID.setReference(rpm, ControlType.kVelocity);
+
+        setpointError.setDouble(flywheelOne.getEncoder().getVelocity() - rpm);
+        if (!pidEnabled.getBoolean(false)) pidEnabled.setBoolean(true);
+        break;
+      }
+      case "manual": {
+        if (pidEnabled.getBoolean(true)) {
+          setpointError.setDouble(0);
+          pidEnabled.setBoolean(false);
+        }
+        flywheelOne.set(power.getDouble(0.5));
+        break;
+      }
+      default: break;
+    }
+    
+    if (!shooterEnabled.getBoolean(false)) shooterEnabled.setBoolean(true);
+    RobotContainer.coPilot.setRumble(0.2);
   }
 
   private void updateShuffleboard() {
     shooterVelocity.setDouble(flywheelOne.getEncoder().getVelocity());
-    appliedOutput.setDouble(flywheelOne.getAppliedOutput());
+    appliedOutput.setDouble(0);
   }
 }

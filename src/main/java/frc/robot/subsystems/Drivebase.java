@@ -21,8 +21,10 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -63,51 +65,97 @@ public class Drivebase extends SubsystemBase {
 
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
-  private NetworkTableEntry Shuffle_gyro =
-    tab.add("Gyro angle", 0)
-    .getEntry();
+  // private NetworkTableEntry Shuffle_gyro =
+  //   tab.add("Gyro angle", 180)
+  //   .withWidget(BuiltInWidgets.kGyro)
+  //   .withPosition(3,0)
+  //   .withSize(2,2)
+  //   .getEntry();
   private NetworkTableEntry maxSpeed =
     tab.add("Max Speed", 1)
     .withWidget(BuiltInWidgets.kNumberSlider)
     .withProperties(Map.of("min", 0, "max", 1))
+    .withPosition(0,3)
+    .withSize(3,1)
     .getEntry();
   private NetworkTableEntry Shuffle_power =
     tab.add("Power", 0)
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", -1, "max", 1))
+    .withPosition(3,2)
+    .withSize(1,1)
     .getEntry();
   private NetworkTableEntry Shuffle_turn =
     tab.add("Turn", 0)
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", -1, "max", 1))
+    .withPosition(4,2)
+    .withSize(1,1)
     .getEntry();
 
+  private ShuffleboardLayout positionList =
+    tab.getLayout("Encoder Position", BuiltInLayouts.kGrid)
+    .withProperties(Map.of("Label position", "RIGHT"))
+    .withSize(3,2)
+    .withPosition(5,0);
+  // Left encoder position
   private NetworkTableEntry Shuffle_lencoder =
-    tab.add("Left Master Encoder", 0).getEntry();
+    positionList.add("Left Master Encoder", 0)
+      .withPosition(0,0)
+      .getEntry();
   private NetworkTableEntry Shuffle_lencoder_slave =
-    tab.add("Left Slave Encoder", 0).getEntry();
+    positionList.add("Left Slave Encoder", 0)
+      .withPosition(0,1)
+      .getEntry();
   private NetworkTableEntry Shuffle_left_position =
-    tab.add("Left Encoder Posoition", 0).getEntry();
+    positionList.add("Left Encoder Posoition", 0)
+      .withPosition(0,2)
+      .getEntry();
+  // Right encoder position
   private NetworkTableEntry Shuffle_rencoder =
-    tab.add("Right Master Encoder", 0).getEntry();
+   positionList.add("Right Master Encoder", 0)
+    .withPosition(1,0)
+    .getEntry();
   private NetworkTableEntry Shuffle_rencoder_slave =
-    tab.add("Right Slave Encoder", 0).getEntry();
+   positionList.add("Right Slave Encoder", 0)
+    .withPosition(1,1)
+    .getEntry();
   private NetworkTableEntry Shuffle_right_position =
-    tab.add("Right Encoder Posoition", 0).getEntry();
+    positionList.add("Right Encoder Posoition", 0)
+      .withPosition(1,2)
+      .getEntry();
 
+  private ShuffleboardLayout velocityList =
+    tab.getLayout("Drivetrain Velocity", BuiltInLayouts.kGrid)
+    .withProperties(Map.of("Label position", "RIGHT"))
+    .withSize(3,2)
+    .withPosition(5,2);
+  // Left velocity
   private NetworkTableEntry Shuffle_lvelocity =
-    tab.add("Left Master Velocity", 0).getEntry();
+    velocityList.add("Left Master Velocity", 0)
+      .withPosition(0,0)
+      .getEntry();
   private NetworkTableEntry Shuffle_lvelocity_slave =
-    tab.add("Left Slave Velocity", 0).getEntry();
+    velocityList.add("Left Slave Velocity", 0)
+      .withPosition(0,1)
+      .getEntry();
   private NetworkTableEntry Shuffle_left_velocity =
-    tab.add("Left Velocity", 0).getEntry();
-  
+    velocityList.add("Left Velocity", 0)
+      .withPosition(0,2)
+      .getEntry();
+  // Right velocity
   private NetworkTableEntry Shuffle_rvelocity =
-    tab.add("Right Master Velocity", 0).getEntry();
+    velocityList.add("Right Master Velocity", 0)
+      .withPosition(1,0)
+      .getEntry();
   private NetworkTableEntry Shuffle_rvelocity_slave =
-    tab.add("Right Slave Velocity", 0).getEntry();
+    velocityList.add("Right Slave Velocity", 0)
+      .withPosition(1,1)
+      .getEntry();
   private NetworkTableEntry Shuffle_right_velocity =
-    tab.add("Right Velocity", 0).getEntry();
+    velocityList.add("Right Velocity", 0)
+      .withPosition(1,2)
+      .getEntry();
 
   /**
    * Creates a new Drivebase.
@@ -116,6 +164,11 @@ public class Drivebase extends SubsystemBase {
 
     // Creates NavX
     navX = new AHRS(SPI.Port.kMXP);
+
+    tab.add("Gyro", navX)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withPosition(3,0)
+      .withSize(2,2);
 
     // Creates Limlight and Limelight PID Controller
     // limelightPidController = new PIDController(Constants.Limelight_Constants.PID_Values.kP, Constants.Limelight_Constants.PID_Values.kI, Constants.Limelight_Constants.PID_Values.kD);
@@ -146,8 +199,11 @@ public class Drivebase extends SubsystemBase {
     //Creates New Drive Object to Allow for Tank, Arcade, and Curvature Drive
     drive = new DifferentialDrive(leftMotors, rightMotors);
     
+    // Add drivetrain to Shuffleboard
     tab.add("Drivetrain", drive)
-    .withWidget(BuiltInWidgets.kDifferentialDrive);
+    .withWidget(BuiltInWidgets.kDifferentialDrive)
+    .withPosition(0,0)
+    .withSize(3,3);
 
     //Creates an Odometry Object That Is Used To Allow the Robot to Follow Trajectories
     odometry = new DifferentialDriveOdometry(navX.getRotation2d());
@@ -167,7 +223,6 @@ public class Drivebase extends SubsystemBase {
     // Odometry Calculates the Robot's Position On The Field so It Will Constantly Update by Reading Encoder and Gyro Values
     odometry.update(navX.getRotation2d(), getLeftEncoders_Position(), getRightEncoders_Position());
 
-    Shuffle_gyro.setDouble(navX.getAngle());
     getLeftEncoders_Velocity();
     getRightEncoders_Velocity();
   }
@@ -359,58 +414,6 @@ public class Drivebase extends SubsystemBase {
    {
       return leftSlave1_encoder.getVelocity();
    }
-
-  /****************************************************
-   ** DISPLAYING GROUPED ENCODER VALUES ON DASHBOARD **
-   ************* (POSITION / VELOCITY) ****************
-   ****************************************************/
-  public void displayLeftEncodersPosition()
-  {
-    SmartDashboard.putNumber("Left Side Encoder", getLeftEncoders_Position());
-  }
-
-  public void displayRightEncodersPosition()
-  {
-    SmartDashboard.putNumber("Right Side Encoder Position", getRightEncoders_Position());
-  }
-
-  public void displayLeftEncodersVelocity()
-  {
-    SmartDashboard.putNumber("Left Side Encoder Velocity", getLeftEncoders_Velocity());
-  }
-
-  public void displayRightEncodersVelocity()
-  {
-    SmartDashboard.putNumber("Right Side Encoder Velocity", getRightEncoders_Velocity());
-  }
-
-  /*****************************************************
-   * DISPLAYING INDIVIDUAL ENCODER VALUES ON DASHBOARD *
-   ************* (POSITION / VELOCITY) *****************
-   *****************************************************/
-  public void displayAllLeftSideEncoders_Position()
-  {
-    double[] leftEncoders = new double[]{getLeftMasterEncoderPosition(), getLeftSlave1EncoderPosition()};
-    SmartDashboard.putNumberArray("Left Encoder Position (Master, Slave1, Slave2)", leftEncoders);
-  }
-
-  public void displayAllRightSideEncoders_Position()
-  {
-    double[] rightEncoders = new double[]{getRightMasterEncoderPosition(), getRightSlave1EncoderPosition()};
-    SmartDashboard.putNumberArray("Right Encoder Position (Master, Slave1, Slave2)", rightEncoders);
-  }
-
-  public void displayAllRightSideEncoders_Velocity()
-  {
-    double[] rightEncoders = new double[]{getRightMasterEncoderVelocity(), getRightSlave1EncoderVelocity()};
-    SmartDashboard.putNumberArray("Right Encoder Velocity (Master, Slave1, Slave2)", rightEncoders);
-  }
-
-  public void displayAllLeftSideEncoders_Velocity()
-  {
-    double[] leftEncoders = new double[]{getLeftMasterEncoderVelocity(), getLeftSlave1EncoderVelocity()};
-    SmartDashboard.putNumberArray("Left Encoder Velocity (Master, Slave1, Slave2)", leftEncoders);
-  }
 
   /****************************************************
    * SETTING POSITION AND VELOCITY CONVERSION FACTORS *

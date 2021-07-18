@@ -8,7 +8,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shooter_Hood;
 
 public class Hood_Reset extends CommandBase {
@@ -17,7 +16,6 @@ public class Hood_Reset extends CommandBase {
    */
 
    private Shooter_Hood shooterHood;
-   private double power;
 
   public Hood_Reset(Shooter_Hood shooterHoodSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -46,9 +44,6 @@ public class Hood_Reset extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (shooterHood.isHome() == 1) {
-      return true;
-    }
-    else return false;
+    return shooterHood.isHome() ? true : false;
   }
 }

@@ -120,8 +120,8 @@ public class RobotContainer {
     pilot.lt.whileHeld(collectorEject, true);
     pilot.rt.whileHeld(collectorCollect, true);
     
-    coPilot.dPad.up.whenPressed(() -> shooter.changeRPM("up"));
-    coPilot.dPad.down.whenPressed(() -> shooter.changeRPM("down"));
+    coPilot.dPad.up.whenPressed(() -> shooter.changeSpeed("up"));
+    coPilot.dPad.down.whenPressed(() -> shooter.changeSpeed("down"));
 
     coPilot.lb.whenPressed(enableShooter);
     coPilot.rb.whenPressed(disableShooter);

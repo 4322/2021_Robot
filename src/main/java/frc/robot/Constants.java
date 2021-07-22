@@ -117,11 +117,11 @@ public final class Constants {
         public static final double setPoint = 3000;
 
         public static class PID_Values  {
-            public static final double kP = .001;
-            public static final double kI = 0;
-            public static final double kD = 150;
-            public static final double kIz = 0;
-            public static final double kFF = 0;
+            public static final double kP = .0005;
+            public static final double kI = 0.0000003;
+            public static final double kD = 0.01;
+            public static final double kIz = 300;
+            public static final double kFF = 0.00015;
             public static final int kMax = 1;
             public static final int kMin = -1;
         }

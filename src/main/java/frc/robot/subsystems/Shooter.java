@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase {
   private SendableChooser<String> shooterControlMethod = new SendableChooser<String>();
 
   private CANSparkMax flywheelOne;
-  // private CANSparkMax flywheelTwo;
+  private CANSparkMax flywheelTwo;
 
   private CANPIDController flywheelPID;
   
@@ -66,6 +66,7 @@ public class Shooter extends SubsystemBase {
     .withWidget(BuiltInWidgets.kGraph)
     .withProperties(Map.of("unit", "RPM"))
     .withPosition(0,0)
+    .withSize(3,3)
     .getEntry();
 
   private NetworkTableEntry setpointError =
@@ -73,13 +74,7 @@ public class Shooter extends SubsystemBase {
     .withWidget(BuiltInWidgets.kGraph)
     .withProperties(Map.of("unit", "RPM difference"))
     .withPosition(6,0)
-    .getEntry();
-
-  private NetworkTableEntry appliedOutput =
-    tab.add("Applied Output", 0)
-    .withWidget(BuiltInWidgets.kGraph)
-    .withProperties(Map.of("unit", "Duty Cycles"))
-    .withPosition(6,3)
+    .withSize(3,3)
     .getEntry();
 
   private ShuffleboardLayout shufflePID =
@@ -104,6 +99,9 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry pidEnabled =
     shufflePID.add("PID Enabled", false).withPosition(2,1).getEntry();
 
+  private NetworkTableEntry setpointErrorVal =
+    shufflePID.add("Error", 0).withPosition(0,1).getEntry();
+
   public Shooter() {
     shooterControlMethod.setDefaultOption("PID Control (RPM)", "pid");
     shooterControlMethod.addOption("Manual Control (power)", "manual");
@@ -113,10 +111,12 @@ public class Shooter extends SubsystemBase {
       .withSize(2,1);
 
     flywheelOne = new CANSparkMax(Constants.Shooter_Constants.flywheelOneSpark_ID, MotorType.kBrushless);
+    flywheelTwo = new CANSparkMax(Constants.Shooter_Constants.flywheelTwoSpark_ID, MotorType.kBrushless);
 
     flywheelOne.restoreFactoryDefaults();
     flywheelOne.setInverted(true);
-    // flywheelTwo.follow(flywheelOne, true);
+    flywheelTwo.restoreFactoryDefaults();
+    flywheelTwo.follow(flywheelOne, true);
 
     flywheelPID = flywheelOne.getPIDController();
 
@@ -139,14 +139,13 @@ public class Shooter extends SubsystemBase {
     double min = kMinOutput.getDouble(0);
 
     // Refresh PID values from Shuffleboard
-    if((p != kP.getDouble(0))) { flywheelPID.setP(p); kP.setDouble(p); }
-    if((i != kI.getDouble(0))) { flywheelPID.setI(i); kI.setDouble(i); }
-    if((d != kD.getDouble(0))) { flywheelPID.setD(d); kD.setDouble(d); }
-    if((iz != kIz.getDouble(0))) { flywheelPID.setIZone(iz); kIz.setDouble(iz); }
-    if((ff != kFF.getDouble(0))) { flywheelPID.setFF(ff); kFF.setDouble(ff); }
-    if((max != kMaxOutput.getDouble(0)) || (min != kMinOutput.getDouble(0))) {
+    if(p != flywheelPID.getP()) { flywheelPID.setP(p); }
+    if(i != flywheelPID.getI()) { flywheelPID.setI(i); }
+    if(d != flywheelPID.getD()) { flywheelPID.setD(d); }
+    if(iz != flywheelPID.getIZone()) { flywheelPID.setIZone(iz); }
+    if(ff != flywheelPID.getFF()) { flywheelPID.setFF(ff); }
+    if(max != flywheelPID.getOutputMax() || (min != flywheelPID.getOutputMin())) {
       flywheelPID.setOutputRange(min, max);
-      kMinOutput.setDouble(min); kMaxOutput.setDouble(max);
     }
 
     updateShuffleboard();
@@ -198,6 +197,7 @@ public class Shooter extends SubsystemBase {
   public void stopShooter() {
     flywheelOne.stopMotor();
     setpointError.setDouble(0);
+    setpointErrorVal.setDouble(0);
     pidEnabled.setBoolean(false);
 
     shooterEnabled.setBoolean(false);
@@ -210,7 +210,9 @@ public class Shooter extends SubsystemBase {
         double rpm = targetRPM.getDouble(Constants.Shooter_Constants.setPoint);
         if (!pidEnabled.getBoolean(false)) flywheelPID.setReference(rpm, ControlType.kVelocity);
 
-        setpointError.setDouble(flywheelOne.getEncoder().getVelocity() - rpm);
+        double _setpointError = flywheelOne.getEncoder().getVelocity() - rpm;
+        setpointError.setDouble(_setpointError);
+        setpointErrorVal.setDouble(_setpointError);
         if (!pidEnabled.getBoolean(false)) pidEnabled.setBoolean(true);
         break;
       }
@@ -226,11 +228,10 @@ public class Shooter extends SubsystemBase {
     }
     
     if (!shooterEnabled.getBoolean(false)) shooterEnabled.setBoolean(true);
-    RobotContainer.coPilot.setRumble(0.2);
+    RobotContainer.coPilot.setRumble(0.1);
   }
 
   private void updateShuffleboard() {
     shooterVelocity.setDouble(flywheelOne.getEncoder().getVelocity());
-    appliedOutput.setDouble(0);
   }
 }

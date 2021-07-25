@@ -7,12 +7,10 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,7 +22,6 @@ public class Kicker extends SubsystemBase {
    */
 
   private CANSparkMax kickerMotor;
-  private CANEncoder kickerMotorEncoder;
 
   // SHUFFLEBOARD
   ShuffleboardTab tab = Shuffleboard.getTab("Kicker");
@@ -36,13 +33,6 @@ public class Kicker extends SubsystemBase {
 
     kickerMotor.setIdleMode(IdleMode.kCoast);
     kickerMotor.burnFlash();
-
-    kickerMotorEncoder = new CANEncoder(kickerMotor);
-
-    tab.add("Kicker Position", getKickerEncoderPosition())
-    .withWidget(BuiltInWidgets.kGraph);
-    tab.add("Kicker Velocity", getKickerEncoderVelocity())
-    .withWidget(BuiltInWidgets.kGraph);
   }
 
   @Override
@@ -58,13 +48,5 @@ public class Kicker extends SubsystemBase {
   public void disableKicker()
   {
     kickerMotor.set(0);
-  }
-
-  public double getKickerEncoderPosition() {
-    return (kickerMotorEncoder.getPosition());
-  }
-
-  public double getKickerEncoderVelocity() {
-    return (kickerMotorEncoder.getVelocity());
   }
 }

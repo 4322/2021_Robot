@@ -13,7 +13,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -24,7 +23,7 @@ public class Shooter_Hood extends SubsystemBase {
 
   private WPI_TalonSRX shooterHood;
   private Encoder hoodEncoder;
-  private PIDController hoodPIDController;
+  // private PIDController hoodPIDController;
   // private Limelight limelight;
 
   // SHUFFLEBOARD
@@ -46,11 +45,11 @@ public class Shooter_Hood extends SubsystemBase {
 
   public Shooter_Hood() {
     // The PIDController used by the subsystem
-    hoodPIDController = new PIDController(
-      Constants.Hood_Constants.PID_Values.kP,
-      Constants.Hood_Constants.PID_Values.kI,
-      Constants.Hood_Constants.PID_Values.kD
-    );
+    // hoodPIDController = new PIDController(
+    //   Constants.Hood_Constants.PID_Values.kP,
+    //   Constants.Hood_Constants.PID_Values.kI,
+    //   Constants.Hood_Constants.PID_Values.kD
+    // );
     shooterHood = new WPI_TalonSRX(Constants.Hood_Constants.hoodTalon_ID);
     hoodEncoder = new Encoder(0, 1);
     // limelight = new Limelight();

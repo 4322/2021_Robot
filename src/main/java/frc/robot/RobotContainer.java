@@ -9,7 +9,6 @@ package frc.robot;
 
 import java.util.List;
 
-import frc.robot.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -29,8 +28,8 @@ import frc.robot.commands.Disable_Shooter;
 import frc.robot.commands.Drive_Manual;
 import frc.robot.commands.Enable_Kicker;
 import frc.robot.commands.Enable_Shooter;
-import frc.robot.commands.Enable_ShooterPower;
 import frc.robot.commands.Hood_Manual;
+import frc.robot.commands.Hood_Reset;
 import frc.robot.commands.Hopper_Eject;
 import frc.robot.commands.Hopper_Intake;
 import frc.robot.commands.Hopper_Stop;
@@ -67,10 +66,11 @@ public class RobotContainer {
   public final Drive_Manual driveManual = new Drive_Manual(drivebase);
 
   public final Hood_Manual hoodManual = new Hood_Manual(shooterHood);
+  public final Hood_Reset hoodReset = new Hood_Reset(shooterHood);
 
   public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
-  public final Enable_ShooterPower enableShooterPower = new Enable_ShooterPower(shooter);
+  // public final Enable_ShooterPower enableShooterPower = new Enable_ShooterPower(shooter);
 
   public final Enable_Kicker enableKicker = new Enable_Kicker(kicker);
   public final Disable_Kicker disableKicker = new Disable_Kicker(kicker);
@@ -120,8 +120,8 @@ public class RobotContainer {
     pilot.lt.whileHeld(collectorEject, true);
     pilot.rt.whileHeld(collectorCollect, true);
     
-    coPilot.dPad.up.whenPressed(() -> shooter.changePower("up"));
-    coPilot.dPad.down.whenPressed(() -> shooter.changePower("down"));
+    coPilot.dPad.up.whenPressed(() -> shooter.changeSpeed("up"));
+    coPilot.dPad.down.whenPressed(() -> shooter.changeSpeed("down"));
 
     coPilot.lb.whenPressed(enableShooter);
     coPilot.rb.whenPressed(disableShooter);
@@ -132,8 +132,14 @@ public class RobotContainer {
     coPilot.lt.whileHeld(hopperEject);
     coPilot.rt.whileHeld(hopperIntake);
 
+    coPilot.a.whenPressed(hoodReset);
+
     // coPilot.y.whenPressed(extendClimber);
     // coPilot.a.whenPressed(retractClimber);
+  }
+
+  public void disableSubsystems() {
+    shooter.stopShooter();
   }
 
 
@@ -150,25 +156,8 @@ public class RobotContainer {
         new SimpleMotorFeedforward(Constants.Drivebase_Constants.PID_Values.ksVolts,
                                    Constants.Drivebase_Constants.PID_Values.kaVoltSecondsSquaredPerMeter,
                                    Constants.Drivebase_Constants.PID_Values.kvVoltSecondsPerMeter),
-                                   Constants.Drivebase_Constants.kinematics, 10);
+        Constants.Drivebase_Constants.kinematics, 10);
 
-    // TrajectoryConfig config = new TrajectoryConfig(Constants.Drivebase_Constants.kMaxSpeedMetersPerSecond, Constants.Drivebase_Constants.kMaxAccelerationMetersPerSecondSquared)
-    // .setKinematics(Constants.Drivebase_Constants.kinematics)
-    // .addConstraint(autoVoltageConstraint);
-
-    // Trajectory driveForward = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),  
-    
-    // List.of
-    // (
-    //   new Translation2d(.5, 0),
-    //   new Translation2d(1, 0)
-    // ),
-    //   new Pose2d(2, 0, new Rotation2d(0)), config);
-    
-    
-    
-    //   return m_autoCommand;
-    // Create config for trajectory
     TrajectoryConfig config =
         new TrajectoryConfig(Constants.Drivebase_Constants.kMaxSpeedMetersPerSecond,
                              Constants.Drivebase_Constants.kMaxAccelerationMetersPerSecondSquared)

@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -24,18 +25,29 @@ public class Limelight extends SubsystemBase {
   // SHUFFLEBOARD
   ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
 
-  public Limelight() {
-    tab.add("X Offset", getX_Offset());
-    tab.add("Y Offset", getY_Offset());
+  NetworkTableEntry _tv =
     tab.add("Target Visible", getTarget())
-    .withWidget(BuiltInWidgets.kBooleanBox);
-    tab.add("Target Area", get_TargetArea());
-    tab.add("Distance to Target", getDistance());
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .withPosition(0,0)
+    .getEntry();
+  NetworkTableEntry distanceToTarget =
+    tab.add("Distance to Target", getDistance())
+    .withPosition(1,0)
+    .withSize(2,1)
+    .getEntry();
+  NetworkTableEntry _ta = tab.add("Target Area", getTargetArea()).withPosition(0,1).getEntry();
+  NetworkTableEntry _tx = tab.add("X Offset", getX_Offset()).withPosition(1,1).getEntry();
+  NetworkTableEntry _ty = tab.add("Y Offset", getY_Offset()).withPosition(2,1).getEntry();
+
+  public Limelight() {
+    // Nothing to do here :)
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    if(getTarget()) RobotContainer.pilot.setRumble(0.2);
+
+    updateShuffleboard();
   }
 
   public double getX_Offset()
@@ -48,7 +60,7 @@ public class Limelight extends SubsystemBase {
     return ty.getDouble(0);
   }
 
-  public double get_TargetArea()
+  public double getTargetArea()
   {
     return ta.getDouble(0);
   }
@@ -65,6 +77,14 @@ public class Limelight extends SubsystemBase {
     (Constants.Limelight_Constants.targetHeight - Constants.Limelight_Constants.limelightHeight)
       / (Math.tan(Constants.Limelight_Constants.limelightAngle + getY_Offset()));
     return distance;
+  }
+
+  private void updateShuffleboard() {
+    if (getX_Offset() != _tx.getDouble(0)) _tx.setDouble(getX_Offset());
+    if (getY_Offset() != _ty.getDouble(0)) _ty.setDouble(getY_Offset());
+    if (getTargetArea() != _ta.getDouble(0)) _ta.setDouble(getTargetArea());
+    if (getTarget () != _tv.getBoolean(false)) _tv.setBoolean(getTarget());
+    if (getDistance() != distanceToTarget.getDouble(0)) distanceToTarget.setDouble(getDistance());
   }
 
 }

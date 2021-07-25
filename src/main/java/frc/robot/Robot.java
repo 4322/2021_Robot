@@ -34,7 +34,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     // compressor.start();
-    
   }
 
   /**
@@ -51,11 +50,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    // SmartDashboard.putNumber("l_encoder_rate", m_drivebase.getLeftEncoders_Velocity());
-    // SmartDashboard.putNumber("l_encoder_pos", m_drivebase.getLeftEncoders_Velocity());
-    // SmartDashboard.putNumber("r_encoder_rate", m_drivebase.getRightEncoders_Velocity());
-    // SmartDashboard.putNumber("r_encoder_pos", m_drivebase.getRightEncoders_Velocity());
-    
   }
 
   /**
@@ -63,6 +57,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    m_robotContainer.disableSubsystems();
   }
 
   @Override
@@ -74,12 +69,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    // new ScheduleCommand(m_hoodReset);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    
   }
 
   /**
@@ -98,6 +95,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    // new ScheduleCommand(m_hoodReset);
   }
 
   /**

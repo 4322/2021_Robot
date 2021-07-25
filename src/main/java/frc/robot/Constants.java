@@ -49,7 +49,10 @@ public final class Constants {
         public static final double kRamseteZeta = 0.7;
 
         public static final double distPerPulse = .0011114506; // In Meters
+        // public static final double distPerPulse = 1;
+
         public static final double velocityConversion = .0007780154; // In Meters
+        // public static final double velocityConversion = 1;
 
 
         public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
@@ -109,29 +112,27 @@ public final class Constants {
         public static final int flywheelTwoSpark_ID = 8;
         public static final int kickerSpark_ID = 5;
 
-        public static final int maxRPM = 4900;
+        public static final double maxRPM = 4900;
+
+        public static final double setPoint = 3000;
 
         public static class PID_Values  {
-
-            public static final double kP = .01;
-            // 2020: 0.4
-            public static final double kI = 0;
-            public static final double kD = 0;
-            // 2020: 0
-            public static final double kIz = 0;
-            public static final double kFF = 0;
-            // 2020: 0.01;
+            public static final double kP = .0005;
+            public static final double kI = 0.0000003;
+            public static final double kD = 0.01;
+            public static final double kIz = 300;
+            public static final double kFF = 0.00015;
             public static final int kMax = 1;
             public static final int kMin = -1;
-
         }
     }
 
     public static class Hood_Constants
     {
         public static final int hoodTalon_ID = 12;
+        public static final int hoodMaxDistance = 4800;
         public static final int hoodTolerance = 10;
-        public static final int setpointOne = 50; 
+        public static final int setpointOne = 50;
 
         public static class PID_Values
         {

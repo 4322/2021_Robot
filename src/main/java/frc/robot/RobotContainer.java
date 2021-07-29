@@ -138,6 +138,10 @@ public class RobotContainer {
     // coPilot.a.whenPressed(retractClimber);
   }
 
+  public void disableSubsystems() {
+    shooter.stopShooter();
+  }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

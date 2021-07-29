@@ -65,15 +65,15 @@ public class Shooter_Hood extends SubsystemBase {
 
   public double getPosition()
   {
-    return hoodEncoder.getDistance(); 
+    return hoodEncoder.getDistance() * -1; 
   }
 
   public void setHood(double power)
   {
     double encValue = this.getPosition();
-    if (this.getPosition() >= -4800 || power < 0) {
-      if (this.getPosition() <= -4200 && power > 0) {
-        double _power = power * ((4800 - (-encValue))/600);
+    if (this.getPosition() <= 4800 || power < 0) {
+      if (this.getPosition() >= 4200 && power > 0) {
+        double _power = power * ((4800 - (encValue))/600);
         if (_power < 0.1) {
           _power = 0.1;
         }

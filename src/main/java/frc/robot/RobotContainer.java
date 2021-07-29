@@ -19,28 +19,8 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import frc.robot.commands.Arm_Manual;
-import frc.robot.commands.Collecter_Collect;
-import frc.robot.commands.Collector_Eject;
-import frc.robot.commands.Collector_Stop;
-import frc.robot.commands.Disable_Kicker;
-import frc.robot.commands.Disable_Shooter;
-import frc.robot.commands.Drive_Manual;
-import frc.robot.commands.Enable_Kicker;
-import frc.robot.commands.Enable_Shooter;
-import frc.robot.commands.Hood_Manual;
-import frc.robot.commands.Hood_Reset;
-import frc.robot.commands.Hopper_Eject;
-import frc.robot.commands.Hopper_Intake;
-import frc.robot.commands.Hopper_Stop;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Collector;
-import frc.robot.subsystems.Drivebase;
-import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Kicker;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Shooter_Hood;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
@@ -71,6 +51,7 @@ public class RobotContainer {
   public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
   // public final Enable_ShooterPower enableShooterPower = new Enable_ShooterPower(shooter);
+  public final Shooter_ResetPID shooterResetPID = new Shooter_ResetPID(shooter);
 
   public final Enable_Kicker enableKicker = new Enable_Kicker(kicker);
   public final Disable_Kicker disableKicker = new Disable_Kicker(kicker);
@@ -125,6 +106,7 @@ public class RobotContainer {
 
     coPilot.lb.whenPressed(enableShooter);
     coPilot.rb.whenPressed(disableShooter);
+    coPilot.start.whenPressed(shooterResetPID);
 
     coPilot.x.whenPressed(enableKicker);
     coPilot.b.whenPressed(disableKicker);

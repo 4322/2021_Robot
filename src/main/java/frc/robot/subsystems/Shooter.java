@@ -121,6 +121,8 @@ public class Shooter extends SubsystemBase {
 
     flywheelPID = flywheelOne.getPIDController();
 
+    resetPIDValues();
+
     flywheelPID.setP(kP.getDouble(0));
     flywheelPID.setI(kI.getDouble(0));
     flywheelPID.setD(kD.getDouble(0));
@@ -131,6 +133,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+
     double p = kP.getDouble(0);
     double i = kI.getDouble(0);
     double d = kD.getDouble(0);
@@ -234,6 +237,16 @@ public class Shooter extends SubsystemBase {
     
     if (!shooterEnabled.getBoolean(false)) shooterEnabled.setBoolean(true);
     RobotContainer.coPilot.setRumble(0.1);
+  }
+
+  public void resetPIDValues() {
+    kP.setDouble(Constants.Shooter_Constants.PID_Values.kP);
+    kI.setDouble(Constants.Shooter_Constants.PID_Values.kI);
+    kD.setDouble(Constants.Shooter_Constants.PID_Values.kD);
+    kIz.setDouble(Constants.Shooter_Constants.PID_Values.kIz);
+    kFF.setDouble(Constants.Shooter_Constants.PID_Values.kFF);
+    kMaxOutput.setDouble(Constants.Shooter_Constants.PID_Values.kMax);
+    kMinOutput.setDouble(Constants.Shooter_Constants.PID_Values.kMin);
   }
 
   private void setShooterRPM(double rpm, boolean override) {

@@ -69,14 +69,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // new ScheduleCommand(m_hoodReset);
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
-    
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.schedule();
+    // }
+    m_robotContainer.resetSubsystems();
   }
 
   /**
@@ -95,7 +94,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    // new ScheduleCommand(m_hoodReset);
+    
+    m_robotContainer.resetSubsystems();
   }
 
   /**

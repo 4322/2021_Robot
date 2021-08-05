@@ -26,6 +26,9 @@ public class Shooter_Hood extends SubsystemBase {
   // private PIDController hoodPIDController;
   // private Limelight limelight;
 
+  // Hood control
+  private boolean homed = false;
+
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Hood");
 
@@ -36,11 +39,24 @@ public class Shooter_Hood extends SubsystemBase {
     .withPosition(0,0)
     .withSize(2,2)
     .getEntry();
+  private NetworkTableEntry hoodPower =
+    tab.add("Hood Power", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -1, "max", 1))
+    .withPosition(2,0)
+    .withSize(2,2)
+    .getEntry();
   private NetworkTableEntry isHomeIndicator =
-    tab.add("Homed?", false)
+    tab.add("Is @ home", false)
     .withWidget(BuiltInWidgets.kBooleanBox)
     .withPosition(0,2)
-    .withSize(1,2)
+    .withSize(1,1)
+    .getEntry();
+  private NetworkTableEntry isHomedIndicator =
+    tab.add("Homed", false)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .withPosition(1,2)
+    .withSize(1,1)
     .getEntry();
 
   public Shooter_Hood() {
@@ -53,6 +69,9 @@ public class Shooter_Hood extends SubsystemBase {
     shooterHood = new WPI_TalonSRX(Constants.Hood_Constants.hoodTalon_ID);
     hoodEncoder = new Encoder(0, 1);
     // limelight = new Limelight();
+
+    // Check if the hood is already in the home position
+    if (isAtHome()) homed = true;
   }
 
   @Override
@@ -60,7 +79,8 @@ public class Shooter_Hood extends SubsystemBase {
     checkHome();
 
     hoodPosition.setDouble(getPosition());
-    isHomeIndicator.setBoolean(isHome());
+    isHomeIndicator.setBoolean(isAtHome());
+    isHomedIndicator.setBoolean(isHomed());
   }
 
   public double getPosition()
@@ -70,10 +90,12 @@ public class Shooter_Hood extends SubsystemBase {
 
   public void setHood(double power)
   {
+    hoodPower.setDouble(power);
+
     double encValue = this.getPosition();
-    if (this.getPosition() <= 4800 || power < 0) {
+    if (this.getPosition() <= Constants.Hood_Constants.hoodMaxDistance || power < 0) {
       if (this.getPosition() >= 4200 && power > 0) {
-        double _power = power * ((4800 - (encValue))/600);
+        double _power = power * ((Constants.Hood_Constants.hoodMaxDistance - (encValue))/600);
         if (_power < 0.1) {
           _power = 0.1;
         }
@@ -87,10 +109,17 @@ public class Shooter_Hood extends SubsystemBase {
   }
 
   public void checkHome() {
-    if (isHome() && getPosition() != 0) hoodEncoder.reset();
+    if (isAtHome() && getPosition() != 0) {
+      hoodEncoder.reset();
+      homed = true;
+    }
   }
 
-  public boolean isHome() {
+  public boolean isAtHome() {
     return shooterHood.isRevLimitSwitchClosed() == 1 ? true : false;
+  }
+
+  public boolean isHomed() {
+    return homed;
   }
 }

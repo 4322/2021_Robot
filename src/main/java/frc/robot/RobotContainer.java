@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConst
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 /**
@@ -47,6 +48,7 @@ public class RobotContainer {
 
   public final Hood_Manual hoodManual = new Hood_Manual(shooterHood);
   public final Hood_Reset hoodReset = new Hood_Reset(shooterHood);
+  public final Hood_AutoHome hoodAutoHome = new Hood_AutoHome(shooterHood);
 
   public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
@@ -124,6 +126,10 @@ public class RobotContainer {
     shooter.stopShooter();
   }
 
+  public void resetSubsystems() {
+    // shooterHood.autoHome();
+    CommandScheduler.getInstance().schedule(hoodAutoHome);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

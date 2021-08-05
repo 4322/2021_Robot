@@ -8,16 +8,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter_Hood;
 
-public class Hood_Reset extends CommandBase {
+public class Hood_AutoHome extends CommandBase {
   /**
    * Creates a new Hood_Manual.
    */
 
    private Shooter_Hood shooterHood;
 
-  public Hood_Reset(Shooter_Hood shooterHoodSubsystem) {
+  public Hood_AutoHome(Shooter_Hood shooterHoodSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     shooterHood = shooterHoodSubsystem;
@@ -33,7 +34,8 @@ public class Hood_Reset extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterHood.setHood(-1);
+    if (!shooterHood.isHomed()) shooterHood.setHood(-1);
+    else shooterHood.setHood(1);
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +47,7 @@ public class Hood_Reset extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooterHood.isAtHome() ? true : false;
+    return shooterHood.isHomed() && shooterHood.getPosition() >=
+      Constants.Hood_Constants.hoodMaxDistance - Constants.Hood_Constants.hoodTolerance;
   }
 }

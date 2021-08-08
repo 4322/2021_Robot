@@ -9,6 +9,8 @@ package frc.robot;
 
 import java.util.List;
 
+import javax.print.attribute.standard.Copies;
+
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -97,27 +99,34 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    // DRIVEBASE CONTROLS
     pilot.dPad.up.whenPressed(() -> drivebase.changePower("up"));
     pilot.dPad.down.whenPressed(() -> drivebase.changePower("down"));
 
+    // COLLECTOR CONTROLS
     pilot.lt.whileHeld(collectorEject, true);
     pilot.rt.whileHeld(collectorCollect, true);
     
-    coPilot.dPad.up.whenPressed(() -> shooter.changeSpeed("up"));
-    coPilot.dPad.down.whenPressed(() -> shooter.changeSpeed("down"));
-
+    // SHOOTER COTNROLS
     coPilot.lb.whenPressed(enableShooter);
     coPilot.rb.whenPressed(disableShooter);
     coPilot.start.whenPressed(shooterResetPID);
+    coPilot.dPad.up.whenPressed(() -> shooter.changeSpeed("up"));
+    coPilot.dPad.down.whenPressed(() -> shooter.changeSpeed("down"));
 
+    // KICKER CONTROLS
     coPilot.x.whenPressed(enableKicker);
     coPilot.b.whenPressed(disableKicker);
     
+    // HOOD CONTROLS
     coPilot.lt.whileHeld(hopperEject);
     coPilot.rt.whileHeld(hopperIntake);
+    coPilot.back.whenPressed(hoodReset);
+    // TEMPORARY CONTROLS
+    coPilot.y.whenPressed(() -> shooterHood.changeSetpoint("up"));
+    coPilot.a.whenPressed(() -> shooterHood.changeSetpoint("down"));
 
-    coPilot.a.whenPressed(hoodReset);
-
+    // CLIMBER CONTROLS
     // coPilot.y.whenPressed(extendClimber);
     // coPilot.a.whenPressed(retractClimber);
   }

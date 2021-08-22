@@ -147,6 +147,8 @@ public class Shooter_Hood extends SubsystemBase {
                           Constants.Hood_Constants.PID_Values.kI, Constants.Hood_Constants.kTimeoutMs);
 		shooterHood.config_kD(Constants.Hood_Constants.kPIDLoopIdx,
                           Constants.Hood_Constants.PID_Values.kD, Constants.Hood_Constants.kTimeoutMs);
+    shooterHood.config_kF(Constants.Hood_Constants.kPIDLoopIdx,
+                          Constants.Hood_Constants.PID_Values.kF, Constants.Hood_Constants.kTimeoutMs);
     currentP = Constants.Hood_Constants.PID_Values.kP;
     currentI = Constants.Hood_Constants.PID_Values.kI;
     currentD = Constants.Hood_Constants.PID_Values.kD;
@@ -174,7 +176,7 @@ public class Shooter_Hood extends SubsystemBase {
       Constants.Hood_Constants.PID_Values.kI,
       Constants.Hood_Constants.PID_Values.kD
     );
-    hoodPIDController.disableContinuousInput();
+    // hoodPIDController.disableContinuousInput();
 
     hoodPIDController.setTolerance(
       Constants.Hood_Constants.PID_Values.errorTollerance,
@@ -191,6 +193,7 @@ public class Shooter_Hood extends SubsystemBase {
   @Override
   public void periodic() {
     checkHome();
+    checkPIDDone();
 
     hoodPosition.setDouble(getPosition());
     hoodPositionTalon.setDouble(getPosition_talon());
@@ -256,7 +259,7 @@ public class Shooter_Hood extends SubsystemBase {
   }
 
   public double getPosition_talon() {
-    return shooterHood.getSelectedSensorPosition();
+    return shooterHood.getSelectedSensorPosition(0);
   }
 
   public void setHood(double power)
@@ -297,15 +300,15 @@ public class Shooter_Hood extends SubsystemBase {
   public void changeSetpoint(String direction) {
     switch(direction) {
       case "up": {
-        if (targetSetpoint + 600 <= Constants.Hood_Constants.hoodMaxDistance) targetSetpoint += 600;
-        else targetSetpoint = Constants.Hood_Constants.hoodMaxDistance;
+        if (targetSetpoint + 1000 <= Constants.Hood_Constants.hoodMaxDistance_talon) targetSetpoint += 1000;
+        else targetSetpoint = Constants.Hood_Constants.hoodMaxDistance_talon;
         pidEnabled = true;
         setHoodPosition_talon(targetSetpoint);
         // hoodPIDController.setSetpoint(targetSetpoint);
         break;
       }
       case "down": {
-        if (targetSetpoint - 600 >= 0) targetSetpoint -= 600;
+        if (targetSetpoint - 1000 >= 0) targetSetpoint -= 1000;
         else targetSetpoint = 0;
         pidEnabled = true;
         setHoodPosition_talon(targetSetpoint);
@@ -340,5 +343,15 @@ public class Shooter_Hood extends SubsystemBase {
     // kFF.setDouble(Constants.Shooter_Constants.PID_Values.kFF);
     // kMaxOutput.setDouble(Constants.Shooter_Constants.PID_Values.kMax);
     // kMinOutput.setDouble(Constants.Shooter_Constants.PID_Values.kMin);
+  }
+
+  public void checkPIDDone() {
+    if (Math.abs(getPosition_talon() - targetSetpoint) <= 20) {
+      pidEnabled = false;
+    }
+  }
+
+  public boolean getPIDEnabled() {
+    return pidEnabled;
   }
 }

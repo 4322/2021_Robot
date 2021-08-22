@@ -84,7 +84,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    drivebase.setDefaultCommand(driveManual);
+    drivebase.setDefaultCommand(driveManual); 
     shooterHood.setDefaultCommand(hoodManual);
     collector.setDefaultCommand(collectorStop);
     arm.setDefaultCommand(armManual);

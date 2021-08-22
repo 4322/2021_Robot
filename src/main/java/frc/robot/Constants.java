@@ -144,10 +144,10 @@ public final class Constants {
 
         public static class PID_Values
         {
-            public static final double kP = 0;
-            public static final double kI = 0;
-            public static final double kD = 0;
-
+            public static final double kP = 3;
+            public static final double kI = 0.00001;
+            public static final double kD = 0.0;
+            public static final double kF = 0.0;
             public static final double errorTollerance = 5;
             public static final double errorDerivativeTolerance = 10;
         }

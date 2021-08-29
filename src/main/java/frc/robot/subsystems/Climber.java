@@ -8,17 +8,24 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
   /**
    * Creates a new Climber.
    */
 
-  private WPI_TalonSRX climberRight;
-  private WPI_TalonSRX climberLeft;
+  private CANSparkMax climberRight;
+  private CANSparkMax climberLeft;
 
   public Climber() {
+
+    climberRight = new CANSparkMax(Constants.ArmConstants.rightMotor_ID, MotorType.kBrushless);
+    climberLeft = new CANSparkMax(Constants.ArmConstants.leftMotor_ID, MotorType.kBrushless);
 
   }
 

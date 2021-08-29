@@ -42,7 +42,7 @@ public class RobotContainer {
   public final Kicker kicker = new Kicker();
   public final Collector collector = new Collector();
   public final Arm arm = new Arm();
-  // public final Climber climber = new Climber();
+  public final Climber climber = new Climber();
   public final Hopper hopper = new Hopper();
   
   // Define robot commands
@@ -63,15 +63,14 @@ public class RobotContainer {
   public final Collecter_Collect collectorCollect = new Collecter_Collect(collector);
   public final Collector_Eject collectorEject = new Collector_Eject(collector);
   public final Collector_Stop collectorStop = new Collector_Stop(collector);
-
-  // public final Extend_Climber extendClimber = new Extend_Climber(climber);
-  // public final Retract_Climber retractClimber = new Retract_Climber(climber);
   
   public final Arm_Manual armManual = new Arm_Manual(arm);
 
   public final Hopper_Intake hopperIntake = new Hopper_Intake(hopper);
   public final Hopper_Eject hopperEject = new Hopper_Eject(hopper);
   public final Hopper_Stop hopperStop = new Hopper_Stop(hopper);
+
+  public final Climber_Manual climberManual = new Climber_Manual(climber);
 
   // Define controllers
   public static XboxController pilot = new XboxController(0);
@@ -89,6 +88,7 @@ public class RobotContainer {
     collector.setDefaultCommand(collectorStop);
     arm.setDefaultCommand(armManual);
     hopper.setDefaultCommand(hopperStop);
+    climber.setDefaultCommand(climberManual);
   }
 
   /**
@@ -122,13 +122,14 @@ public class RobotContainer {
     coPilot.lt.whileHeld(hopperEject);
     coPilot.rt.whileHeld(hopperIntake);
     coPilot.back.whenPressed(hoodReset);
+
     // TEMPORARY CONTROLS
     coPilot.y.whenPressed(() -> shooterHood.changeSetpoint("up"));
     coPilot.a.whenPressed(() -> shooterHood.changeSetpoint("down"));
 
     // CLIMBER CONTROLS
-    // coPilot.y.whenPressed(extendClimber);
-    // coPilot.a.whenPressed(retractClimber);
+    // pilot.y.whenPressed(extendClimber);
+    // pilot.a.whenPressed(retractClimber);
   }
 
   public void disableSubsystems() {

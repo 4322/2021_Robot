@@ -7,8 +7,7 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -16,23 +15,19 @@ public class Climber extends SubsystemBase {
    * Creates a new Climber.
    */
 
-  private DoubleSolenoid climbPistons;
+  private WPI_TalonSRX climberRight;
+  private WPI_TalonSRX climberLeft;
 
   public Climber() {
 
-    climbPistons = new DoubleSolenoid(0, 1);
-
   }
 
-  public void extend()
-  {
-    climbPistons.set(Value.kForward);
-  }
+  public void setClimber(double speed) {
 
-  public void retract()
-  {
-    climbPistons.set(Value.kReverse);
-  } 
+    climberRight.set(speed);
+    climberLeft.set(speed);
+
+  }
 
   @Override
   public void periodic() {

@@ -101,8 +101,7 @@ public class RobotContainer {
     pilot.dPad.down.whenPressed(() -> drivebase.changePower("down"));
 
     // COLLECTOR CONTROLS
-    pilot.lt.whileHeld(collectorEject, true);
-    pilot.rt.whileHeld(collectorCollect, true);
+    pilot.lt.whileHeld(collectorCollect, true);
     
     // SHOOTER COTNROLS
     coPilot.lb.whenPressed(enableShooter);

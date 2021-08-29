@@ -39,7 +39,7 @@ public class Drive_Manual extends CommandBase {
     
     power = RobotContainer.pilot.leftStick.getY();
     turn = RobotContainer.pilot.rightStick.getX();
-    quickTurnState = RobotContainer.pilot.lb.get();
+    quickTurnState = RobotContainer.pilot.rt.get();
 
     // SmartDashboard.putNumber("Power Value", power);
     // SmartDashboard.putNumber("Turn Value", turn);

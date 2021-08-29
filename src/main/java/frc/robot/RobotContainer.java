@@ -9,8 +9,6 @@ package frc.robot;
 
 import java.util.List;
 
-import javax.print.attribute.standard.Copies;
-
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -64,7 +62,7 @@ public class RobotContainer {
   public final Collector_Eject collectorEject = new Collector_Eject(collector);
   public final Collector_Stop collectorStop = new Collector_Stop(collector);
   
-  public final Arm_Manual armManual = new Arm_Manual(arm);
+  public final Arm_Toggle armToggle = new Arm_Toggle(arm);
 
   public final Hopper_Intake hopperIntake = new Hopper_Intake(hopper);
   public final Hopper_Eject hopperEject = new Hopper_Eject(hopper);
@@ -86,7 +84,6 @@ public class RobotContainer {
     drivebase.setDefaultCommand(driveManual); 
     shooterHood.setDefaultCommand(hoodManual);
     collector.setDefaultCommand(collectorStop);
-    arm.setDefaultCommand(armManual);
     hopper.setDefaultCommand(hopperStop);
     climber.setDefaultCommand(climberManual);
   }
@@ -122,6 +119,9 @@ public class RobotContainer {
     coPilot.lt.whileHeld(hopperEject);
     coPilot.rt.whileHeld(hopperIntake);
     coPilot.back.whenPressed(hoodReset);
+
+    // ARM CONTROLS
+    pilot.lb.whenPressed(armToggle);
 
     // TEMPORARY CONTROLS
     coPilot.y.whenPressed(() -> shooterHood.changeSetpoint("up"));

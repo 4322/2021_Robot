@@ -53,6 +53,9 @@ public class Drivebase extends SubsystemBase {
   private SpeedControllerGroup rightMotors;
   private SpeedControllerGroup leftMotors;
 
+  //Crawl Mode
+  private boolean crawlMode = false;
+
   // PID Controller that Controls Turning the Robot Using Values From the Limelight
   // private PIDController limelightPidController;
 
@@ -295,6 +298,9 @@ public class Drivebase extends SubsystemBase {
    ****************************************************/
   public void curveDrive(double power, double turn, boolean quickTurn)
   {
+    if (crawlMode == true){
+      power = power / 2;
+    }
     double max = maxSpeed.getDouble(1.0);
     drive.curvatureDrive(power * max, turn * max, quickTurn);
     Shuffle_power.setDouble(power * max);

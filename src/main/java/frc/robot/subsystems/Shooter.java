@@ -62,21 +62,21 @@ public class Shooter extends SubsystemBase {
     .withPosition(3,0)
     .getEntry();
 
-  private NetworkTableEntry shooterVelocity =
-    tab.add("Shooter Velocity Graph", 0)
-    .withWidget(BuiltInWidgets.kGraph)
-    .withProperties(Map.of("unit", "RPM"))
-    .withPosition(0,0)
-    .withSize(3,3)
-    .getEntry();
+  // private NetworkTableEntry shooterVelocity =
+  //   tab.add("Shooter Velocity Graph", 0)
+  //   .withWidget(BuiltInWidgets.kGraph)
+  //   .withProperties(Map.of("unit", "RPM"))
+  //   .withPosition(0,0)
+  //   .withSize(3,3)
+  //   .getEntry();
 
-  private NetworkTableEntry setpointError =
-    tab.add("Setpoint Error", 0)
-    .withWidget(BuiltInWidgets.kGraph)
-    .withProperties(Map.of("unit", "RPM difference"))
-    .withPosition(6,0)
-    .withSize(3,3)
-    .getEntry();
+  // private NetworkTableEntry setpointError =
+  //   tab.add("Setpoint Error", 0)
+  //   .withWidget(BuiltInWidgets.kGraph)
+  //   .withProperties(Map.of("unit", "RPM difference"))
+  //   .withPosition(6,0)
+  //   .withSize(3,3)
+  // .getEntry();
 
   private ShuffleboardLayout shufflePID =
     tab.getLayout("Shooter PID", BuiltInLayouts.kGrid)
@@ -205,7 +205,7 @@ public class Shooter extends SubsystemBase {
   
   public void stopShooter() {
     flywheelOne.stopMotor();
-    setpointError.setDouble(0);
+    // setpointError.setDouble(0);
     setpointErrorVal.setDouble(0);
     pidEnabled.setBoolean(false);
 
@@ -219,14 +219,14 @@ public class Shooter extends SubsystemBase {
         double rpm = targetRPM.getDouble(Constants.Shooter_Constants.setPoint);
         setShooterRPM(rpm, false);
         double _setpointError = flywheelOne.getEncoder().getVelocity() - rpm;
-        setpointError.setDouble(_setpointError);
+        // setpointError.setDouble(_setpointError);
         setpointErrorVal.setDouble(_setpointError);
         
         break;
       }
       case "manual": {
         if (pidEnabled.getBoolean(true)) {
-          setpointError.setDouble(0);
+          // setpointError.setDouble(0);
           pidEnabled.setBoolean(false);
         }
         flywheelOne.set(power.getDouble(0.5));
@@ -257,6 +257,6 @@ public class Shooter extends SubsystemBase {
   }
 
   private void updateShuffleboard() {
-    shooterVelocity.setDouble(flywheelOne.getEncoder().getVelocity());
+    // shooterVelocity.setDouble(flywheelOne.getEncoder().getVelocity());
   }
 }

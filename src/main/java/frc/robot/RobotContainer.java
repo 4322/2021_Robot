@@ -115,7 +115,7 @@ public class RobotContainer {
     coPilot.dPad.down.whenPressed(() -> shooter.changeSpeed("down"));
 
     // KICKER CONTROLS
-    coPilot.rt.whenPressed(enableKicker);
+    coPilot.rt.whileHeld(enableKicker);
     
     // HOOD CONTROLS
     coPilot.back.whenPressed(hoodReset);

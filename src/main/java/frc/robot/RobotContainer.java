@@ -101,7 +101,11 @@ public class RobotContainer {
     pilot.dPad.down.whenPressed(() -> drivebase.changePower("down"));
 
     // COLLECTOR CONTROLS
-    pilot.lt.whileHeld(collectorCollect, true);
+    pilot.rb.whileHeld(collectorCollect, true);
+
+    // HOPPER CONTROLS
+    coPilot.lt.whileHeld(hopperEject);
+    coPilot.rt.whileHeld(hopperIntake);
     
     // SHOOTER COTNROLS
     coPilot.lb.whenPressed(enableShooter);
@@ -111,12 +115,9 @@ public class RobotContainer {
     coPilot.dPad.down.whenPressed(() -> shooter.changeSpeed("down"));
 
     // KICKER CONTROLS
-    coPilot.x.whenPressed(enableKicker);
-    coPilot.b.whenPressed(disableKicker);
+    coPilot.rt.whenPressed(enableKicker);
     
     // HOOD CONTROLS
-    coPilot.lt.whileHeld(hopperEject);
-    coPilot.rt.whileHeld(hopperIntake);
     coPilot.back.whenPressed(hoodReset);
 
     // ARM CONTROLS

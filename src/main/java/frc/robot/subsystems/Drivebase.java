@@ -293,9 +293,12 @@ public class Drivebase extends SubsystemBase {
   /****************************************************
    ************ DIFFERENTIAL DRIVE MODES **************
    ****************************************************/
-  public void curveDrive(double power, double turn, boolean quickTurn)
+  public void curveDrive(double power, double turn, boolean quickTurn, boolean crawlMode)
   {
     double max = maxSpeed.getDouble(1.0);
+    if (crawlMode) {
+      power = power/2;
+    }
     drive.curvatureDrive(power * max, turn * max, quickTurn);
     Shuffle_power.setDouble(power * max);
     Shuffle_turn.setDouble(turn * max);

@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import java.lang.reflect.Array;
+import java.util.List;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -107,7 +110,6 @@ public final class Constants {
 
     public static class Shooter_Constants
     {
-
         public static final int flywheelOneSpark_ID = 4;
         public static final int flywheelTwoSpark_ID = 8;
         public static final int kickerSpark_ID = 5;

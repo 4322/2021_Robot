@@ -24,20 +24,11 @@ public class Limelight extends SubsystemBase {
 
   // SHUFFLEBOARD
   ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
-
-  NetworkTableEntry _tv =
-    tab.add("Target Visible", getTarget())
-    .withWidget(BuiltInWidgets.kBooleanBox)
-    .withPosition(0,0)
-    .getEntry();
   NetworkTableEntry distanceToTarget =
     tab.add("Distance to Target", getDistance())
     .withPosition(1,0)
     .withSize(2,1)
     .getEntry();
-  NetworkTableEntry _ta = tab.add("Target Area", getTargetArea()).withPosition(0,1).getEntry();
-  NetworkTableEntry _tx = tab.add("X Offset", getX_Offset()).withPosition(1,1).getEntry();
-  NetworkTableEntry _ty = tab.add("Y Offset", getY_Offset()).withPosition(2,1).getEntry();
 
   public Limelight() {
     // Nothing to do here :)
@@ -45,9 +36,7 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(getTarget()) RobotContainer.pilot.setRumble(0.2);
-
-    updateShuffleboard();
+    getDistance();
   }
 
   public double getX_Offset()
@@ -75,16 +64,8 @@ public class Limelight extends SubsystemBase {
   {
     double distance = 
     (Constants.Limelight_Constants.targetHeight - Constants.Limelight_Constants.limelightHeight)
-      / (Math.tan(Constants.Limelight_Constants.limelightAngle + getY_Offset()));
+      / (Math.tan(Math.toRadians(Constants.Limelight_Constants.limelightAngle + getY_Offset())));
+    distanceToTarget.setDouble(distance);
     return distance;
   }
-
-  private void updateShuffleboard() {
-    if (getX_Offset() != _tx.getDouble(0)) _tx.setDouble(getX_Offset());
-    if (getY_Offset() != _ty.getDouble(0)) _ty.setDouble(getY_Offset());
-    if (getTargetArea() != _ta.getDouble(0)) _ta.setDouble(getTargetArea());
-    if (getTarget () != _tv.getBoolean(false)) _tv.setBoolean(getTarget());
-    if (getDistance() != distanceToTarget.getDouble(0)) distanceToTarget.setDouble(getDistance());
-  }
-
 }

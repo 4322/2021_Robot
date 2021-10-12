@@ -82,8 +82,8 @@ public final class Constants {
 
     public static class ArmConstants
     {
-        public static final int leftMotor_ID = 7;
-        public static final int rightMotor_ID = 6;
+        public static final int leftMotor_ID = 7; // remove after climber is reworked
+        public static final int rightMotor_ID = 6; // this too
         public static final int collectorTalonID = 15;
 
         public static final double collectSetpoint = 0;

@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
@@ -20,6 +21,7 @@ public class Arm extends SubsystemBase {
   public Arm() {
 
     dSolenoid = new DoubleSolenoid(0, 1);
+    dSolenoid.set(Value.kForward);
 
   }
 

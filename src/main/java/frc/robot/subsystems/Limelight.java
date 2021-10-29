@@ -62,10 +62,11 @@ public class Limelight extends SubsystemBase {
   //Formula Referenced From: https://docs.limelightvision.io/en/latest/cs_estimating_distance.html
   public double getDistance()
   {
-    double distance = 
-    (Constants.Limelight_Constants.targetHeight - Constants.Limelight_Constants.limelightHeight)
-      / (Math.tan(Math.toRadians(Constants.Limelight_Constants.limelightAngle + getY_Offset())));
-    distanceToTarget.setDouble(distance);
-    return distance;
+    // double distance = 
+    // (Constants.Limelight_Constants.targetHeight - Constants.Limelight_Constants.limelightHeight)
+    //   / (Math.tan(Math.toRadians(Constants.Limelight_Constants.limelightAngle + getY_Offset())));
+    // distanceToTarget.setDouble(distance);
+    // return distance;
+    return 0;
   }
 }

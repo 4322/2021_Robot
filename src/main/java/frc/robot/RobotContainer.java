@@ -118,7 +118,7 @@ public class RobotContainer {
     coPilot.rt.whileHeld(enableKicker);
     
     // HOOD CONTROLS
-    coPilot.back.whenPressed(hoodReset);
+    // coPilot.back.whenPressed(hoodReset);
 
     // ARM CONTROLS
     pilot.lb.whenPressed(armToggle);
@@ -138,7 +138,7 @@ public class RobotContainer {
 
   public void resetSubsystems() {
     // shooterHood.autoHome();
-    CommandScheduler.getInstance().schedule(hoodAutoHome);
+    // CommandScheduler.getInstance().schedule(hoodAutoHome);
   }
 
   /**

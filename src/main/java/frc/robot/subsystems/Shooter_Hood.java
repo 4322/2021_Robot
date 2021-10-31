@@ -14,24 +14,17 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
 
 public class Shooter_Hood extends SubsystemBase {
 
   private WPI_TalonSRX shooterHood;
-  
-  private Encoder hoodEncoder;
-  private PIDController hoodPIDController;
-  // private Limelight limelight;
 
   // Hood control
   private boolean homed = false;
@@ -50,13 +43,6 @@ public class Shooter_Hood extends SubsystemBase {
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Hood");
 
-  private NetworkTableEntry hoodPosition =
-    tab.add("Hood Position", 0)
-    .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", Constants.Hood_Constants.hoodMaxDistance))
-    .withPosition(0,0)
-    .withSize(2,2)
-    .getEntry();
   private NetworkTableEntry hoodPositionTalon =
     tab.add("Hood Position (Talon)", 0)
     .withPosition(2,2)
@@ -93,10 +79,6 @@ public class Shooter_Hood extends SubsystemBase {
     hoodPID.add("kI", Constants.Hood_Constants.PID_Values.kI).withPosition(1,0).getEntry();
   private NetworkTableEntry kD =
     hoodPID.add("kD", Constants.Hood_Constants.PID_Values.kD).withPosition(2,0).getEntry();
-  private NetworkTableEntry errorTollerance =
-    hoodPID.add("Error Tolerance", Constants.Hood_Constants.PID_Values.errorTollerance).withPosition(1,1).getEntry();
-  private NetworkTableEntry errorDerivativeTolerance =
-    hoodPID.add("Error Derivative Tolerance", Constants.Hood_Constants.PID_Values.errorDerivativeTolerance).withPosition(2,1).getEntry();
   // private NetworkTableEntry kIz =
   //   hoodPID.add("kIz", Constants.Shooter_Constants.PID_Values.kIz).withPosition(1,1).getEntry();
   // private NetworkTableEntry kFF =
@@ -105,8 +87,6 @@ public class Shooter_Hood extends SubsystemBase {
   //   hoodPID.add("kMax", Constants.Shooter_Constants.PID_Values.kMax).withPosition(1,2).getEntry();
   // private NetworkTableEntry kMinOutput =
   //   hoodPID.add("kMin", Constants.Shooter_Constants.PID_Values.kMin).withPosition(2,2).getEntry();
-  private NetworkTableEntry atSetpoint =
-    hoodPID.add("At Setpoint", false).withPosition(0,1).getEntry();
   private NetworkTableEntry shufflePIDenabled =
     hoodPID.add("PID Enabled", false).withPosition(0,2).getEntry();
   private NetworkTableEntry shuffleTargetSetpoint =
@@ -169,23 +149,6 @@ public class Shooter_Hood extends SubsystemBase {
                                           Constants.Hood_Constants.kPIDLoopIdx,
                                           Constants.Hood_Constants.kTimeoutMs);
 
-    // OLD PID CONTROL
-    // The PIDController used by the subsystem
-    hoodPIDController = new PIDController(
-      Constants.Hood_Constants.PID_Values.kP,
-      Constants.Hood_Constants.PID_Values.kI,
-      Constants.Hood_Constants.PID_Values.kD
-    );
-    // hoodPIDController.disableContinuousInput();
-
-    hoodPIDController.setTolerance(
-      Constants.Hood_Constants.PID_Values.errorTollerance,
-      Constants.Hood_Constants.PID_Values.errorDerivativeTolerance
-    );
-
-    hoodEncoder = new Encoder(0, 1);
-    // limelight = new Limelight();
-
     // Check if the hood is already in the home position
     if (isAtHome()) homed = true;
   }
@@ -195,7 +158,6 @@ public class Shooter_Hood extends SubsystemBase {
     checkHome();
     checkPIDDone();
 
-    hoodPosition.setDouble(getPosition());
     hoodPositionTalon.setDouble(getPosition_talon());
     isHomeIndicator.setBoolean(isAtHome());
     isHomedIndicator.setBoolean(isHomed());
@@ -203,22 +165,6 @@ public class Shooter_Hood extends SubsystemBase {
     double p = kP.getDouble(0);
     double i = kI.getDouble(0);
     double d = kD.getDouble(0);
-    // double errTol = errorTollerance.getDouble(0);
-    // double errDerivTol = errorDerivativeTolerance.getDouble(0);
-    // double iz = kIz.getDouble(0);
-    // double ff = kFF.getDouble(0);
-    // double max = kMaxOutput.getDouble(0);
-    // double min = kMinOutput.getDouble(0);
-
-    // Refresh PID values from Shuffleboard
-    if(p != hoodPIDController.getP()) { hoodPIDController.setP(p); }
-    if(i != hoodPIDController.getI()) { hoodPIDController.setI(i); }
-    if(d != hoodPIDController.getD()) { hoodPIDController.setD(d); }
-    // if(iz != flywheelPID.getIZone()) { flywheelPID.setIZone(iz); }
-    // if(ff != flywheelPID.getFF()) { flywheelPID.setFF(ff); }
-    // if(max != flywheelPID.getOutputMax() || (min != flywheelPID.getOutputMin())) {
-    //   flywheelPID.setOutputRange(min, max);
-    // }
 
     if(p != currentP) {
       shooterHood.config_kP(Constants.Hood_Constants.kPIDLoopIdx, p, Constants.Hood_Constants.kTimeoutMs);
@@ -232,30 +178,12 @@ public class Shooter_Hood extends SubsystemBase {
       shooterHood.config_kD(Constants.Hood_Constants.kPIDLoopIdx, d, Constants.Hood_Constants.kTimeoutMs);
       currentD = d;
     };
-    // if(iz != flywheelPID.getIZone()) { flywheelPID.setIZone(iz); }
-    // if(ff != flywheelPID.getFF()) { flywheelPID.setFF(ff); }
-    // if(max != flywheelPID.getOutputMax() || (min != flywheelPID.getOutputMin())) {
-    //   flywheelPID.setOutputRange(min, max);
-    // }
 
-    // "OLD" HOOD PID CONTROL
-    // if (pidEnabled && !hoodPIDController.atSetpoint()) setHoodPosition(targetSetpoint);
-    // else pidEnabled = false;
-    // if (pidEnabled && getPosition_talon() != targetSetpoint)
-    //   setHoodPosition_talon(targetSetpoint);
-    // else pidEnabled = false;
     shufflePIDenabled.setBoolean(pidEnabled);
     shuffleTargetSetpoint.setDouble(targetSetpoint);
-    // shuffleCurrentError.setDouble(hoodPIDController.getPositionError());
     shuffleCurrentError.setDouble(shooterHood.getClosedLoopError());
     
-    // atSetpoint.setBoolean(hoodPIDController.atSetpoint());
     hoodPower.setDouble(shooterHood.getMotorOutputPercent());
-  }
-
-  public double getPosition()
-  {
-    return hoodEncoder.getDistance() * -1;
   }
 
   public double getPosition_talon() {
@@ -264,10 +192,6 @@ public class Shooter_Hood extends SubsystemBase {
 
   public void setHood(double power)
   {
-    // if (pidEnabled) pidEnabled = false;
-
-    // hoodPower.setDouble(power);
-
     double encValue = this.getPosition_talon();
     if (this.getPosition_talon() <= Constants.Hood_Constants.hoodMaxDistance_talon || power < 0) {
       // if (this.getPosition() >= 4200 && power > 0) {
@@ -287,12 +211,6 @@ public class Shooter_Hood extends SubsystemBase {
     }
   }
 
-  public void setHoodPosition(double setpoint) {
-    double output = MathUtil.clamp(hoodPIDController.calculate(getPosition(), setpoint), -1, 1);
-    shooterHood.set(output);
-    // hoodPower.setDouble(output);
-  }
-
   public void setHoodPosition_talon(double setpoint) {
     shooterHood.set(ControlMode.Position, setpoint);
   }
@@ -304,7 +222,6 @@ public class Shooter_Hood extends SubsystemBase {
         else targetSetpoint = Constants.Hood_Constants.hoodMaxDistance_talon;
         pidEnabled = true;
         setHoodPosition_talon(targetSetpoint);
-        // hoodPIDController.setSetpoint(targetSetpoint);
         break;
       }
       case "down": {
@@ -312,7 +229,6 @@ public class Shooter_Hood extends SubsystemBase {
         else targetSetpoint = 0;
         pidEnabled = true;
         setHoodPosition_talon(targetSetpoint);
-        // hoodPIDController.setSetpoint(targetSetpoint);
         break;
       }
       default: break;
@@ -321,7 +237,6 @@ public class Shooter_Hood extends SubsystemBase {
 
   public void checkHome() {
     if (isAtHome()) {
-      if (getPosition() != 0) hoodEncoder.reset();
       if (getPosition_talon() != 0) shooterHood.setSelectedSensorPosition(0);
       homed = true;
     }
@@ -333,16 +248,6 @@ public class Shooter_Hood extends SubsystemBase {
 
   public boolean isHomed() {
     return homed;
-  }
-
-  public void resetPIDValues() {
-    kP.setDouble(Constants.Shooter_Constants.PID_Values.kP);
-    kI.setDouble(Constants.Shooter_Constants.PID_Values.kI);
-    kD.setDouble(Constants.Shooter_Constants.PID_Values.kD);
-    // kIz.setDouble(Constants.Shooter_Constants.PID_Values.kIz);
-    // kFF.setDouble(Constants.Shooter_Constants.PID_Values.kFF);
-    // kMaxOutput.setDouble(Constants.Shooter_Constants.PID_Values.kMax);
-    // kMinOutput.setDouble(Constants.Shooter_Constants.PID_Values.kMin);
   }
 
   public void checkPIDDone() {

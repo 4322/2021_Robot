@@ -48,7 +48,6 @@ public class RobotContainer {
 
   public final Hood_Manual hoodManual = new Hood_Manual(shooterHood);
   public final Hood_Reset hoodReset = new Hood_Reset(shooterHood);
-  public final Hood_AutoHome hoodAutoHome = new Hood_AutoHome(shooterHood);
 
   public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
@@ -135,8 +134,9 @@ public class RobotContainer {
   }
 
   public void resetSubsystems() {
-    // shooterHood.autoHome();
-    // CommandScheduler.getInstance().schedule(hoodAutoHome);
+    if (shooterHood.getPosition() != 0) {
+      hoodReset.execute();
+    }
   }
 
   /**

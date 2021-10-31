@@ -132,11 +132,17 @@ public final class Constants {
     public static class Hood_Constants
     {
         public static final int hoodTalon_ID = 12;
-        public static final int hoodMaxDistance_talon = 9300;
-        public static final int hoodMaxDecelleration = 7750;
+        public static final int hoodMaxPosition = 9300;
+        public static final int hoodDecellerationDistance = 1550;
         public static final int hoodTolerance = 10;
 
-        // Used for onboard PID control (Talon SRX)
+        public static final double maxForwardPower = 1.0;
+        public static final double maxReversePower = -1.0;
+        public static final double minForwardPower = 0.1;
+        public static final double minReversePower = -0.1;
+        public static final double homingPower = -0.2;
+        public static final double manualDeadband = 0.05;
+
         public static final int kPIDLoopIdx = 0;
         public static final int kTimeoutMs = 30;
         public static final boolean kSensorPhase = false;

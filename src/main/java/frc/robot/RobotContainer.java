@@ -119,14 +119,12 @@ public class RobotContainer {
     
     // HOOD CONTROLS
     // coPilot.back.whenPressed(hoodReset);
-
-    // ARM CONTROLS
-    pilot.lb.whenPressed(armToggle);
-
-    // TEMPORARY CONTROLS
     coPilot.y.whenPressed(() -> shooterHood.changeSetpoint("up"));
     coPilot.a.whenPressed(() -> shooterHood.changeSetpoint("down"));
 
+    // ARM CONTROLS
+    pilot.lb.whenPressed(armToggle);
+  
     // CLIMBER CONTROLS
     // pilot.y.whenPressed(extendClimber);
     // pilot.a.whenPressed(retractClimber);

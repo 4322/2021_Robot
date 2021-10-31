@@ -92,10 +92,10 @@ public class Shooter_Hood extends SubsystemBase {
     shooterHood.setSensorPhase(Constants.Hood_Constants.kSensorPhase);
 
     /* Config the peak and nominal outputs, 12V means full */
-		shooterHood.configNominalOutputForward(0, Constants.Hood_Constants.kTimeoutMs);
-		shooterHood.configNominalOutputReverse(0, Constants.Hood_Constants.kTimeoutMs);
-		shooterHood.configPeakOutputForward(1, Constants.Hood_Constants.kTimeoutMs);
-		shooterHood.configPeakOutputReverse(-1, Constants.Hood_Constants.kTimeoutMs);
+		shooterHood.configNominalOutputForward(Constants.Hood_Constants.minForwardPower, Constants.Hood_Constants.kTimeoutMs);
+		shooterHood.configNominalOutputReverse(Constants.Hood_Constants.minReversePower, Constants.Hood_Constants.kTimeoutMs);
+		shooterHood.configPeakOutputForward(Constants.Hood_Constants.maxForwardPower, Constants.Hood_Constants.kTimeoutMs);
+		shooterHood.configPeakOutputReverse(Constants.Hood_Constants.maxReversePower, Constants.Hood_Constants.kTimeoutMs);
 
     /**
 		 * Config the allowable closed-loop error, Closed-Loop output will be
@@ -172,22 +172,39 @@ public class Shooter_Hood extends SubsystemBase {
     return shooterHood.getSelectedSensorPosition(0);
   }
 
-  public void setHood(double power)
+  public void setHoodPower(double power)
   {
     double encValue = getPosition();
-    if (getPosition() <= Constants.Hood_Constants.hoodMaxDistance_talon || power < 0) {
-      if (getPosition() >= Constants.Hood_Constants.hoodMaxDecelleration && power > 0) {
-        double _power = power * ((
-          Constants.Hood_Constants.hoodMaxDistance_talon - (encValue)) /
-          (Constants.Hood_Constants.hoodMaxDistance_talon - Constants.Hood_Constants.hoodMaxDecelleration)
-        );
-        shooterHood.set(Math.max(_power, 0.1));
+    double _power = power;
+    
+    if (_power > 0) {
+      if (encValue >= Constants.Hood_Constants.hoodMaxPosition) {
+        shooterHood.stopMotor();
       } else {
-        shooterHood.set(power);
+        if (encValue >= Constants.Hood_Constants.hoodMaxPosition - Constants.Hood_Constants.hoodDecellerationDistance) {
+          _power *= (Constants.Hood_Constants.hoodMaxPosition - encValue) /
+                    Constants.Hood_Constants.hoodDecellerationDistance;
+        }
+        shooterHood.set(Math.min(Constants.Hood_Constants.maxForwardPower, 
+                                 Math.max(_power, Constants.Hood_Constants.minForwardPower)));
+      }
+    } else if (_power < 0) {
+      if (encValue <= 0) {
+        shooterHood.stopMotor();
+      } else {
+        if (encValue <= Constants.Hood_Constants.hoodDecellerationDistance) {
+          _power *= -encValue / Constants.Hood_Constants.hoodDecellerationDistance;
+        }
+        shooterHood.set(Math.max(Constants.Hood_Constants.maxReversePower, 
+                                 Math.min(_power, Constants.Hood_Constants.minReversePower)));
       }
     } else {
       shooterHood.stopMotor();
     }
+  }
+
+  public void moveHome() {
+    shooterHood.set(Constants.Hood_Constants.homingPower);
   }
 
   public void setTargetPosition(double setpoint) {
@@ -197,7 +214,7 @@ public class Shooter_Hood extends SubsystemBase {
   public void changeSetpoint(String direction) {
     switch(direction) {
       case "up": {
-        targetPosition = Math.min(targetPosition + 1000, Constants.Hood_Constants.hoodMaxDistance_talon);
+        targetPosition = Math.min(targetPosition + 1000, Constants.Hood_Constants.hoodMaxPosition);
         pidEnabled = true;
         setTargetPosition(targetPosition);
         break;

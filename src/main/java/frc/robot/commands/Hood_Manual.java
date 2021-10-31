@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shooter_Hood;
+import frc.robot.Constants;
 
 public class Hood_Manual extends CommandBase {
   /**
@@ -38,7 +39,10 @@ public class Hood_Manual extends CommandBase {
     boolean pidEnabled = shooterHood.getPIDEnabled();
     if (pidEnabled == false) {
       power = RobotContainer.coPilot.leftStick.getY();
-      shooterHood.setHood(power);
+      if (Math.abs(power) < Constants.Hood_Constants.manualDeadband) {
+        power = 0;
+      }
+      shooterHood.setHoodPower(power);
     }
   }
 

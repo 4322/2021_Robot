@@ -34,20 +34,20 @@ public class Hood_AutoHome extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!shooterHood.isHomed()) shooterHood.setHood(-1);
-    else shooterHood.setHood(1);
+    if (!shooterHood.isHomed()) shooterHood.moveHome();
+    else shooterHood.setHoodPower(Constants.Hood_Constants.maxForwardPower);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterHood.setHood(0);
+    shooterHood.setHoodPower(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return shooterHood.isHomed() && shooterHood.getPosition() >=
-      Constants.Hood_Constants.hoodMaxDistance_talon - Constants.Hood_Constants.hoodTolerance;
+      Constants.Hood_Constants.hoodMaxPosition - Constants.Hood_Constants.hoodTolerance;
   }
 }

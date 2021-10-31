@@ -29,16 +29,12 @@ public class Shooter_Hood extends SubsystemBase {
   // Hood control
   private boolean homed = false;
   private boolean pidEnabled = false;
-  private double targetSetpoint = 0;
+  private double targetPosition = 0;
 
   // NEW PID
   private double currentP = 0;
   private double currentI = 0;
   private double currentD = 0;
-  // private double currentFF = 0;
-  // private double currentIz = 0;
-  // private double currentMin = 0;
-  // private double currentMax = 0;
 
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Hood");
@@ -79,18 +75,10 @@ public class Shooter_Hood extends SubsystemBase {
     hoodPID.add("kI", Constants.Hood_Constants.PID_Values.kI).withPosition(1,0).getEntry();
   private NetworkTableEntry kD =
     hoodPID.add("kD", Constants.Hood_Constants.PID_Values.kD).withPosition(2,0).getEntry();
-  // private NetworkTableEntry kIz =
-  //   hoodPID.add("kIz", Constants.Shooter_Constants.PID_Values.kIz).withPosition(1,1).getEntry();
-  // private NetworkTableEntry kFF =
-  //   hoodPID.add("kFF", Constants.Shooter_Constants.PID_Values.kFF).withPosition(0,2).getEntry();
-  // private NetworkTableEntry kMaxOutput =
-  //   hoodPID.add("kMax", Constants.Shooter_Constants.PID_Values.kMax).withPosition(1,2).getEntry();
-  // private NetworkTableEntry kMinOutput =
-  //   hoodPID.add("kMin", Constants.Shooter_Constants.PID_Values.kMin).withPosition(2,2).getEntry();
   private NetworkTableEntry shufflePIDenabled =
     hoodPID.add("PID Enabled", false).withPosition(0,2).getEntry();
   private NetworkTableEntry shuffleTargetSetpoint =
-    hoodPID.add("Target Setpoint", targetSetpoint).withPosition(1,2).getEntry();
+    hoodPID.add("Target Setpoint", targetPosition).withPosition(1,2).getEntry();
   private NetworkTableEntry shuffleCurrentError =
     hoodPID.add("Setpoint Error", 0).withPosition(1,2).getEntry();
 
@@ -114,21 +102,15 @@ public class Shooter_Hood extends SubsystemBase {
 		 * neutral within this range. See Table in Section 17.2.1 for native
 		 * units per rotation.
 		 */
-		shooterHood.configAllowableClosedloopError(0,
+		shooterHood.configAllowableClosedloopError(Constants.Hood_Constants.hoodTolerance,
                                           Constants.Hood_Constants.kPIDLoopIdx,
                                           Constants.Hood_Constants.kTimeoutMs);
-
-    /* Config Position Closed Loop gains in slot0, tsypically kF stays zero. */
-		// shooterHood.config_kF(Constants.Hood_Constants.kPIDLoopIdx,
-    //                       Constants.Hood_Constants.PID_Values.kF, Constants.Hood_Constants.kTimeoutMs);
 		shooterHood.config_kP(Constants.Hood_Constants.kPIDLoopIdx,
                           Constants.Hood_Constants.PID_Values.kP, Constants.Hood_Constants.kTimeoutMs);
 		shooterHood.config_kI(Constants.Hood_Constants.kPIDLoopIdx,
                           Constants.Hood_Constants.PID_Values.kI, Constants.Hood_Constants.kTimeoutMs);
 		shooterHood.config_kD(Constants.Hood_Constants.kPIDLoopIdx,
                           Constants.Hood_Constants.PID_Values.kD, Constants.Hood_Constants.kTimeoutMs);
-    shooterHood.config_kF(Constants.Hood_Constants.kPIDLoopIdx,
-                          Constants.Hood_Constants.PID_Values.kF, Constants.Hood_Constants.kTimeoutMs);
     currentP = Constants.Hood_Constants.PID_Values.kP;
     currentI = Constants.Hood_Constants.PID_Values.kI;
     currentD = Constants.Hood_Constants.PID_Values.kD;
@@ -158,7 +140,7 @@ public class Shooter_Hood extends SubsystemBase {
     checkHome();
     checkPIDDone();
 
-    hoodPositionTalon.setDouble(getPosition_talon());
+    hoodPositionTalon.setDouble(getPosition());
     isHomeIndicator.setBoolean(isAtHome());
     isHomedIndicator.setBoolean(isHomed());
 
@@ -180,55 +162,50 @@ public class Shooter_Hood extends SubsystemBase {
     };
 
     shufflePIDenabled.setBoolean(pidEnabled);
-    shuffleTargetSetpoint.setDouble(targetSetpoint);
+    shuffleTargetSetpoint.setDouble(targetPosition);
     shuffleCurrentError.setDouble(shooterHood.getClosedLoopError());
     
     hoodPower.setDouble(shooterHood.getMotorOutputPercent());
   }
 
-  public double getPosition_talon() {
+  public double getPosition() {
     return shooterHood.getSelectedSensorPosition(0);
   }
 
   public void setHood(double power)
   {
-    double encValue = this.getPosition_talon();
-    if (this.getPosition_talon() <= Constants.Hood_Constants.hoodMaxDistance_talon || power < 0) {
-      // if (this.getPosition() >= 4200 && power > 0) {
-      if (this.getPosition_talon() >= Constants.Hood_Constants.hoodMaxDecelleration && power > 0) { // NEW TALON CONTROL
+    double encValue = getPosition();
+    if (getPosition() <= Constants.Hood_Constants.hoodMaxDistance_talon || power < 0) {
+      if (getPosition() >= Constants.Hood_Constants.hoodMaxDecelleration && power > 0) {
         double _power = power * ((
           Constants.Hood_Constants.hoodMaxDistance_talon - (encValue)) /
           (Constants.Hood_Constants.hoodMaxDistance_talon - Constants.Hood_Constants.hoodMaxDecelleration)
         );
-        
-        if (_power < 0.1) {
-          _power = 0.1;
-        }
-        shooterHood.set(_power);
-      } else shooterHood.set(power);
+        shooterHood.set(Math.max(_power, 0.1));
+      } else {
+        shooterHood.set(power);
+      }
     } else {
       shooterHood.stopMotor();
     }
   }
 
-  public void setHoodPosition_talon(double setpoint) {
+  public void setTargetPosition(double setpoint) {
     shooterHood.set(ControlMode.Position, setpoint);
   }
 
   public void changeSetpoint(String direction) {
     switch(direction) {
       case "up": {
-        if (targetSetpoint + 1000 <= Constants.Hood_Constants.hoodMaxDistance_talon) targetSetpoint += 1000;
-        else targetSetpoint = Constants.Hood_Constants.hoodMaxDistance_talon;
+        targetPosition = Math.min(targetPosition + 1000, Constants.Hood_Constants.hoodMaxDistance_talon);
         pidEnabled = true;
-        setHoodPosition_talon(targetSetpoint);
+        setTargetPosition(targetPosition);
         break;
       }
       case "down": {
-        if (targetSetpoint - 1000 >= 0) targetSetpoint -= 1000;
-        else targetSetpoint = 0;
+        targetPosition = Math.max(targetPosition - 1000, 0);
         pidEnabled = true;
-        setHoodPosition_talon(targetSetpoint);
+        setTargetPosition(targetPosition);
         break;
       }
       default: break;
@@ -237,7 +214,7 @@ public class Shooter_Hood extends SubsystemBase {
 
   public void checkHome() {
     if (isAtHome()) {
-      if (getPosition_talon() != 0) shooterHood.setSelectedSensorPosition(0);
+      shooterHood.setSelectedSensorPosition(0);
       homed = true;
     }
   }
@@ -251,7 +228,7 @@ public class Shooter_Hood extends SubsystemBase {
   }
 
   public void checkPIDDone() {
-    if (Math.abs(getPosition_talon() - targetSetpoint) <= 20) {
+    if (Math.abs(getPosition() - targetPosition) <= 20) {
       pidEnabled = false;
     }
   }

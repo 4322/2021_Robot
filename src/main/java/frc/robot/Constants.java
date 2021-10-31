@@ -132,11 +132,9 @@ public final class Constants {
     public static class Hood_Constants
     {
         public static final int hoodTalon_ID = 12;
-        public static final int hoodMaxDistance = 4800;
         public static final int hoodMaxDistance_talon = 9300;
         public static final int hoodMaxDecelleration = 7750;
         public static final int hoodTolerance = 10;
-        public static final int setpointOne = 50;
 
         // Used for onboard PID control (Talon SRX)
         public static final int kPIDLoopIdx = 0;
@@ -149,9 +147,6 @@ public final class Constants {
             public static final double kP = 3;
             public static final double kI = 0.00001;
             public static final double kD = 0.0;
-            public static final double kF = 0.0;
-            public static final double errorTollerance = 5;
-            public static final double errorDerivativeTolerance = 10;
         }
     }
     public static class Hopper_Constants

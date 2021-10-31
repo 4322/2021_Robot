@@ -47,7 +47,7 @@ public class Hood_AutoHome extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooterHood.isHomed() && shooterHood.getPosition_talon() >=
+    return shooterHood.isHomed() && shooterHood.getPosition() >=
       Constants.Hood_Constants.hoodMaxDistance_talon - Constants.Hood_Constants.hoodTolerance;
   }
 }

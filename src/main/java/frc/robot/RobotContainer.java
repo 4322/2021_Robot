@@ -117,9 +117,9 @@ public class RobotContainer {
     coPilot.rt.whileHeld(enableKicker);
     
     // HOOD CONTROLS
-    // coPilot.back.whenPressed(hoodReset);
-    coPilot.y.whenPressed(() -> shooterHood.changeSetpoint("up"));
-    coPilot.a.whenPressed(() -> shooterHood.changeSetpoint("down"));
+    coPilot.back.whenPressed(hoodReset);
+    coPilot.y.whenPressed(() -> shooterHood.goPos(1));
+    coPilot.a.whenPressed(() -> shooterHood.goPos(2));
 
     // ARM CONTROLS
     pilot.lb.whenPressed(armToggle);
@@ -134,7 +134,7 @@ public class RobotContainer {
   }
 
   public void resetSubsystems() {
-    if (shooterHood.getPosition() != 0) {
+    if (shooterHood.isAtHome()) {
       hoodReset.execute();
     }
   }

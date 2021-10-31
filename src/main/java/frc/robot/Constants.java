@@ -154,6 +154,12 @@ public final class Constants {
             public static final double kI = 0.00001;
             public static final double kD = 0.0;
         }
+
+        public static class Positions
+        {
+            public static final double pos1 = 7000;
+            public static final double pos2 = 3000;
+        }
     }
     public static class Hopper_Constants
     {

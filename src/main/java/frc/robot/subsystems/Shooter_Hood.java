@@ -229,6 +229,24 @@ public class Shooter_Hood extends SubsystemBase {
     }
   }
 
+  public void goPos(int positionNum) {
+    switch(positionNum) {
+      case 1: {
+        targetPosition = Constants.Hood_Constants.Positions.pos1;
+        pidEnabled = true;
+        setTargetPosition(targetPosition);
+        break;
+      }
+      case 2: {
+        targetPosition = Constants.Hood_Constants.Positions.pos2;
+        pidEnabled = true;
+        setTargetPosition(targetPosition);
+        break;
+      }
+      default: break;
+    }
+  }
+
   public void checkHome() {
     if (isAtHome()) {
       shooterHood.setSelectedSensorPosition(0);

@@ -7,9 +7,6 @@
 
 package frc.robot;
 
-import java.lang.reflect.Array;
-import java.util.List;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;

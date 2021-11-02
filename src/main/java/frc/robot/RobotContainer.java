@@ -134,8 +134,8 @@ public class RobotContainer {
   }
 
   public void resetSubsystems() {
-    if (shooterHood.isAtHome()) {
-      hoodReset.execute();
+    if (!shooterHood.isHomed()) {
+      hoodReset.schedule();
     }
   }
 

@@ -62,21 +62,8 @@ public class Drivebase extends SubsystemBase {
   // Drive Object to Enable Various Modes
   private DifferentialDrive drive;
 
-  private boolean crawlMode = false;
-
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
-  // private NetworkTableEntry Shuffle_gyro =
-  //   tab.add("Gyro angle", 180)
-  //   .withWidget(BuiltInWidgets.kGyro)
-  //   .withPosition(3,0)
-  //   .withSize(2,2)
-  //   .getEntry();
-  private NetworkTableEntry crawlModeEnabled =
-  tab.add("Shooter Enabled", false)
-  .withWidget(BuiltInWidgets.kBooleanBox)
-  .withPosition(5,5)
-  .getEntry();
   private NetworkTableEntry maxSpeed =
     tab.add("Max Speed", 1)
     .withWidget(BuiltInWidgets.kNumberSlider)

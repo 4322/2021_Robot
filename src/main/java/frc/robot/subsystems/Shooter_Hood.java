@@ -12,6 +12,7 @@ import java.util.Map;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -91,11 +92,13 @@ public class Shooter_Hood extends SubsystemBase {
                                               Constants.Hood_Constants.kTimeoutMs);
     shooterHood.setSensorPhase(Constants.Hood_Constants.kSensorPhase);
 
-    /* Config the peak and nominal outputs, 12V means full */
+    /* Config the peak and nominal outputs */
 		shooterHood.configNominalOutputForward(Constants.Hood_Constants.minForwardPower, Constants.Hood_Constants.kTimeoutMs);
 		shooterHood.configNominalOutputReverse(Constants.Hood_Constants.minReversePower, Constants.Hood_Constants.kTimeoutMs);
 		shooterHood.configPeakOutputForward(Constants.Hood_Constants.maxForwardPower, Constants.Hood_Constants.kTimeoutMs);
 		shooterHood.configPeakOutputReverse(Constants.Hood_Constants.maxReversePower, Constants.Hood_Constants.kTimeoutMs);
+  
+    setCoastMode();    // allow hood to be moved manually
 
     /**
 		 * Config the allowable closed-loop error, Closed-Loop output will be
@@ -137,7 +140,6 @@ public class Shooter_Hood extends SubsystemBase {
 
   @Override
   public void periodic() {
-    checkHome();
     checkPIDDone();
 
     hoodPositionTalon.setDouble(getPosition());
@@ -166,6 +168,14 @@ public class Shooter_Hood extends SubsystemBase {
     shuffleCurrentError.setDouble(shooterHood.getClosedLoopError());
     
     hoodPower.setDouble(shooterHood.getMotorOutputPercent());
+  }
+
+  public void setCoastMode() {
+    shooterHood.setNeutralMode(NeutralMode.Coast);
+  }
+
+  public void setBrakeMode() {
+    shooterHood.setNeutralMode(NeutralMode.Brake);
   }
 
   public double getPosition() {
@@ -247,11 +257,9 @@ public class Shooter_Hood extends SubsystemBase {
     }
   }
 
-  public void checkHome() {
-    if (isAtHome()) {
-      shooterHood.setSelectedSensorPosition(0);
-      homed = true;
-    }
+  public void setAtHome() {
+    shooterHood.setSelectedSensorPosition(0);
+    homed = true;
   }
 
   public boolean isAtHome() {

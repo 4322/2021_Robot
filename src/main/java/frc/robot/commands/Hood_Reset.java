@@ -45,6 +45,10 @@ public class Hood_Reset extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooterHood.isAtHome() ? true : false;
+    if (shooterHood.isAtHome()) {
+      shooterHood.setAtHome();
+      return true;
+    }
+    return false;
   }
 }

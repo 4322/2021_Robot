@@ -54,7 +54,6 @@ public class RobotContainer {
   public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
   // public final Enable_ShooterPower enableShooterPower = new Enable_ShooterPower(shooter);
-  public final Shooter_ResetPID shooterResetPID = new Shooter_ResetPID(shooter);
 
   public final Enable_Kicker enableKicker = new Enable_Kicker(kicker);
   public final Disable_Kicker disableKicker = new Disable_Kicker(kicker);
@@ -111,7 +110,6 @@ public class RobotContainer {
     // SHOOTER COTNROLS
     coPilot.lb.whenPressed(enableShooter);
     coPilot.rb.whenPressed(disableShooter);
-    coPilot.start.whenPressed(shooterResetPID);
     coPilot.dPad.up.whenPressed(() -> shooter.changeSpeed("up"));
     coPilot.dPad.down.whenPressed(() -> shooter.changeSpeed("down"));
 

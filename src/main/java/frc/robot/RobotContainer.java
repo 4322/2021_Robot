@@ -48,6 +48,7 @@ public class RobotContainer {
 
   public final Hood_Manual hoodManual = new Hood_Manual(shooterHood);
   public final Hood_Reset hoodReset = new Hood_Reset(shooterHood);
+  public final Hood_Auto hoodAuto = new Hood_Auto(shooterHood);
 
   public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);

@@ -133,6 +133,7 @@ public final class Constants {
         public static final int hoodDecellerationDistance = 1550;
         public static final int hoodTolerance = 20;
         public static final double homingTimeout = 5.0; 
+        public static final double autoTimeout = 3.0; 
 
         public static final double maxForwardPower = 1.0;
         public static final double maxReversePower = -1.0;

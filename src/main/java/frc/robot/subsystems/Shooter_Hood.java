@@ -223,6 +223,12 @@ public class Shooter_Hood extends SubsystemBase {
     shooterHood.set(ControlMode.Position, setpoint);
   }
 
+  // This is only valid following a set position command
+  public boolean isAtTarget() {
+    return (shooterHood.getClosedLoopError(Constants.Hood_Constants.kPIDLoopIdx) <= 
+            Constants.Hood_Constants.hoodTolerance);
+  }
+
   public void changeSetpoint(String direction) {
     switch(direction) {
       case "up": {

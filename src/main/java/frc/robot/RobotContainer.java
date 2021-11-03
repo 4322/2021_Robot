@@ -137,7 +137,7 @@ public class RobotContainer {
   public void resetSubsystems() {
     shooterHood.setBrakeMode();   // don't let hood move while shooting
     if (!shooterHood.isHomed()) {
-      hoodReset.schedule();
+      hoodReset.schedule();   // move to limit switch
     }
   }
 

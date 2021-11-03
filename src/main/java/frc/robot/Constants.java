@@ -131,15 +131,16 @@ public final class Constants {
         public static final int hoodTalon_ID = 12;
         public static final int hoodMaxPosition = 9300;
         public static final int hoodDecellerationDistance = 1550;
-        public static final int hoodTolerance = 10;
-        public static final double homingTimeout = 1.0; 
+        public static final int hoodTolerance = 20;
+        public static final double homingTimeout = 5.0; 
 
         public static final double maxForwardPower = 1.0;
         public static final double maxReversePower = -1.0;
-        public static final double minForwardPower = 0.25;
-        public static final double minReversePower = -0.25;
-        public static final double homingPower = -0.4;
+        public static final double minForwardPower = 0.1;
+        public static final double minReversePower = -0.1;
+        public static final double homingPower = -0.35;
         public static final double manualDeadband = 0.05;
+
 
         public static final int kPIDLoopIdx = 0;
         public static final int kTimeoutMs = 30;
@@ -148,8 +149,8 @@ public final class Constants {
 
         public static class PID_Values
         {
-            public static final double kP = 3;
-            public static final double kI = 0.00001;
+            public static final double kP = 3.0;
+            public static final double kI = 0.0;
             public static final double kD = 0.0;
         }
 

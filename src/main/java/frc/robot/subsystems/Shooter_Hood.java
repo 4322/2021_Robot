@@ -105,8 +105,8 @@ public class Shooter_Hood extends SubsystemBase {
 		 * neutral within this range. See Table in Section 17.2.1 for native
 		 * units per rotation.
 		 */
-		shooterHood.configAllowableClosedloopError(Constants.Hood_Constants.hoodTolerance,
-                                          Constants.Hood_Constants.kPIDLoopIdx,
+    shooterHood.configAllowableClosedloopError(Constants.Hood_Constants.kPIDLoopIdx,
+                                          Constants.Hood_Constants.hoodTolerance,
                                           Constants.Hood_Constants.kTimeoutMs);
 		shooterHood.config_kP(Constants.Hood_Constants.kPIDLoopIdx,
                           Constants.Hood_Constants.PID_Values.kP, Constants.Hood_Constants.kTimeoutMs);
@@ -135,7 +135,9 @@ public class Shooter_Hood extends SubsystemBase {
                                           Constants.Hood_Constants.kTimeoutMs);
 
     // Check if the hood is already in the home position
-    if (isAtHome()) homed = true;
+    if (isAtHome()) {
+      setAtHome();
+    }
   }
 
   @Override

@@ -117,7 +117,7 @@ public class RobotContainer {
     coPilot.rt.whileHeld(enableKicker);
     
     // HOOD CONTROLS
-    coPilot.back.whenPressed(hoodReset.withTimeout(Constants.Hood_Constants.homingTimeout));
+    coPilot.back.whenPressed(hoodReset);
     coPilot.y.whenPressed(() -> shooterHood.goPos(1));
     coPilot.a.whenPressed(() -> shooterHood.goPos(2));
 
@@ -137,7 +137,7 @@ public class RobotContainer {
   public void resetSubsystems() {
     shooterHood.setBrakeMode();   // don't let hood move while shooting
     if (!shooterHood.isHomed()) {
-      hoodReset.withTimeout(Constants.Hood_Constants.homingTimeout).schedule();
+      hoodReset.schedule();
     }
   }
 

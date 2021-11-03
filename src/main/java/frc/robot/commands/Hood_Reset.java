@@ -8,6 +8,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter_Hood;
 
 public class Hood_Reset extends CommandBase {
@@ -15,7 +17,8 @@ public class Hood_Reset extends CommandBase {
    * Creates a new Hood_Manual.
    */
 
-   private Shooter_Hood shooterHood;
+  private Shooter_Hood shooterHood;
+  private Timer timer = new Timer();
 
   public Hood_Reset(Shooter_Hood shooterHoodSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -28,6 +31,8 @@ public class Hood_Reset extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer.reset();
+    timer.start();
     shooterHood.moveHome();
   }
 
@@ -47,6 +52,9 @@ public class Hood_Reset extends CommandBase {
   public boolean isFinished() {
     if (shooterHood.isAtHome()) {
       shooterHood.setAtHome();
+      return true;
+    }
+    else if (timer.hasElapsed(Constants.Hood_Constants.homingTimeout)) {
       return true;
     }
     return false;

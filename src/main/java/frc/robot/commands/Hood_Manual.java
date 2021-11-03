@@ -36,14 +36,11 @@ public class Hood_Manual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    boolean pidEnabled = shooterHood.getPIDEnabled();
-    if (pidEnabled == false) {
-      power = RobotContainer.coPilot.leftStick.getY();
-      if (Math.abs(power) < Constants.Hood_Constants.manualDeadband) {
-        power = 0;
-      }
-      shooterHood.setHoodPower(power);
+    power = RobotContainer.coPilot.leftStick.getY();
+    if (Math.abs(power) < Constants.Hood_Constants.manualDeadband) {
+      power = 0;
     }
+    shooterHood.setHoodPower(power);
   }
 
   // Called once the command ends or is interrupted.

@@ -48,7 +48,8 @@ public class RobotContainer {
 
   public final Hood_Manual hoodManual = new Hood_Manual(shooterHood);
   public final Hood_Reset hoodReset = new Hood_Reset(shooterHood);
-  public final Hood_Auto hoodAuto = new Hood_Auto(shooterHood);
+  public final Hood_Auto hoodAuto1 = new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos1);
+  public final Hood_Auto hoodAuto2 = new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2);
 
   public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
@@ -119,8 +120,8 @@ public class RobotContainer {
     
     // HOOD CONTROLS
     coPilot.back.whenPressed(hoodReset);
-    coPilot.y.whenPressed(() -> shooterHood.goPos(1));
-    coPilot.a.whenPressed(() -> shooterHood.goPos(2));
+    coPilot.y.whenPressed(hoodAuto1);
+    coPilot.a.whenPressed(hoodAuto2);
 
     // ARM CONTROLS
     pilot.lb.whenPressed(armToggle);

@@ -46,7 +46,10 @@ public class Hood_Auto extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (shooterHood.isAtTarget() || timer.hasElapsed(Constants.Hood_Constants.autoTimeout)) {
+    // don't check closed loop error from the controller because this methos is called
+    // before the movement starts and the error may be zero from the prior movement
+    if (Math.abs(targetPosition - shooterHood.getPosition()) < Constants.Hood_Constants.hoodTolerance || 
+        timer.hasElapsed(Constants.Hood_Constants.autoTimeout)) {
       return true;
     }
     return false;

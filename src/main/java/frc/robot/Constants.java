@@ -113,6 +113,9 @@ public final class Constants {
         public static final int flywheelTwoSpark_ID = 8;
         public static final int kickerSpark_ID = 5;
 
+        public static final int shooterVelY = 3000;
+        public static final int shooterVelA = 3000;
+
         public static final double maxRPM = 4900;
 
         public static final double setPoint = 3000;

@@ -51,7 +51,6 @@ public class RobotContainer {
   public final Hood_Auto hoodAuto1 = new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos1);
   public final Hood_Auto hoodAuto2 = new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2);
 
-  public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
   // public final Enable_ShooterPower enableShooterPower = new Enable_ShooterPower(shooter);
 
@@ -107,11 +106,10 @@ public class RobotContainer {
     coPilot.lt.whileHeld(hopperEject);
     coPilot.rt.whileHeld(hopperIntake);
     
-    // SHOOTER COTNROLS
-    coPilot.lb.whenPressed(enableShooter);
-    coPilot.rb.whenPressed(disableShooter);
-    coPilot.dPad.up.whenPressed(() -> shooter.changeSpeed("up"));
-    coPilot.dPad.down.whenPressed(() -> shooter.changeSpeed("down"));
+    // SHOOTER CONROLS
+    coPilot.y.whenPressed(() -> shooter.changeSpeed(Constants.Shooter_Constants.shooterVelY));
+    coPilot.a.whenPressed(() -> shooter.changeSpeed(Constants.Shooter_Constants.shooterVelA));
+    coPilot.b.whenPressed(() -> shooter.stopShooter());
 
     // KICKER CONTROLS
     coPilot.rt.whileHeld(enableKicker);

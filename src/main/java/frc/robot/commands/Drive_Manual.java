@@ -19,8 +19,8 @@ public class Drive_Manual extends CommandBase {
    private Drivebase drivebase;
    private double power;
    private double turn;
-   private boolean quickTurnState;
-   private boolean crawlModeState;
+   //private boolean quickTurnState;
+   //private boolean crawlModeState;
 
 
   public Drive_Manual(Drivebase driveSubsystem) {
@@ -40,8 +40,8 @@ public class Drive_Manual extends CommandBase {
     
     power = RobotContainer.pilot.leftStick.getY();
     turn = RobotContainer.pilot.rightStick.getX();
-    quickTurnState = RobotContainer.pilot.rt.get();
-    crawlModeState = RobotContainer.pilot.lt.get();
+    //quickTurnState = RobotContainer.pilot.rt.get();
+    //crawlModeState = RobotContainer.pilot.lt.get();
 
     // SmartDashboard.putNumber("Power Value", power);
     // SmartDashboard.putNumber("Turn Value", turn);
@@ -50,8 +50,8 @@ public class Drive_Manual extends CommandBase {
     // drivebase.displayAllLeftSideEncoders_Velocity();
     // drivebase.displayAllRightSideEncoders_Position();
     // drivebase.displayAllRightSideEncoders_Velocity();
-
-    drivebase.curveDrive(power, turn, quickTurnState, crawlModeState);
+    drivebase.arcadeDrive(power, turn, true);
+    //drivebase.curveDrive(power, turn, quickTurnState, crawlModeState);
   }
 
   // Called once the command ends or is interrupted.

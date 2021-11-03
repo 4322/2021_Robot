@@ -7,8 +7,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.Map;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -38,8 +36,6 @@ public class Shooter_Hood extends SubsystemBase {
     .getEntry();
   private NetworkTableEntry hoodPower =
     tab.add("Hood Power", 0)
-    .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", -1, "max", 1))
     .withPosition(2,0)
     .withSize(2,2)
     .getEntry();

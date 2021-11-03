@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -24,11 +23,13 @@ public class Limelight extends SubsystemBase {
 
   // SHUFFLEBOARD
   ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
+  /* Why is this adding 6ms to the subsystem periodic timing?
   NetworkTableEntry distanceToTarget =
     tab.add("Distance to Target", getDistance())
     .withPosition(1,0)
     .withSize(2,1)
     .getEntry();
+  */
 
   public Limelight() {
     // Nothing to do here :)

@@ -134,6 +134,7 @@ public class RobotContainer {
   public void disableSubsystems() {
     shooter.stopShooter();
     shooterHood.setCoastMode();   // allow hood to be moved manually
+    limelight.setLed(Limelight.LedMode.Off);
   }
 
   public void resetSubsystems() {
@@ -141,6 +142,7 @@ public class RobotContainer {
     if (!shooterHood.isHomed()) {
       hoodReset.schedule();   // move to limit switch
     }
+    limelight.setLed(Limelight.LedMode.On);
   }
 
   /**

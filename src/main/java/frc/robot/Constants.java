@@ -33,6 +33,7 @@ public final class Constants {
         
 
         public static final int SparkMax_CurrentLimit = 60;
+        public static final double openLoopRampRate = 0.5;      // seconds to go from 0 to full power
 
         // CHARACTERIZED DRIVE VALUES
         public static final double kTrackwidthMeters = 0.6771275509857637;

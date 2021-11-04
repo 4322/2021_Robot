@@ -185,6 +185,9 @@ public class Drivebase extends SubsystemBase {
     setSmartCurrentLimit(Constants.Drivebase_Constants.SparkMax_CurrentLimit);
     saveMotorSettings();
     
+    rightMaster.setOpenLoopRampRate(Constants.Drivebase_Constants.openLoopRampRate);
+    leftMaster.setOpenLoopRampRate(Constants.Drivebase_Constants.openLoopRampRate);
+
     // Groups Motor Controllers Instead of Making Slaves Follow Masters
     rightMotors = new SpeedControllerGroup(rightMaster, rightSlave1);
     leftMotors = new SpeedControllerGroup(leftMaster, leftSlave1);

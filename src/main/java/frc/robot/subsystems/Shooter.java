@@ -7,24 +7,17 @@
 
 package frc.robot.subsystems;
 
-import java.util.Map;
-
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.ControlType;
-import com.revrobotics.EncoderType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
   /**
@@ -78,6 +71,9 @@ public class Shooter extends SubsystemBase {
     flywheelOne.setInverted(true);
     flywheelTwo.restoreFactoryDefaults();
     flywheelTwo.follow(flywheelOne, true);
+    flywheelOne.setIdleMode(IdleMode.kCoast);
+    flywheelTwo.setIdleMode(IdleMode.kCoast);
+    flywheelOne.setOpenLoopRampRate(Constants.Shooter_Constants.openLoopRampRate);    // don't eject the shooter
 
     flywheelEncoder = flywheelOne.getEncoder();
     flywheelPID = flywheelOne.getPIDController();
@@ -92,7 +88,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    power.setDouble(flywheelOne.getBusVoltage());
+    power.setDouble(flywheelOne.getAppliedOutput());
     currentRPM.setDouble(flywheelEncoder.getVelocity());
   }
 

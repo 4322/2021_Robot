@@ -120,6 +120,8 @@ public final class Constants {
 
         public static final double setPoint = 3000;
 
+        public static final double openLoopRampRate = 1.0;  // seconds to go from stopped to full power
+
         public static class PID_Values  {
             public static final double kP = .0005;
             public static final double kI = 0.0000003;

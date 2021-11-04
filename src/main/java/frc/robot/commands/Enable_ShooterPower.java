@@ -16,23 +16,24 @@ public class Enable_ShooterPower extends CommandBase {
    */
 
   private Shooter shooter;
+  private double m_rpm;
 
 
-  public Enable_ShooterPower(Shooter shooterSubsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public Enable_ShooterPower(Shooter shooterSubsystem, double rpm) {
     shooter = shooterSubsystem;
+    m_rpm = rpm;
     addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    shooter.changeSpeed(m_rpm);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // shooter.spinShooter();
   }
 
   // Called once the command ends or is interrupted.
@@ -43,6 +44,6 @@ public class Enable_ShooterPower extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

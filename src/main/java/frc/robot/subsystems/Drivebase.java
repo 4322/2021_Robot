@@ -16,7 +16,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
@@ -48,10 +47,6 @@ public class Drivebase extends SubsystemBase {
 
   // Odometry Object for Trajectory Following
   private DifferentialDriveOdometry odometry;
-
-  //Speed Controller Groups for Each Side of Drivebase
-  private SpeedControllerGroup rightMotors;
-  private SpeedControllerGroup leftMotors;
 
   // PID Controller that Controls Turning the Robot Using Values From the Limelight
   // private PIDController limelightPidController;
@@ -178,6 +173,11 @@ public class Drivebase extends SubsystemBase {
     leftMaster_encoder = leftMaster.getEncoder();
     leftSlave1_encoder = leftSlave1.getEncoder();
 
+    // Set master/slave mode by having the slaves directly follow the masters.
+    // This is preferred to using a SpeedControlGroup because we have a limit on the OpenLoopRampRate.
+    rightSlave1.follow(rightMaster, true);
+    leftSlave1.follow(leftMaster, true);
+
     // Configures Motors For The Drivebase Gear Ratio, Current Limit, and Then Saves Settings to Motors
     setPositionConversionFactor(Constants.Drivebase_Constants.distPerPulse);
     setVelocityConversionFactor(Constants.Drivebase_Constants.velocityConversion);
@@ -188,12 +188,8 @@ public class Drivebase extends SubsystemBase {
     rightMaster.setOpenLoopRampRate(Constants.Drivebase_Constants.openLoopRampRate);
     leftMaster.setOpenLoopRampRate(Constants.Drivebase_Constants.openLoopRampRate);
 
-    // Groups Motor Controllers Instead of Making Slaves Follow Masters
-    rightMotors = new SpeedControllerGroup(rightMaster, rightSlave1);
-    leftMotors = new SpeedControllerGroup(leftMaster, leftSlave1);
-
     //Creates New Drive Object to Allow for Tank, Arcade, and Curvature Drive
-    drive = new DifferentialDrive(leftMotors, rightMotors);
+    drive = new DifferentialDrive(leftMaster, rightMaster);
     
     // Add drivetrain to Shuffleboard
     tab.add("Drivetrain", drive)
@@ -282,8 +278,8 @@ public class Drivebase extends SubsystemBase {
 
   // Allows For Independent Control of Each Side of the Robot Without Getting Controlled By the Tank Drive Object
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    leftMotors.setVoltage(leftVolts);
-    rightMotors.setVoltage(-rightVolts);
+    leftMaster.setVoltage(leftVolts);
+    rightMaster.setVoltage(-rightVolts);
     drive.feed();
   }
 

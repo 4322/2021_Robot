@@ -165,7 +165,6 @@ public class Drivebase extends SubsystemBase {
 
     // Creates Limlight and Limelight PID Controller
     // limelightPidController = new PIDController(Constants.Limelight_Constants.PID_Values.kP, Constants.Limelight_Constants.PID_Values.kI, Constants.Limelight_Constants.PID_Values.kD);
-    // limelight = new Limelight();
   
     // Creates Drivebase Motors
     rightMaster = new CANSparkMax(Constants.Drivebase_Constants.rightMasterSpark_ID, MotorType.kBrushless);
@@ -185,6 +184,7 @@ public class Drivebase extends SubsystemBase {
     setSmartCurrentLimit(Constants.Drivebase_Constants.SparkMax_CurrentLimit);
     saveMotorSettings();
     
+    // Don't shred the belts
     rightMaster.setOpenLoopRampRate(Constants.Drivebase_Constants.openLoopRampRate);
     leftMaster.setOpenLoopRampRate(Constants.Drivebase_Constants.openLoopRampRate);
 
@@ -297,16 +297,20 @@ public class Drivebase extends SubsystemBase {
       power = power/2;
     }
     drive.curvatureDrive(power * max, turn * max, quickTurn);
-    Shuffle_power.setDouble(power * max);
-    Shuffle_turn.setDouble(turn * max);
+    if (Constants.debug) {
+      Shuffle_power.setDouble(power * max);
+      Shuffle_turn.setDouble(turn * max);
+    }
   }
 
   public void arcadeDrive(double power, double turn, boolean squaredInputs)
   {
     double max = maxSpeed.getDouble(1.0);
     drive.arcadeDrive(power * max, turn * max, squaredInputs);
-    Shuffle_power.setDouble(power * max);
-    Shuffle_turn.setDouble(turn * max);
+    if (Constants.debug) {
+      Shuffle_power.setDouble(power * max);
+      Shuffle_turn.setDouble(turn * max);
+    }
   }
 
   public void tankDrive(double left, double right)
@@ -322,99 +326,59 @@ public class Drivebase extends SubsystemBase {
    ****************************************************/
   public double getLeftEncoders_Position()
   {
-    Shuffle_lencoder.setDouble(leftMaster_encoder.getPosition());
-    Shuffle_lencoder_slave.setDouble(leftSlave1_encoder.getPosition());
-
-    var position = ((leftMaster_encoder.getPosition() + leftSlave1_encoder.getPosition())/2);
-    Shuffle_left_position.setDouble(position);
+    double masterPos = leftMaster_encoder.getPosition();
+    double slavePos = leftSlave1_encoder.getPosition();
+    double position = (leftMaster_encoder.getPosition() + leftSlave1_encoder.getPosition()) / 2;
+    
+    if (Constants.debug) {
+      Shuffle_lencoder.setDouble(masterPos);
+      Shuffle_lencoder_slave.setDouble(slavePos);
+      Shuffle_left_position.setDouble(position);
+    }
     return position;
   }
 
   public double getRightEncoders_Position()
   {
-    Shuffle_rencoder.setDouble(rightMaster_encoder.getPosition() * -1);
-    Shuffle_rencoder_slave.setDouble(rightSlave1_encoder.getPosition() * -1);
-
-    var position = ((rightMaster_encoder.getPosition() + rightSlave1_encoder.getPosition())/2) * -1;
-    Shuffle_right_position.setDouble(position);
+    double masterPos = -rightMaster_encoder.getPosition();
+    double slavePos = -rightSlave1_encoder.getPosition();
+    double position = (rightMaster_encoder.getPosition() + rightSlave1_encoder.getPosition()) / 2;
+    
+    if (Constants.debug) {
+      Shuffle_rencoder.setDouble(masterPos);
+      Shuffle_rencoder_slave.setDouble(slavePos);
+      Shuffle_right_position.setDouble(position);
+    }
     return position;
-  }
-
-  public double getRightEncoders_Velocity()
-  {
-    Shuffle_rvelocity.setDouble(rightMaster_encoder.getVelocity() * -1);
-    Shuffle_rvelocity_slave.setDouble(rightSlave1_encoder.getVelocity() *- 1);
-
-    var velocity = ((rightMaster_encoder.getVelocity() + rightSlave1_encoder.getVelocity())/2) * -1;
-    Shuffle_right_velocity.setDouble(velocity);
-    return velocity;
   }
 
   public double getLeftEncoders_Velocity()
   {
-    Shuffle_lvelocity.setDouble(leftMaster_encoder.getVelocity());
-    Shuffle_lvelocity_slave.setDouble(leftSlave1_encoder.getVelocity());
-
-    var velocity = ((leftMaster_encoder.getVelocity() + leftSlave1_encoder.getVelocity())/2);
-    Shuffle_left_velocity.setDouble(velocity);
+    double masterVelocity = leftMaster_encoder.getVelocity();
+    double slaveVelocity = leftSlave1_encoder.getVelocity();
+    double velocity = ((leftMaster_encoder.getVelocity() + leftSlave1_encoder.getVelocity())/2);
+    
+    if (Constants.debug) {
+      Shuffle_lvelocity.setDouble(masterVelocity);
+      Shuffle_lvelocity_slave.setDouble(slaveVelocity);
+      Shuffle_left_velocity.setDouble(velocity);
+    }
     return velocity;
   }
 
-  /****************************************************
-   ********* GETTING SINGLE ENCODER VALUES ************
-   ****************** (POSITION) **********************
-   ****************************************************/
-   public double getRightMasterEncoderPosition()
-   {
-    var position = rightMaster_encoder.getPosition();
-    // Shuffle_rencoder.setDouble(position);
-    return position;
-   }
+  public double getRightEncoders_Velocity()
+  {
+    double masterVelocity = -rightMaster_encoder.getVelocity();
+    double slaveVelocity = -rightSlave1_encoder.getVelocity();
+    double velocity = ((rightMaster_encoder.getVelocity() + rightSlave1_encoder.getVelocity())/2);
 
-   public double getRightSlave1EncoderPosition()
-   {
-    var position = rightSlave1_encoder.getPosition();
-    // Shuffle_rencoder_slave.setDouble(position);
-    return position;
-   }
-
-   public double getLeftMasterEncoderPosition()
-   {
-    var position = leftMaster_encoder.getPosition();
-    // Shuffle_lencoder.setDouble(position);
-    return position;
-   }
-
-   public double getLeftSlave1EncoderPosition()
-   {
-    var position = leftSlave1_encoder.getPosition();
-    // Shuffle_lencoder_slave.setDouble(position);
-    return position;
-   }
-
-  /****************************************************
-   ********* GETTING SINGLE ENCODER VALUES ************
-   ****************** (VELOCITY) **********************
-   ****************************************************/
-   public double getRightMasterEncoderVelocity()
-   {
-      return rightMaster_encoder.getVelocity();
-   }
-   
-   public double getRightSlave1EncoderVelocity()
-   {
-      return rightSlave1_encoder.getVelocity();
-   }
-  
-   public double getLeftMasterEncoderVelocity()
-   {
-      return leftMaster_encoder.getVelocity();
-   }
-
-   public double getLeftSlave1EncoderVelocity()
-   {
-      return leftSlave1_encoder.getVelocity();
-   }
+    if (Constants.debug) {
+      Shuffle_rvelocity.setDouble(masterVelocity);
+      Shuffle_rvelocity_slave.setDouble(slaveVelocity);
+      Shuffle_right_velocity.setDouble(velocity);
+    }
+    return velocity;
+  }
 
   /****************************************************
    * SETTING POSITION AND VELOCITY CONVERSION FACTORS *

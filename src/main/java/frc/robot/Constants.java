@@ -116,14 +116,14 @@ public final class Constants {
         public static final int kickerSpark_ID = 5;
 
         public static final int shooterVel1 = 1500;
-        public static final int shooterVel2 = 3000;
+        public static final int shooterVel2 = 4000;
 
         public static final double closedLoopRampRate = 1.0;  // seconds to go from stopped to full power
 
         public static class PID_Values  {
-            public static final double kP = .0005;
-            public static final double kI = 0.0000003;
-            public static final double kD = 0.01;
+            public static final double kP = .00025;
+            public static final double kI = 0.000001;
+            public static final double kD = 0.004;
             public static final double kIz = 300;
             public static final double kFF = 0.00015;
             public static final int kMax = 1;

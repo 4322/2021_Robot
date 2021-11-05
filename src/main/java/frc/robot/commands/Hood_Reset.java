@@ -33,6 +33,7 @@ public class Hood_Reset extends CommandBase {
   public void initialize() {
     timer.reset();
     timer.start();
+    shooterHood.setNotAtHome();
     shooterHood.moveHome();
   }
 

@@ -120,7 +120,7 @@ public class RobotContainer {
     coPilot.rt.whileHeld(enableKicker);
     
     // HOOD CONTROLS
-    coPilot.back.whenPressed(hoodReset);
+    coPilot.back.whenPressed(hoodReset, false);   // move to limit switch without any interrupts
 
     // ARM CONTROLS
     pilot.a.whenPressed(armToggle);
@@ -139,7 +139,7 @@ public class RobotContainer {
   public void resetSubsystems() {
     shooterHood.setBrakeMode();   // don't let hood move while shooting
     if (!shooterHood.isHomed()) {
-      hoodReset.schedule();   // move to limit switch
+      hoodReset.schedule(false);   // move to limit switch without any interrupts
     }
     limelight.setLed(Limelight.LedMode.On);
   }

@@ -27,9 +27,11 @@ public class Hood_Auto extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
-    timer.start();
-    shooterHood.setTargetPosition(targetPosition);
+    if (shooterHood.isHomed()) {    // not safe to move if not homed
+      timer.reset();
+      timer.start();
+      shooterHood.setTargetPosition(targetPosition);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,7 +50,8 @@ public class Hood_Auto extends CommandBase {
   public boolean isFinished() {
     // don't check closed loop error from the controller because this methos is called
     // before the movement starts and the error may be zero from the prior movement
-    if (Math.abs(targetPosition - shooterHood.getPosition()) < Constants.Hood_Constants.hoodTolerance || 
+    if (!shooterHood.isHomed() ||
+        Math.abs(targetPosition - shooterHood.getPosition()) < Constants.Hood_Constants.hoodTolerance || 
         timer.hasElapsed(Constants.Hood_Constants.autoTimeout)) {
       return true;
     }

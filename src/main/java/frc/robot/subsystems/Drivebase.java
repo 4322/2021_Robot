@@ -309,10 +309,13 @@ public class Drivebase extends SubsystemBase {
   public void arcadeDrive(double power, double turn, boolean squaredInputs)
   {
     double max = maxSpeed.getDouble(1.0);
-    drive.arcadeDrive(power * max, turn * max, squaredInputs);
+    double adjPower = power * max;
+    double adjTurn = turn * max * Constants.Drivebase_Constants.maxTurn;
+
+    drive.arcadeDrive(adjPower, adjTurn, squaredInputs);
     if (Constants.debug) {
-      Shuffle_power.setDouble(power * max);
-      Shuffle_turn.setDouble(turn * max);
+      Shuffle_power.setDouble(adjPower);
+      Shuffle_turn.setDouble(adjTurn);
     }
   }
 

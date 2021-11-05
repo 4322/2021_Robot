@@ -34,25 +34,15 @@ public class Shooter extends SubsystemBase {
   
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
-
-  // private NetworkTableEntry shooterEnabled =
-  //   tab.add("Shooter Enabled", false)
-  //   .withWidget(BuiltInWidgets.kBooleanBox)
-  //   .withPosition(0,3)
-  //   .getEntry();
   
   private NetworkTableEntry power =
     tab.add("Power", 0)
-    // .withWidget(BuiltInWidgets.kNumberSlider)
-    // .withProperties(Map.of("min", 0, "max", 1))
     .withPosition(0,0)
     .withSize(1,1)
     .getEntry();
 
   private NetworkTableEntry currentRPM =
     tab.add("Current RPM", 0)
-    // .withWidget(BuiltInWidgets.kNumberSlider)
-    // .withProperties(Map.of("min", 100, "max", Constants.Shooter_Constants.maxRPM))
     .withPosition(1,0)
     .withSize(1,1)
     .getEntry();

@@ -31,13 +31,13 @@ public class Shooter_Hood extends SubsystemBase {
 
   private NetworkTableEntry hoodPositionTalon =
     tab.add("Hood Position (Talon)", 0)
-    .withPosition(2,2)
+    .withPosition(0,1)
     .withSize(1,1)
     .getEntry();
   private NetworkTableEntry hoodPower =
     tab.add("Hood Power", 0)
-    .withPosition(2,0)
-    .withSize(2,2)
+    .withPosition(1,1)
+    .withSize(1,1)
     .getEntry();
   private NetworkTableEntry isHomeIndicator =
     tab.add("Is @ home", false)
@@ -174,6 +174,10 @@ public class Shooter_Hood extends SubsystemBase {
   public void setAtHome() {
     shooterHood.setSelectedSensorPosition(0);
     homed = true;
+  }
+
+  public void setNotAtHome() {
+    homed = false;
   }
 
   public boolean isAtHome() {

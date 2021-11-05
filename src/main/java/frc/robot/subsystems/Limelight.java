@@ -26,9 +26,9 @@ public class Limelight extends SubsystemBase {
   // SHUFFLEBOARD
   ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
   NetworkTableEntry distanceToTarget =
-    tab.add("Distance to Target", getDistance())
+    tab.add("Distance to Target", 0)
     .withPosition(1,0)
-    .withSize(2,1)
+    .withSize(1,1)
     .getEntry();
 
   public Limelight() {
@@ -100,14 +100,13 @@ public class Limelight extends SubsystemBase {
 
     if (getTarget()) {
       double angleToTarget = Constants.Limelight_Constants.limelightAngle + getY_Offset();
-      if ((angleToTarget > 0 && angleToTarget < 90) ||
-          (angleToTarget < 0 && angleToTarget > -90)) {
+      if (angleToTarget > 0 && angleToTarget < 90) {
         distance = 
           (Constants.Limelight_Constants.targetHeight - Constants.Limelight_Constants.limelightHeight)
             / Math.tan(Math.toRadians(angleToTarget));
       }
     }
-    //distanceToTarget.setDouble(distance);  // getting a NULL pointer exception on this line!
+    distanceToTarget.setDouble(distance);
     return distance;
   }
 }

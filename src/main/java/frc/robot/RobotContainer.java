@@ -24,6 +24,7 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -48,13 +49,14 @@ public class RobotContainer {
 
   public final Hood_Manual hoodManual = new Hood_Manual(shooterHood);
   public final Hood_Reset hoodReset = new Hood_Reset(shooterHood);
-  public final Hood_Auto hoodAuto1 = new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos1);
-  public final Hood_Auto hoodAuto2 = new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2);
 
-  public final Enable_Shooter enableShooter = new Enable_Shooter(shooter);
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
-  // public final Enable_ShooterPower enableShooterPower = new Enable_ShooterPower(shooter);
-  public final Shooter_ResetPID shooterResetPID = new Shooter_ResetPID(shooter);
+  public final ParallelCommandGroup shootFromPos1 = new ParallelCommandGroup(
+    new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos1), 
+    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel1));
+  public final ParallelCommandGroup shootFromPos2 = new ParallelCommandGroup(
+    new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2), 
+    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2));
 
   public final Enable_Kicker enableKicker = new Enable_Kicker(kicker);
   public final Disable_Kicker disableKicker = new Disable_Kicker(kicker);
@@ -108,20 +110,16 @@ public class RobotContainer {
     coPilot.lt.whileHeld(hopperEject);
     coPilot.rt.whileHeld(hopperIntake);
     
-    // SHOOTER COTNROLS
-    coPilot.lb.whenPressed(enableShooter);
-    coPilot.rb.whenPressed(disableShooter);
-    coPilot.start.whenPressed(shooterResetPID);
-    coPilot.dPad.up.whenPressed(() -> shooter.changeSpeed("up"));
-    coPilot.dPad.down.whenPressed(() -> shooter.changeSpeed("down"));
+    // SHOOTER CONROLS
+    coPilot.y.whenPressed(shootFromPos1);   // interruptable by default
+    coPilot.a.whenPressed(shootFromPos2);   // interruptable by default
+    coPilot.b.whenPressed(disableShooter);
 
     // KICKER CONTROLS
     coPilot.rt.whileHeld(enableKicker);
     
     // HOOD CONTROLS
     coPilot.back.whenPressed(hoodReset);
-    coPilot.y.whenPressed(hoodAuto1);
-    coPilot.a.whenPressed(hoodAuto2);
 
     // ARM CONTROLS
     pilot.lb.whenPressed(armToggle);
@@ -141,6 +139,7 @@ public class RobotContainer {
     if (!shooterHood.isHomed()) {
       hoodReset.schedule();   // move to limit switch
     }
+    
   }
 
   /**

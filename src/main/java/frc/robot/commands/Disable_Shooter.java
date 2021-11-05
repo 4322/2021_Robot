@@ -26,12 +26,12 @@ public class Disable_Shooter extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    shooter.stopShooter();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.stopShooter();
   }
 
   // Called once the command ends or is interrupted.
@@ -42,6 +42,6 @@ public class Disable_Shooter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

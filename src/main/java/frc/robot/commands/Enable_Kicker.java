@@ -9,19 +9,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Kicker;
+import frc.robot.subsystems.Shooter;
 
 public class Enable_Kicker extends CommandBase {
-  /**
-   * Creates a new Enable_Kicker.
-   */
 
    private Kicker kicker;
+   private Shooter shooter;
 
-  public Enable_Kicker(Kicker kickerSubsystem) {
+  public Enable_Kicker(Kicker kickerSubsystem, Shooter shooterSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     kicker = kickerSubsystem;
+    shooter = shooterSubsystem;
     addRequirements(kicker);
-    
   }
 
   // Called when the command is initially scheduled.
@@ -32,8 +31,12 @@ public class Enable_Kicker extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    kicker.enableKicker();
+    if (shooter.isAbleToEject()) {
+      kicker.enableKicker();
+    }
+    else {
+      kicker.disableKicker();
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +48,6 @@ public class Enable_Kicker extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return false;     // run until interrupted
   }
 }

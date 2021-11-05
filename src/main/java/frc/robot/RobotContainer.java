@@ -58,7 +58,7 @@ public class RobotContainer {
     new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2), 
     new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2));
 
-  public final Enable_Kicker enableKicker = new Enable_Kicker(kicker);
+  public final Enable_Kicker enableKicker = new Enable_Kicker(kicker, shooter);
   public final Disable_Kicker disableKicker = new Disable_Kicker(kicker);
 
   public final Collecter_Collect collectorCollect = new Collecter_Collect(collector);

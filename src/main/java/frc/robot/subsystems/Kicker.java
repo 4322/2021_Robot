@@ -10,28 +10,19 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Kicker extends SubsystemBase {
-  /**
-   * Creates a new Kicker.
-   */
 
-  private CANSparkMax kickerMotor;
-
-  // SHUFFLEBOARD
-  ShuffleboardTab tab = Shuffleboard.getTab("Kicker");
+  private CANSparkMax kickerMotor;;
 
   public Kicker() {
 
     kickerMotor = new CANSparkMax(Constants.Shooter_Constants.kickerSpark_ID, MotorType.kBrushless);
+    kickerMotor.restoreFactoryDefaults();
     kickerMotor.setInverted(true);
-
-    kickerMotor.setIdleMode(IdleMode.kCoast);
+    kickerMotor.setIdleMode(IdleMode.kBrake);   // don't let balls partially fall into the shooter
     kickerMotor.burnFlash();
   }
 
@@ -42,11 +33,11 @@ public class Kicker extends SubsystemBase {
 
   public void enableKicker()
   {
-    kickerMotor.set(.5);
+    kickerMotor.set(Constants.Shooter_Constants.kickerPower);
   }
 
   public void disableKicker()
   {
-    kickerMotor.set(0);
+    kickerMotor.stopMotor();
   }
 }

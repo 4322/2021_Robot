@@ -89,8 +89,10 @@ public final class Constants {
 
         public static final int shooterVel1 = 3000;
         public static final int shooterVel2 = 4000;
+        public static final int minEjectVel = 1000;
 
         public static final double closedLoopRampRate = 1.0;  // seconds to go from stopped to full power
+        public static final double kickerPower = 0.5;
 
         public static class PID_Values  {
             public static final double kP = .00025;
@@ -146,7 +148,7 @@ public final class Constants {
         public static final double hopperIntakePower = 0.6;
         public static final double hopperEjectPower = -0.6;
     }
-    
+
     public static class Limelight_Constants
     {
         // Network Tables for Vision (from Robojacks 2019 https://github.com/Robojacks/FRC-2019-Rampage/blob/master/src/main/java/frc/robot/Constants.java)

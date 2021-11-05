@@ -28,7 +28,7 @@ public class Enable_ShooterPower extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.changeSpeed(m_rpm);
+    shooter.setSpeed(m_rpm);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

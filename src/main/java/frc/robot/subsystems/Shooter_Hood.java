@@ -139,8 +139,8 @@ public class Shooter_Hood extends SubsystemBase {
           _power *= (Constants.Hood_Constants.hoodMaxPosition - encValue) /
                     Constants.Hood_Constants.hoodDecellerationDistance;
         }
-        shooterHood.set(Math.min(Constants.Hood_Constants.maxForwardPower, 
-                                 Math.max(_power, Constants.Hood_Constants.minForwardPower)));
+        // let motor controller apply minimum power bound for easier tuning
+        shooterHood.set(Math.min(_power, Constants.Hood_Constants.maxForwardPower));
       }
     } else if (_power < 0) {
       if (encValue <= 0) {
@@ -149,8 +149,8 @@ public class Shooter_Hood extends SubsystemBase {
         if (encValue <= Constants.Hood_Constants.hoodDecellerationDistance) {
           _power *= -encValue / Constants.Hood_Constants.hoodDecellerationDistance;
         }
-        shooterHood.set(Math.max(Constants.Hood_Constants.maxReversePower, 
-                                 Math.min(_power, Constants.Hood_Constants.minReversePower)));
+        // let motor controller apply minimum power bound for easier tuning
+        shooterHood.set(Math.max(_power, Constants.Hood_Constants.maxReversePower));
       }
     } else {
       shooterHood.stopMotor();

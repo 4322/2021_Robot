@@ -9,6 +9,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
+import frc.robot.Constants;
+import frc.robot.XboxController;
 
 public class Enable_ShooterPower extends CommandBase {
   /**
@@ -17,11 +19,13 @@ public class Enable_ShooterPower extends CommandBase {
 
   private Shooter shooter;
   private double m_rpm;
+  private XboxController m_copilot;
 
 
-  public Enable_ShooterPower(Shooter shooterSubsystem, double rpm) {
+  public Enable_ShooterPower(Shooter shooterSubsystem, double rpm, XboxController copilot) {
     shooter = shooterSubsystem;
     m_rpm = rpm;
+    m_copilot = copilot;
     addRequirements(shooter);
   }
 
@@ -34,16 +38,25 @@ public class Enable_ShooterPower extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    // Inform copilot that shooter is up to speed
+    if (Math.abs(m_rpm - shooter.getSpeed()) <= Constants.Shooter_Constants.tolerance) {
+      m_copilot.setRumble(Constants.Shooter_Constants.rumbleIntensity);
+    }
+    else {
+      m_copilot.setRumble(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_copilot.setRumble(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;     // run until interrupted
   }
 }

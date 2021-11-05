@@ -90,6 +90,8 @@ public final class Constants {
         public static final int shooterVel1 = 3000;
         public static final int shooterVel2 = 4000;
         public static final int minEjectVel = 1000;
+        public static final int tolerance = 100;
+        public static final double rumbleIntensity = 1.0;
 
         public static final double closedLoopRampRate = 1.0;  // seconds to go from stopped to full power
         public static final double kickerPower = 0.5;

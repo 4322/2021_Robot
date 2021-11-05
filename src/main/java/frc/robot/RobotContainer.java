@@ -33,6 +33,11 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
+  // Define controllers
+  public static XboxController pilot = new XboxController(0);
+  public static XboxController coPilot = new XboxController(1);
+  
   // The robot's subsystems and commands are defined here...
   public final Limelight limelight = new Limelight();
   public final Drivebase drivebase = new Drivebase();
@@ -53,10 +58,10 @@ public class RobotContainer {
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
   public final ParallelCommandGroup shootFromPos1 = new ParallelCommandGroup(
     new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos1), 
-    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel1));
+    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel1, coPilot));
   public final ParallelCommandGroup shootFromPos2 = new ParallelCommandGroup(
     new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2), 
-    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2));
+    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2, coPilot));
 
   public final Enable_Kicker enableKicker = new Enable_Kicker(kicker, shooter);
   public final Disable_Kicker disableKicker = new Disable_Kicker(kicker);
@@ -72,10 +77,6 @@ public class RobotContainer {
   public final Hopper_Stop hopperStop = new Hopper_Stop(hopper);
 
   public final Climber_Manual climberManual = new Climber_Manual(climber);
-
-  // Define controllers
-  public static XboxController pilot = new XboxController(0);
-  public static XboxController coPilot = new XboxController(1);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -136,6 +137,7 @@ public class RobotContainer {
     shooter.stopShooter();
     shooterHood.setCoastMode();   // allow hood to be moved manually
     limelight.setLed(Limelight.LedMode.Off);
+    coPilot.setRumble(0);
   }
 
   public void resetSubsystems() {

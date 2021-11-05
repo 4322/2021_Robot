@@ -79,7 +79,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     power.setDouble(flywheelOne.getAppliedOutput());
-    currentRPM.setDouble(flywheelEncoder.getVelocity());
+    currentRPM.setDouble(getSpeed());
   }
 
   public void setSpeed(double rpm) {
@@ -87,9 +87,13 @@ public class Shooter extends SubsystemBase {
     targetRPM.setDouble(rpm);
   }
 
+  public double getSpeed() {
+    return flywheelEncoder.getVelocity();
+  }
+
   // don't let balls get stuck in the shooter
   public boolean isAbleToEject() {
-    return flywheelEncoder.getVelocity() >= Constants.Shooter_Constants.minEjectVel;
+    return getSpeed() >= Constants.Shooter_Constants.minEjectVel;
   }
   
   public void stopShooter() {

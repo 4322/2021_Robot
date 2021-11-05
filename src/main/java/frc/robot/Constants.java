@@ -53,11 +53,7 @@ public final class Constants {
         public static final double kRamseteZeta = 0.7;
 
         public static final double distPerPulse = .0011114506; // In Meters
-        // public static final double distPerPulse = 1;
-
         public static final double velocityConversion = .0007780154; // In Meters
-        // public static final double velocityConversion = 1;
-
 
         public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
@@ -86,10 +82,6 @@ public final class Constants {
         public static final int leftMotor_ID = 7; // remove after climber is reworked
         public static final int rightMotor_ID = 6; // this too
         public static final int collectorTalonID = 15;
-
-        public static final double collectSetpoint = 0;
-        public static final double startingConfigSetpoint = 0;
-        public static final double climbSetpoint = 0;
     }
 
     public static class Shooter_Constants
@@ -110,7 +102,7 @@ public final class Constants {
             public static final double kIz = 300;
             public static final double kFF = 0.00015;
             public static final int kMax = 1;
-            public static final int kMin = 0;
+            public static final int kMin = 0;   // let flywheel coast down, don't apply power to slow it
         }
     }
 

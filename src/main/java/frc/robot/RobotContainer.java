@@ -104,7 +104,8 @@ public class RobotContainer {
     pilot.dPad.down.whenPressed(() -> drivebase.changePower("down"));
 
     // COLLECTOR CONTROLS
-    pilot.rb.whileHeld(collectorCollect, true);
+    pilot.rb.whileHeld(collectorCollect);
+    pilot.lb.whileHeld(collectorEject);
 
     // HOPPER CONTROLS
     coPilot.lt.whileHeld(hopperEject);
@@ -122,7 +123,7 @@ public class RobotContainer {
     coPilot.back.whenPressed(hoodReset);
 
     // ARM CONTROLS
-    pilot.lb.whenPressed(armToggle);
+    pilot.a.whenPressed(armToggle);
   
     // CLIMBER CONTROLS
     // pilot.y.whenPressed(extendClimber);

@@ -118,10 +118,6 @@ public final class Constants {
         public static final int shooterVel1 = 1500;
         public static final int shooterVel2 = 3000;
 
-        public static final double maxRPM = 4900;
-
-        public static final double setPoint = 3000;
-
         public static final double closedLoopRampRate = 1.0;  // seconds to go from stopped to full power
 
         public static class PID_Values  {
@@ -131,7 +127,7 @@ public final class Constants {
             public static final double kIz = 300;
             public static final double kFF = 0.00015;
             public static final int kMax = 1;
-            public static final int kMin = -1;
+            public static final int kMin = 0;
         }
     }
 

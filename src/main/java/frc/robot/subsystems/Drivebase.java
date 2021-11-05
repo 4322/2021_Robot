@@ -166,6 +166,11 @@ public class Drivebase extends SubsystemBase {
     rightSlave1 = new CANSparkMax(Constants.Drivebase_Constants.rightSlave1Spark_ID, MotorType.kBrushless);
     leftMaster = new CANSparkMax(Constants.Drivebase_Constants.leftMasterSpark_ID, MotorType.kBrushless);
     leftSlave1 = new CANSparkMax(Constants.Drivebase_Constants.leftSlave1Spark_ID, MotorType.kBrushless);
+
+    rightMaster.restoreFactoryDefaults();
+    rightSlave1.restoreFactoryDefaults();
+    leftMaster.restoreFactoryDefaults();
+    leftSlave1.restoreFactoryDefaults();
     
     // Creates Drivebase Encoders
     rightMaster_encoder = rightMaster.getEncoder();
@@ -175,18 +180,20 @@ public class Drivebase extends SubsystemBase {
 
     // Set master/slave mode by having the slaves directly follow the masters.
     // This is preferred to using a SpeedControlGroup because we have a limit on the OpenLoopRampRate.
-    rightSlave1.follow(rightMaster, true);
+    rightSlave1.follow(rightMaster, false);   // why does this need to be false to avoid the motors fighting?
     leftSlave1.follow(leftMaster, true);
 
-    // Configures Motors For The Drivebase Gear Ratio, Current Limit, and Then Saves Settings to Motors
+    // Configures Motors For The Drivebase Gear Ratio, Current Limit
     setPositionConversionFactor(Constants.Drivebase_Constants.distPerPulse);
     setVelocityConversionFactor(Constants.Drivebase_Constants.velocityConversion);
     setSmartCurrentLimit(Constants.Drivebase_Constants.SparkMax_CurrentLimit);
-    saveMotorSettings();
     
     // Don't shred the belts
     rightMaster.setOpenLoopRampRate(Constants.Drivebase_Constants.openLoopRampRate);
     leftMaster.setOpenLoopRampRate(Constants.Drivebase_Constants.openLoopRampRate);
+
+    // Saves settings to controllers in case they power cycle
+    saveMotorSettings();
 
     //Creates New Drive Object to Allow for Tank, Arcade, and Curvature Drive
     drive = new DifferentialDrive(leftMaster, rightMaster);

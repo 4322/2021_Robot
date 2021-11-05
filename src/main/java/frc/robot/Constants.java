@@ -115,7 +115,7 @@ public final class Constants {
         public static final int flywheelTwoSpark_ID = 8;
         public static final int kickerSpark_ID = 5;
 
-        public static final int shooterVel1 = 1500;
+        public static final int shooterVel1 = 3000;
         public static final int shooterVel2 = 4000;
 
         public static final double closedLoopRampRate = 1.0;  // seconds to go from stopped to full power
@@ -162,8 +162,8 @@ public final class Constants {
 
         public static class Positions
         {
-            public static final double pos1 = 7000;
-            public static final double pos2 = 3000;
+            public static final double pos1 = 5000;
+            public static final double pos2 = 3355;
         }
     }
     public static class Hopper_Constants

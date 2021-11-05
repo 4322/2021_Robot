@@ -73,7 +73,7 @@ public class Shooter extends SubsystemBase {
     flywheelTwo.follow(flywheelOne, true);
     flywheelOne.setIdleMode(IdleMode.kCoast);
     flywheelTwo.setIdleMode(IdleMode.kCoast);
-    flywheelOne.setOpenLoopRampRate(Constants.Shooter_Constants.openLoopRampRate);    // don't eject the shooter
+    flywheelOne.setClosedLoopRampRate(Constants.Shooter_Constants.closedLoopRampRate);  // don't eject the shooter
 
     flywheelEncoder = flywheelOne.getEncoder();
     flywheelPID = flywheelOne.getPIDController();

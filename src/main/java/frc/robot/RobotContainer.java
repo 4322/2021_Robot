@@ -81,8 +81,9 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
+
     configureButtonBindings();
+    disableSubsystems();
 
     drivebase.setDefaultCommand(driveManual); 
     shooterHood.setDefaultCommand(hoodManual);
@@ -131,12 +132,14 @@ public class RobotContainer {
   }
 
   public void disableSubsystems() {
+    drivebase.setCoastMode();
     shooter.stopShooter();
     shooterHood.setCoastMode();   // allow hood to be moved manually
     limelight.setLed(Limelight.LedMode.Off);
   }
 
   public void resetSubsystems() {
+    drivebase.setBrakeMode();
     shooterHood.setBrakeMode();   // don't let hood move while shooting
     if (!shooterHood.isHomed()) {
       hoodReset.schedule(false);   // move to limit switch without any interrupts

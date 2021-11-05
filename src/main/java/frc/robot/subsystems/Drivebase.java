@@ -13,6 +13,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SPI;
@@ -191,6 +192,9 @@ public class Drivebase extends SubsystemBase {
     // Don't shred the belts
     rightMaster.setOpenLoopRampRate(Constants.Drivebase_Constants.openLoopRampRate);
     leftMaster.setOpenLoopRampRate(Constants.Drivebase_Constants.openLoopRampRate);
+
+    // Burn brake mode into the settings in case a controller power cycles
+    setBrakeMode();
 
     // Saves settings to controllers in case they power cycle
     saveMotorSettings();
@@ -415,6 +419,20 @@ public class Drivebase extends SubsystemBase {
 
     leftMaster.setSmartCurrentLimit(currentLimit);
     leftSlave1.setSmartCurrentLimit(currentLimit);
+  }
+
+  public void setCoastMode() {
+    rightMaster.setIdleMode(IdleMode.kCoast);
+    rightSlave1.setIdleMode(IdleMode.kCoast);
+    leftMaster.setIdleMode(IdleMode.kCoast);
+    leftSlave1.setIdleMode(IdleMode.kCoast);
+  }
+
+  public void setBrakeMode() {
+    rightMaster.setIdleMode(IdleMode.kBrake);
+    rightSlave1.setIdleMode(IdleMode.kBrake);
+    leftMaster.setIdleMode(IdleMode.kBrake);
+    leftSlave1.setIdleMode(IdleMode.kBrake);
   }
 
   public void saveMotorSettings()

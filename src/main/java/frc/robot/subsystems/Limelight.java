@@ -107,7 +107,7 @@ public class Limelight extends SubsystemBase {
             / Math.tan(Math.toRadians(angleToTarget));
       }
     }
-    distanceToTarget.setDouble(distance);
+    //distanceToTarget.setDouble(distance);  // getting a NULL pointer exception on this line!
     return distance;
   }
 }

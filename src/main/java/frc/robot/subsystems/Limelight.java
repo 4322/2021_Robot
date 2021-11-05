@@ -9,7 +9,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -20,16 +19,17 @@ public class Limelight extends SubsystemBase {
   NetworkTableEntry ty = Constants.Limelight_Constants.ty;
   NetworkTableEntry ta = Constants.Limelight_Constants.ta;
   NetworkTableEntry tv = Constants.Limelight_Constants.tv;
+  NetworkTableEntry ledMode = Constants.Limelight_Constants.ledMode;
+  NetworkTableEntry camMode = Constants.Limelight_Constants.camMode;
+  NetworkTableEntry pipeline = Constants.Limelight_Constants.pipeline;
 
   // SHUFFLEBOARD
   ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
-  /* Why is this adding 6ms to the subsystem periodic timing?
   NetworkTableEntry distanceToTarget =
     tab.add("Distance to Target", getDistance())
     .withPosition(1,0)
     .withSize(2,1)
     .getEntry();
-  */
 
   public Limelight() {
     // Nothing to do here :)
@@ -60,14 +60,54 @@ public class Limelight extends SubsystemBase {
     return tv.getBoolean(false);
   }
 
+  public void setLed(LedMode mode) {
+    ledMode.setNumber(mode.value);
+  }
+
+  public void setCamMode(CamMode mode) {
+      if (mode == CamMode.VisionProcessor) {
+          camMode.setNumber(0);
+      } else if (mode == CamMode.DriverCamera) {
+          camMode.setNumber(1);
+      }
+  }
+
+  public enum LedMode {
+    Off(1),
+    Blink(2),
+    On(3);
+
+    private int value;
+
+    LedMode(int value) {
+        this.value = value;
+    }
+
+    public int get() {
+        return value;
+    }
+  }
+
+  public enum CamMode {
+    VisionProcessor,
+    DriverCamera;
+  }
+
   //Formula Referenced From: https://docs.limelightvision.io/en/latest/cs_estimating_distance.html
   public double getDistance()
   {
-    // double distance = 
-    // (Constants.Limelight_Constants.targetHeight - Constants.Limelight_Constants.limelightHeight)
-    //   / (Math.tan(Math.toRadians(Constants.Limelight_Constants.limelightAngle + getY_Offset())));
-    // distanceToTarget.setDouble(distance);
-    // return distance;
-    return 0;
+    double distance = 0;
+
+    if (getTarget()) {
+      double angleToTarget = Constants.Limelight_Constants.limelightAngle + getY_Offset();
+      if ((angleToTarget > 0 && angleToTarget < 90) ||
+          (angleToTarget < 0 && angleToTarget > -90)) {
+        distance = 
+          (Constants.Limelight_Constants.targetHeight - Constants.Limelight_Constants.limelightHeight)
+            / Math.tan(Math.toRadians(angleToTarget));
+      }
+    }
+    //distanceToTarget.setDouble(distance);  // getting a NULL pointer exception on this line!
+    return distance;
   }
 }

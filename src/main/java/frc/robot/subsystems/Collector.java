@@ -21,7 +21,7 @@ public class Collector extends SubsystemBase {
 
   public Collector() {
 
-    collectorMotor = new WPI_TalonSRX(Constants.ArmConstants.collectorTalonID);
+    collectorMotor = new WPI_TalonSRX(Constants.ArmConstants.collectorTalon_ID);
     collectorMotor.setInverted(true);
   }
 

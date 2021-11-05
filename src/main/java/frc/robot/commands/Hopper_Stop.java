@@ -11,28 +11,24 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hopper;
 
 public class Hopper_Stop extends CommandBase {
-  /**
-   * Creates a new Hopper_Stop.
-   */
+
   private Hopper hopper;
 
   public Hopper_Stop(Hopper hopperSubsytem) {
     // Use addRequirements() here to declare subsystem dependencies.
- hopper = hopperSubsytem; 
- addRequirements(hopper);
- 
+    hopper = hopperSubsytem; 
+    addRequirements(hopper);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    hopper.stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  hopper.stop();
-  
   }
 
   // Called once the command ends or is interrupted.
@@ -43,6 +39,6 @@ public class Hopper_Stop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return false;     // run until interrupted
   }
 }

@@ -29,10 +29,8 @@ public final class Constants {
         public static final int rightMasterSpark_ID = 1;
         public static final int rightSlave1Spark_ID = 3;
       
-        
         public static final int leftMasterSpark_ID = 9;
         public static final int leftSlave1Spark_ID = 11;
-        
 
         public static final int SparkMax_CurrentLimit = 60;
         public static final double openLoopRampRate = 1.0;      // seconds to go from 0 to full power
@@ -73,7 +71,6 @@ public final class Constants {
             // 2020: 16.9
             // 2021.1: 16.1
             // 2021.1: 0.00742
-
         }
     }
 
@@ -81,7 +78,7 @@ public final class Constants {
     {
         public static final int leftMotor_ID = 7; // remove after climber is reworked
         public static final int rightMotor_ID = 6; // this too
-        public static final int collectorTalonID = 15;
+        public static final int collectorTalon_ID = 15;
     }
 
     public static class Shooter_Constants
@@ -141,12 +138,15 @@ public final class Constants {
             public static final double pos2 = 3355;
         }
     }
+
     public static class Hopper_Constants
     {
-    public static final int HopperMotorslaveID = 14; //CHANGE
-    public static final int HopperMotormasterID = 13; //change
-
+        public static final int hopperMasterTalon_ID = 13;
+        public static final int hopperSlaveTalon_ID = 14;
+        public static final double hopperIntakePower = 0.6;
+        public static final double hopperEjectPower = -0.6;
     }
+    
     public static class Limelight_Constants
     {
         // Network Tables for Vision (from Robojacks 2019 https://github.com/Robojacks/FRC-2019-Rampage/blob/master/src/main/java/frc/robot/Constants.java)
@@ -161,9 +161,9 @@ public final class Constants {
         public static final NetworkTableEntry camMode = table.getEntry("camMode");
         public static final NetworkTableEntry pipeline = table.getEntry("pipeline");
 
-        public static final double limelightAngle = 30; //NEED TO CALCULATE IN DEGREES
-        public static final double targetHeight = 98; //NEED TO MEASURE IN INCHES
-        public static final double limelightHeight = 22.5; //NEED TO MEASURE IN INCHES
+        public static final double limelightAngle = 30;     // degrees
+        public static final double targetHeight = 98;       // inches
+        public static final double limelightHeight = 22.5;  // inches
 
         public static class PID_Values
         {
@@ -172,6 +172,4 @@ public final class Constants {
             public static final double kD = 0;
         }
     }
-
-
 }

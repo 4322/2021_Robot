@@ -26,12 +26,12 @@ public class Hopper_Intake extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    hopper.intake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    hopper.intake();
   }
 
   // Called once the command ends or is interrupted.
@@ -42,6 +42,6 @@ public class Hopper_Intake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return false;   // run until interrupted
   }
 }

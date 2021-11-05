@@ -7,15 +7,8 @@
 
 package frc.robot.subsystems;
 
-import java.util.Map;
-
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -27,23 +20,16 @@ public class Hopper extends SubsystemBase {
   private WPI_TalonSRX hopperMotorMaster;
   private WPI_TalonSRX hopperMotorslave;
 
-  // SHUFFLEBOARD
-  private ShuffleboardTab tab = Shuffleboard.getTab("Hopper");
-  private NetworkTableEntry power = tab.add("Power", 0)
-  .withWidget(BuiltInWidgets.kDial)
-  .withProperties(Map.of("min", -1, "max", 1))
-  .getEntry();
-
   public Hopper() {
 
-  hopperMotorMaster = new WPI_TalonSRX(Constants.Hopper_Constants.HopperMotormasterID);
-  hopperMotorslave = new WPI_TalonSRX(Constants.Hopper_Constants.HopperMotorslaveID);
+    hopperMotorMaster = new WPI_TalonSRX(Constants.Hopper_Constants.hopperMasterTalon_ID);
+    hopperMotorslave = new WPI_TalonSRX(Constants.Hopper_Constants.hopperSlaveTalon_ID);
 
-  hopperMotorMaster.setInverted(true);
-  hopperMotorslave.follow(hopperMotorMaster);
-  hopperMotorslave.setInverted(InvertType.OpposeMaster);
-
+    hopperMotorMaster.setInverted(true);
+    hopperMotorslave.follow(hopperMotorMaster);
+    hopperMotorslave.setInverted(InvertType.OpposeMaster);
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -51,19 +37,16 @@ public class Hopper extends SubsystemBase {
 
   public void intake()
   {
-    hopperMotorMaster.set(.6);
-    power.setDouble(.6);
+    hopperMotorMaster.set(Constants.Hopper_Constants.hopperIntakePower);
   }
 
   public void eject()
   {
-    hopperMotorMaster.set(-.6);
-    power.setDouble(-.6);
+    hopperMotorMaster.set(Constants.Hopper_Constants.hopperEjectPower);
   }
 
   public void stop()
   {
-    hopperMotorMaster.set(0);
-    power.setDouble(0);
+    hopperMotorMaster.stopMotor();
   }
 }

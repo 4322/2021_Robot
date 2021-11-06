@@ -24,6 +24,8 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 /**
@@ -161,8 +163,22 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
 
+    return new SequentialCommandGroup(
+      new WaitCommand(3.0), // wait for hood to home
+      new ParallelCommandGroup( // set for 10 foot shot and wait for flywheel to get to speed
+        new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2), 
+        new Auto_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2)
+      ), 
+      enableKicker,
+      new WaitCommand(5.0), // wait for balls to shoot
+      disableKicker,
+      disableShooter,
+      new Drive_Auto(drivebase, -0.5, 0, 2)
+    );
+
+
+    /*
     var autoVoltageConstraint =
       new DifferentialDriveVoltageConstraint(
         new SimpleMotorFeedforward(Constants.Drivebase_Constants.PID_Values.ksVolts,
@@ -215,5 +231,6 @@ public class RobotContainer {
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> drivebase.tankDriveVolts(0, 0));
+    */
   }
 }

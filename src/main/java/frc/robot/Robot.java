@@ -22,7 +22,6 @@ import frc.robot.subsystems.Limelight;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  // private Drivebase m_drivebase;
 
   private RobotContainer m_robotContainer;
   private Compressor compressor = new Compressor(0);
@@ -73,13 +72,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    // }
     m_robotContainer.resetSubsystems();
+
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    // schedule the autonomous command
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
   }
 
   /**

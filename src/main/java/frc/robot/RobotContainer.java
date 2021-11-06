@@ -165,15 +165,18 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     return new SequentialCommandGroup(
-      new WaitCommand(3.0), // wait for hood to home
-      new ParallelCommandGroup( // set for 10 foot shot and wait for flywheel to get to speed
-        new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2), 
-        new Auto_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2)
-      ), 
+      armToggle,
+      hopperIntake, 
+      // set for 10 foot shot:
+      new Auto_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2), // start shooter while hood homing
+      new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2), // won't run until hood is homed
       enableKicker,
       new WaitCommand(5.0), // wait for balls to shoot
+      // disable subsystems
       disableKicker,
       disableShooter,
+      hopperStop,
+      // drive backward
       new Drive_Auto(drivebase, -0.5, 0, 2)
     );
 

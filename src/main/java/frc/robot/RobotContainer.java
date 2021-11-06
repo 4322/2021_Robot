@@ -150,9 +150,6 @@ public class RobotContainer {
   public void resetSubsystems() {
     drivebase.setBrakeMode();
     shooterHood.setBrakeMode();   // don't let hood move while shooting
-    if (!shooterHood.isHomed()) {
-      hoodReset.schedule(false);   // move to limit switch without any interrupts
-    }
     limelight.setLed(Limelight.LedMode.On);
   }
 
@@ -164,11 +161,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     return new SequentialCommandGroup(
+      new Hood_Reset(shooterHood),
       new Arm_Toggle(arm),
       new Hopper_IntakeAuto(hopper), 
       // set for 10 foot shot:
-      new Auto_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2), // start shooter while hood homing
-      new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2), // won't run until hood is homed
+      new Auto_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2),
+      new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2),
       new Enable_KickerAuto(kicker, shooter),
       new WaitCommand(5.0), // wait for balls to shoot
       // disable subsystems
@@ -234,5 +232,11 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> drivebase.tankDriveVolts(0, 0));
     */
+  }
+
+  public void hoodReset() {
+    if (!shooterHood.isHomed()) {
+      hoodReset.schedule(false);   // move to limit switch without any interrupts
+    }
   }
 }

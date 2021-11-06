@@ -27,9 +27,9 @@ public class Hood_Auto extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer.reset();
+    timer.start();
     if (shooterHood.isHomed()) {    // not safe to move if not homed
-      timer.reset();
-      timer.start();
       shooterHood.setTargetPosition(targetPosition);
     }
   }

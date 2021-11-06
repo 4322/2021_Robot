@@ -174,7 +174,7 @@ public class RobotContainer {
       new Disable_Shooter(shooter),
       new Hopper_StopAuto(hopper),
       // drive backward
-      new Drive_Auto(drivebase, -0.5, 0, 2)
+      new Drive_Auto(drivebase, -0.3, 0, 1.5)
     );
 
 

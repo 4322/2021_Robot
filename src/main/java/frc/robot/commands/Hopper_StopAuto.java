@@ -8,30 +8,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Kicker;
+import frc.robot.subsystems.Hopper;
 
-public class Disable_Kicker extends CommandBase {
-  /**
-   * Creates a new Disable_Kicker.
-   */
+public class Hopper_StopAuto extends CommandBase {
 
-  private Kicker kicker;
+  private Hopper hopper;
 
-  public Disable_Kicker(Kicker kickerSubsystem) {
+  public Hopper_StopAuto(Hopper hopperSubsytem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    kicker = kickerSubsystem;
-    addRequirements(kicker);
+    hopper = hopperSubsytem; 
+    addRequirements(hopper);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    hopper.stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    kicker.disableKicker();
   }
 
   // Called once the command ends or is interrupted.
@@ -42,6 +39,6 @@ public class Disable_Kicker extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;     // run until interrupted
   }
 }

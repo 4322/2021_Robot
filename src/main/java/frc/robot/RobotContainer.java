@@ -71,7 +71,6 @@ public class RobotContainer {
     new Enable_ShooterPower(shooter, 3000, coPilot);
 
   public final Enable_Kicker enableKicker = new Enable_Kicker(kicker, shooter);
-  public final Disable_Kicker disableKicker = new Disable_Kicker(kicker);
 
   public final Collecter_Collect collectorCollect = new Collecter_Collect(collector);
   public final Collector_Eject collectorEject = new Collector_Eject(collector);
@@ -166,16 +165,16 @@ public class RobotContainer {
 
     return new SequentialCommandGroup(
       new Arm_Toggle(arm),
-      new Hopper_Intake(hopper), 
+      new Hopper_IntakeAuto(hopper), 
       // set for 10 foot shot:
       new Auto_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2), // start shooter while hood homing
       new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2), // won't run until hood is homed
-      new Enable_Kicker(kicker, shooter),
+      new Enable_KickerAuto(kicker, shooter),
       new WaitCommand(5.0), // wait for balls to shoot
       // disable subsystems
-      new Disable_Kicker(kicker),
+      new Disable_KickerAuto(kicker),
       new Disable_Shooter(shooter),
-      new Hopper_Stop(hopper),
+      new Hopper_StopAuto(hopper),
       // drive backward
       new Drive_Auto(drivebase, -0.5, 0, 2)
     );

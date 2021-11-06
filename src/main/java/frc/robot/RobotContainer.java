@@ -62,6 +62,11 @@ public class RobotContainer {
   public final ParallelCommandGroup shootFromPos2 = new ParallelCommandGroup(
     new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2), 
     new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2, coPilot));
+  public final ParallelCommandGroup shootFromPos3 = new ParallelCommandGroup(
+    new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos3), 
+    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel3, coPilot));
+  public final Enable_ShooterPower shooterTest = 
+    new Enable_ShooterPower(shooter, 3000, coPilot);
 
   public final Enable_Kicker enableKicker = new Enable_Kicker(kicker, shooter);
   public final Disable_Kicker disableKicker = new Disable_Kicker(kicker);
@@ -115,7 +120,8 @@ public class RobotContainer {
     
     // SHOOTER CONROLS
     coPilot.y.whenPressed(shootFromPos1);   // interruptable by default
-    coPilot.a.whenPressed(shootFromPos2);   // interruptable by default
+    coPilot.x.whenPressed(shootFromPos2);
+    coPilot.a.whenPressed(shootFromPos3);
     coPilot.b.whenPressed(disableShooter);
 
     // KICKER CONTROLS

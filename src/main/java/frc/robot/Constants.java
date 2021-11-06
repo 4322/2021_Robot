@@ -87,8 +87,9 @@ public final class Constants {
         public static final int flywheelTwoSpark_ID = 8;
         public static final int kickerSpark_ID = 5;
 
-        public static final int shooterVel1 = 3000;
-        public static final int shooterVel2 = 4000;
+        public static final int shooterVel1 = 2250;     // wall
+        public static final int shooterVel2 = 3000;     // 10 foot line
+        public static final int shooterVel3 = 3500;     // trench
         public static final int minEjectVel = 1000;
         public static final int tolerance = 100;
         public static final double rumbleIntensity = 1.0;
@@ -138,8 +139,9 @@ public final class Constants {
 
         public static class Positions
         {
-            public static final double pos1 = 5000;
-            public static final double pos2 = 3355;
+            public static final double pos1 = 2078;     // wall
+            public static final double pos2 = 6073;     // 10 foot line
+            public static final double pos3 = 7200;     // trench
         }
     }
 

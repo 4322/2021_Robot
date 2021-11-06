@@ -39,7 +39,7 @@ public class Drive_Auto extends CommandBase {
   public void initialize() {
     timer.reset();
     timer.start();
-    drivebase.arcadeDrive(power, turn, true);
+    drivebase.arcadeDrive(power, turn, false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -51,7 +51,7 @@ public class Drive_Auto extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivebase.arcadeDrive(0, 0, true);
+    // drivebase.arcadeDrive(0, 0, true);
   }
 
   // Returns true when the command should end.

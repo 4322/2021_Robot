@@ -141,7 +141,7 @@ public final class Constants {
         public static class Positions
         {
             public static final double pos1 = 2078;     // wall
-            public static final double pos2 = 6073;     // 10 foot line
+            public static final double pos2 = 6450;     // 10 foot line
             public static final double pos3 = 7200;     // trench
         }
     }

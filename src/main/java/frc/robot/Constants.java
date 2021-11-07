@@ -79,6 +79,7 @@ public final class Constants {
         public static final int leftMotor_ID = 7; // remove after climber is reworked
         public static final int rightMotor_ID = 6; // this too
         public static final int collectorTalon_ID = 15;
+        public static final double collector_speed = 0.85;
     }
 
     public static class Shooter_Constants

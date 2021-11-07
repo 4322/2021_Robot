@@ -27,12 +27,12 @@ public class Collector extends SubsystemBase {
 
   public void collect()
   {
-    collectorMotor.set(.7);
+    collectorMotor.set(Constants.ArmConstants.collector_speed);
   }
 
   public void eject()
   {
-    collectorMotor.set(-.7);
+    collectorMotor.set(-Constants.ArmConstants.collector_speed);
   }
 
   public void stop()

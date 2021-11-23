@@ -24,6 +24,10 @@ public final class Constants {
 
     public static final boolean debug = false;
     public static final boolean demo = true;
+    //Demo changes:
+    //Don't allow hood to go halfway
+    //Increase shooter speed slightly
+    //Slow down hood movement
 
     public static class Drivebase_Constants {
 

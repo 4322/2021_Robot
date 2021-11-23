@@ -120,11 +120,15 @@ public class RobotContainer {
     coPilot.rt.whileHeld(hopperIntake);
     
     // SHOOTER CONROLS
-    coPilot.y.whenPressed(shootFromPos1);   // interruptable by default
-    coPilot.x.whenPressed(shootFromPos2);
-    coPilot.a.whenPressed(shootFromPos3);
+    if (Constants.demo) {
+      coPilot.y.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel, coPilot));
+    } else {
+      coPilot.y.whenPressed(shootFromPos1);   // interruptable by default
+      coPilot.x.whenPressed(shootFromPos2);
+      coPilot.a.whenPressed(shootFromPos3);
+    }
     coPilot.b.whenPressed(disableShooter);
-
+    
     // KICKER CONTROLS
     coPilot.rt.whileHeld(enableKicker);
     
@@ -159,7 +163,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-
+    if (Constants.demo) {
+      return null;
+    }
     return new SequentialCommandGroup(
       new Hood_Reset(shooterHood),
       new Arm_Toggle(arm),

@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivebase;
 
@@ -40,17 +41,15 @@ public class Drive_Manual extends CommandBase {
     
     power = RobotContainer.pilot.leftStick.getY();
     turn = RobotContainer.pilot.rightStick.getX();
+    if (Constants.demo) {
+      power = 0;
+      turn = 0;
+    }
+    drivebase.arcadeDrive(power, turn, true);
+
+    //CurveDrive for Skills competition
     //quickTurnState = RobotContainer.pilot.rt.get();
     //crawlModeState = RobotContainer.pilot.lt.get();
-
-    // SmartDashboard.putNumber("Power Value", power);
-    // SmartDashboard.putNumber("Turn Value", turn);
-
-    // drivebase.displayAllLeftSideEncoders_Position();
-    // drivebase.displayAllLeftSideEncoders_Velocity();
-    // drivebase.displayAllRightSideEncoders_Position();
-    // drivebase.displayAllRightSideEncoders_Velocity();
-    drivebase.arcadeDrive(power, turn, true);
     //drivebase.curveDrive(power, turn, quickTurnState, crawlModeState);
   }
 

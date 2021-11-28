@@ -99,11 +99,6 @@ public class Shooter_Hood extends SubsystemBase {
 		shooterHood.setSelectedSensorPosition(absolutePosition,
                                           Constants.Hood_Constants.kPIDLoopIdx,
                                           Constants.Hood_Constants.kTimeoutMs);
-
-    // Check if the hood is already in the home position
-    if (isAtHome()) {
-      setAtHome();
-    }
   }
 
   @Override

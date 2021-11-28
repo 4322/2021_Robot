@@ -55,7 +55,7 @@ public class RobotContainer {
   public final Drive_Manual driveManual = new Drive_Manual(drivebase);
 
   public final Hood_Manual hoodManual = new Hood_Manual(shooterHood);
-  public final Hood_Reset hoodReset = new Hood_Reset(shooterHood);
+  public Command hoodReset;
 
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
   public final ParallelCommandGroup shootFromPos1 = new ParallelCommandGroup(
@@ -88,7 +88,13 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
+    if (Constants.demo) {
+      hoodReset =  new SequentialCommandGroup(   // don't create at instaniation since min position not yet overridden
+      new Hood_Reset(shooterHood),
+      new Hood_Auto(shooterHood, Constants.Hood_Constants.hoodMinPosition)) //leaves hood half way up
+    } else {
+      hoodReset = new Hood_Reset(shooterHood);
+    }
     configureButtonBindings();
     disableSubsystems();
 
@@ -242,14 +248,7 @@ public class RobotContainer {
 
   public void hoodReset() {
     if (!shooterHood.isHomed()) {
-      if (Constants.demo) {
-        new SequentialCommandGroup(   // don't create at instaniation since min position not yet overridden
-          new Hood_Reset(shooterHood),
-          new Hood_Auto(shooterHood, Constants.Hood_Constants.hoodMinPosition) //leaves hood half way up
-        ).schedule(false);   
-      } else {
-        hoodReset.schedule(false);   // move to limit switch without any interrupts
-      }
+      hoodReset.schedule(false);   // move to limit switch without any interrupts
     }
   }
 }

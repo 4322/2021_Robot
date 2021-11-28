@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+   
     if (Constants.demo) {
       compressor.stop();
       Constants.Hood_Constants.maxForwardPower = 0.4;
@@ -42,7 +42,8 @@ public class Robot extends TimedRobot {
       Constants.Hood_Constants.hoodMinPosition = 4500;
     } else {
       compressor.start();
-    }
+    } 
+    m_robotContainer = new RobotContainer();    //instantiate after constants are overridden
   }
 
   /**

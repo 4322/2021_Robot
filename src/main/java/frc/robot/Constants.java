@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 public final class Constants {
 
     public static final boolean debug = false;
-    public static final boolean demo = true;
+    public static final boolean demo = false;
 
     public static class Drivebase_Constants {
 

@@ -91,7 +91,7 @@ public class RobotContainer {
     if (Constants.demo) {
       hoodReset =  new SequentialCommandGroup(   // don't create at instaniation since min position not yet overridden
       new Hood_Reset(shooterHood),
-      new Hood_Auto(shooterHood, Constants.Hood_Constants.hoodMinPosition)) //leaves hood half way up
+      new Hood_Auto(shooterHood, Constants.Hood_Constants.hoodMinPosition)); //leaves hood half way up
     } else {
       hoodReset = new Hood_Reset(shooterHood);
     }

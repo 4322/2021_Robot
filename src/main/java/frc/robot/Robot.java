@@ -37,6 +37,9 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     if (Constants.demo) {
       compressor.stop();
+      Constants.Hood_Constants.maxForwardPower = 0.4;
+      Constants.Hood_Constants.maxReversePower = -0.4;
+      Constants.Hood_Constants.hoodMinPosition = 4500;
     } else {
       compressor.start();
     }

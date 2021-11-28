@@ -24,10 +24,6 @@ public final class Constants {
 
     public static final boolean debug = false;
     public static final boolean demo = true;
-    //Demo changes:
-    //Don't allow hood to go halfway
-    //Increase shooter speed slightly
-    //Slow down hood movement
 
     public static class Drivebase_Constants {
 
@@ -97,7 +93,7 @@ public final class Constants {
         public static final int shooterVel2 = 3000;     // 10 foot line
         public static final int shooterVel3 = 3500;     // trench
         public static final int minEjectVel = 1000;
-        public static final int demoVel = 1800;
+        public static final int demoVel = 2100;
         public static final int tolerance = 100;
         public static final double rumbleIntensity = 1.0;
 
@@ -119,13 +115,14 @@ public final class Constants {
     {
         public static final int hoodTalon_ID = 12;
         public static final int hoodMaxPosition = 9300;
+        public static int hoodMinPosition = 0;     //allows to be changed in demo mode
         public static final int hoodDecellerationDistance = 500;
         public static final int hoodTolerance = 20;
         public static final double homingTimeout = 5.0; 
         public static final double autoTimeout = 3.0; 
 
-        public static final double maxForwardPower = 1.0;
-        public static final double maxReversePower = -1.0;
+        public static double maxForwardPower = 1.0;    //allows to be changed in demo mode
+        public static double maxReversePower = -1.0;   //allows to be changed in demo mode
         public static final double minForwardPower = 0.1;
         public static final double minReversePower = -0.1;
         public static final double homingPower = -0.4;

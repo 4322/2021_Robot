@@ -143,7 +143,7 @@ public class Shooter_Hood extends SubsystemBase {
         shooterHood.set(Math.min(_power, Constants.Hood_Constants.maxForwardPower));
       }
     } else if (_power < 0) {
-      if (encValue <= 0) {
+      if (encValue <= Constants.Hood_Constants.hoodMinPosition) {
         shooterHood.stopMotor();
       } else {
         if (encValue <= Constants.Hood_Constants.hoodDecellerationDistance) {

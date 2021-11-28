@@ -56,9 +56,6 @@ public class RobotContainer {
 
   public final Hood_Manual hoodManual = new Hood_Manual(shooterHood);
   public final Hood_Reset hoodReset = new Hood_Reset(shooterHood);
-  public final SequentialCommandGroup hoodResetDemo = new SequentialCommandGroup(
-    new Hood_Reset(shooterHood),
-    new Hood_Auto(shooterHood, Constants.Hood_Constants.hoodMinPosition));
 
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
   public final ParallelCommandGroup shootFromPos1 = new ParallelCommandGroup(
@@ -246,7 +243,10 @@ public class RobotContainer {
   public void hoodReset() {
     if (!shooterHood.isHomed()) {
       if (Constants.demo) {
-        hoodResetDemo.schedule(false);    //leaves hood half way up
+        new SequentialCommandGroup(   // don't create at instaniation since min position not yet overridden
+          new Hood_Reset(shooterHood),
+          new Hood_Auto(shooterHood, Constants.Hood_Constants.hoodMinPosition) //leaves hood half way up
+        ).schedule(false);   
       } else {
         hoodReset.schedule(false);   // move to limit switch without any interrupts
       }

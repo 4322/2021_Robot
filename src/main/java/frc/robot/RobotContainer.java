@@ -127,7 +127,9 @@ public class RobotContainer {
     
     // SHOOTER CONROLS
     if (Constants.demo) {
-      coPilot.y.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel, coPilot));
+      coPilot.y.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel1, coPilot));
+      coPilot.x.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel2, coPilot));
+      coPilot.a.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel3, coPilot));
     } else {
       coPilot.y.whenPressed(shootFromPos1);   // interruptable by default
       coPilot.x.whenPressed(shootFromPos2);

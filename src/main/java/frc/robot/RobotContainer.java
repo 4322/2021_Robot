@@ -114,37 +114,37 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // DRIVEBASE CONTROLS
-    pilot.dPad.up.whenPressed(() -> drivebase.changePower("up"));
-    pilot.dPad.down.whenPressed(() -> drivebase.changePower("down"));
+    // pilot.dPad.up.whenPressed(() -> drivebase.changePower("up"));
+    // pilot.dPad.down.whenPressed(() -> drivebase.changePower("down"));
 
     // COLLECTOR CONTROLS
-    pilot.rb.whileHeld(collectorCollect);
-    pilot.lb.whileHeld(collectorEject);
+    pilot.rt.whileHeld(collectorCollect);
+    pilot.rb.whileHeld(collectorEject);
 
     // HOPPER CONTROLS
-    coPilot.lt.whileHeld(hopperEject);
-    coPilot.rt.whileHeld(hopperIntake);
+    pilot.lb.whileHeld(hopperEject);
+    pilot.lt.whileHeld(hopperIntake);
     
     // SHOOTER CONROLS
     if (Constants.demo) {
-      coPilot.y.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel1, coPilot));
-      coPilot.x.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel2, coPilot));
-      coPilot.a.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel3, coPilot));
+      pilot.y.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel1, coPilot));
+      pilot.x.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel2, coPilot));
+      pilot.a.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel3, coPilot));
     } else {
-      coPilot.y.whenPressed(shootFromPos1);   // interruptable by default
-      coPilot.x.whenPressed(shootFromPos2);
-      coPilot.a.whenPressed(shootFromPos3);
+      pilot.y.whenPressed(shootFromPos1);   // interruptable by default
+      pilot.x.whenPressed(shootFromPos2);
+      pilot.a.whenPressed(shootFromPos3);
     }
-    coPilot.b.whenPressed(disableShooter);
+    pilot.b.whenPressed(disableShooter);
     
     // KICKER CONTROLS
-    coPilot.rt.whileHeld(enableKicker);
+    pilot.lt.whileHeld(enableKicker);
     
     // HOOD CONTROLS
-    coPilot.back.whenPressed(hoodReset, false);   // move to limit switch without any interrupts
+    pilot.back.whenPressed(hoodReset, false);   // move to limit switch without any interrupts
 
     // ARM CONTROLS
-    pilot.a.whenPressed(armToggle);
+    pilot.dPad.right.whenPressed(armToggle);
   
     // CLIMBER CONTROLS
     // pilot.y.whenPressed(extendClimber);

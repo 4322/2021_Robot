@@ -89,9 +89,9 @@ public final class Constants {
         public static final int flywheelTwoSpark_ID = 8;
         public static final int kickerSpark_ID = 5;
 
-        public static final int shooterVel1 = 2250;     // wall
-        public static final int shooterVel2 = 3000;     // 10 foot line
-        public static final int shooterVel3 = 3500;     // trench
+        public static final int shooterVel1 = 2250;     // wall (0 in to target)
+        public static final int shooterVel2 = 3000;     // 10 foot line (120 in to target)
+        public static final int shooterVel3 = 3500;     // trench (217.13 in to target approx)
         public static final int minEjectVel = 1000;
         public static final int demoVel1 = 2150;
         public static final int demoVel2 = 1900;
@@ -173,9 +173,13 @@ public final class Constants {
         public static final NetworkTableEntry camMode = table.getEntry("camMode");
         public static final NetworkTableEntry pipeline = table.getEntry("pipeline");
 
-        public static final double limelightAngle = 30;     // degrees
+        public static final double limelightAngle = 39;     // degrees
         public static final double targetHeight = 98;       // inches
-        public static final double limelightHeight = 22.5;  // inches
+        public static final double limelightHeight = 22;  // inches
+
+        public static final double dist1 = 0;
+        public static final double dist2 = 120;
+        public static final double dist3 = 217.13;
 
         public static class PID_Values
         {

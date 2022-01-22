@@ -25,8 +25,15 @@ public class Limelight extends SubsystemBase {
 
   // SHUFFLEBOARD
   ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
+
   NetworkTableEntry distanceToTarget =
     tab.add("Distance to Target", 0)
+    .withPosition(1,0)
+    .withSize(1,1)
+    .getEntry();
+
+  NetworkTableEntry targetVisible =
+    tab.add("Target Visible", false)
     .withPosition(1,0)
     .withSize(1,1)
     .getEntry();
@@ -38,6 +45,7 @@ public class Limelight extends SubsystemBase {
   @Override
   public void periodic() {
     getDistance();
+    targetVisible.setBoolean(getTarget());
   }
 
   public double getX_Offset()
@@ -100,11 +108,7 @@ public class Limelight extends SubsystemBase {
 
     if (getTarget()) {
       double angleToTarget = Constants.Limelight_Constants.limelightAngle + getY_Offset();
-      if (angleToTarget > 0 && angleToTarget < 90) {
-        distance = 
-          (Constants.Limelight_Constants.targetHeight - Constants.Limelight_Constants.limelightHeight)
-            / Math.tan(Math.toRadians(angleToTarget));
-      }
+      distance = (Constants.Limelight_Constants.targetHeight - Constants.Limelight_Constants.limelightHeight) / Math.tan(Math.toRadians(angleToTarget));
     }
     distanceToTarget.setDouble(distance);
     return distance;

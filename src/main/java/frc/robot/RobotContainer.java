@@ -83,7 +83,7 @@ public class RobotContainer {
   public final Hopper_Stop hopperStop = new Hopper_Stop(hopper);
 
   public final Climber_Manual climberManual = new Climber_Manual(climber);
-
+  public final Limelight_AutoTurn limelightAutoTurn = new Limelight_AutoTurn(drivebase, limelight);
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
@@ -149,6 +149,8 @@ public class RobotContainer {
     // CLIMBER CONTROLS
     // pilot.y.whenPressed(extendClimber);
     // pilot.a.whenPressed(retractClimber);
+    // LIMELIGHT CONTROLS
+    pilot.b.whenPressed(limelightAutoTurn);
   }
 
   public void disableSubsystems() {

@@ -20,8 +20,10 @@ public class FiringSolution {
         public int getflywheelSpeed() { return flywheelSpeed; }
         public int gethoodPosition() { return hoodPosition; }
         
-        public double getDistance() {
-            return distance;
+        public int getDistance() {
+            return (int) Math.round(distance);
         }
+
+
  
 }

@@ -11,17 +11,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight extends SubsystemBase {
   
-  NetworkTableEntry tx = Constants.Limelight_Constants.tx;
-  NetworkTableEntry ty = Constants.Limelight_Constants.ty;
-  NetworkTableEntry ta = Constants.Limelight_Constants.ta;
-  NetworkTableEntry tv = Constants.Limelight_Constants.tv;
-  NetworkTableEntry ledMode = Constants.Limelight_Constants.ledMode;
-  NetworkTableEntry camMode = Constants.Limelight_Constants.camMode;
-  NetworkTableEntry pipeline = Constants.Limelight_Constants.pipeline;
+  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+            
+  NetworkTableEntry tx = table.getEntry("tx");
+  NetworkTableEntry ty = table.getEntry("ty");
+  NetworkTableEntry ta = table.getEntry("ta");
+  NetworkTableEntry tv = table.getEntry("tv");
+  NetworkTableEntry ledMode = table.getEntry("ledMode");
+  NetworkTableEntry camMode = table.getEntry("camMode");
+  NetworkTableEntry pipeline = table.getEntry("pipeline");
 
   // SHUFFLEBOARD
   ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
@@ -46,6 +50,7 @@ public class Limelight extends SubsystemBase {
   public void periodic() {
     getDistance();
     targetVisible.setBoolean(getTarget());
+    updateLimelightValues();
   }
 
   public double getX_Offset()
@@ -112,5 +117,15 @@ public class Limelight extends SubsystemBase {
     }
     distanceToTarget.setDouble(distance);
     return distance;
+  }
+
+  public void updateLimelightValues() {
+    tx = table.getEntry("tx");
+    ty = table.getEntry("ty");
+    ta = table.getEntry("ta");
+    tv = table.getEntry("tv");
+    ledMode = table.getEntry("ledMode");
+    camMode = table.getEntry("camMode");
+    pipeline = table.getEntry("pipeline");
   }
 }

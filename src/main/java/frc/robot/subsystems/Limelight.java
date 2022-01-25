@@ -70,7 +70,7 @@ public class Limelight extends SubsystemBase {
 
   public boolean getTarget()
   {
-    return tv.getBoolean(false);
+    return tv.getDouble(0.0) == 1.0;
   }
 
   public void setLed(LedMode mode) {

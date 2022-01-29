@@ -73,7 +73,7 @@ public final class Constants {
             // 2021.1: 16.1
             // 2021.1: 0.00742
 
-            public static final double aimingThreshold = 0.05;
+            public static final double minDriveRotationPower = 0.05;
             public static final double aimingTolerance = 0.25;
         }
     }

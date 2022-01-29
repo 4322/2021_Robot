@@ -39,7 +39,7 @@ public class FiringSolutionManager { // https://github.com/Team3309/FRC2020/blob
             }
         }
 
-        if ((upper == -1) {
+        if (upper == -1) {
             return solutions.get(solutions.size() - 1); // returns highest/lowest solution
         }
         if (lower == -1) {

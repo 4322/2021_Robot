@@ -2,7 +2,7 @@ package frc.robot.FiringSolution;
 
 import java.util.*;
 
-public class FiringSolutionManager {
+public class FiringSolutionManager { // https://github.com/Team3309/FRC2020/blob/master/src/main/java/frc/robot/util/FiringSolutionManager.java
 
     private static FiringSolutionManager singleton;
     private ArrayList<FiringSolution> solutions;
@@ -12,12 +12,12 @@ public class FiringSolutionManager {
         solutions = new ArrayList<FiringSolution>(); // new ArrayList to organize based on distance
     }
 
-    public void addSolution(FiringSolution add, int distance) { 
+    public void addSolution(FiringSolution add) { 
         for (int i = 0; i < solutions.size(); i++) {
-            if (solutions.get(i).getDistance() == distance) {
+            if (solutions.get(i).getDistance() == add.getDistance()) {
                 break;
             }
-            if (solutions.get(i).getDistance() > distance) { // iterate through ArrayList until desired position found
+            if (solutions.get(i).getDistance() > add.getDistance()) { // iterate through ArrayList until desired position found
                 solutions.add(i, add);
                 break;
             }
@@ -39,9 +39,13 @@ public class FiringSolutionManager {
             }
         }
 
-        if ((upper == -1) || (lower == -1)) {
-            return null; // not sure what the proper thing to return here is
-        } else {
+        if ((upper == -1) {
+            return solutions.get(solutions.size() - 1); // returns highest/lowest solution
+        }
+        if (lower == -1) {
+            return solutions.get(0);
+        }
+        else {
             double d = (currentDistance - solutions.get(lower).getDistance()) / (solutions.get(upper).getDistance() - solutions.get(lower).getDistance());
             return new FiringSolution(
                 (int) (solutions.get(upper).gethoodPosition() * d + solutions.get(lower).gethoodPosition() * (1 - d)),
@@ -52,6 +56,6 @@ public class FiringSolutionManager {
     }
 
     public static FiringSolutionManager getSingleton() {
-        return singleton;
+        return singleton == null ? new FiringSolutionManager() : singleton;
     }
 }

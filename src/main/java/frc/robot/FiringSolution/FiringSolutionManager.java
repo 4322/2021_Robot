@@ -1,7 +1,6 @@
 package frc.robot.FiringSolution;
 
 import java.util.*;
-import frc.robot.FiringSolution.FiringSolution;
 
 public class FiringSolutionManager {
 

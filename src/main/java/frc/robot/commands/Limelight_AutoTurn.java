@@ -40,9 +40,13 @@ public class Limelight_AutoTurn extends CommandBase {
   public void execute() { // https://docs.limelightvision.io/en/latest/cs_aiming.html
     heading_error = -limelight.getX_Offset(); // positive error means clockwise turn
     steering_adjust = Constants.Drivebase_Constants.PID_Values.kP*heading_error;
-    if (steering_adjust < Constants.Drivebase_Constants.PID_Values.minDriveRotationPower) 
+    if (steering_adjust < Constants.Drivebase_Constants.PID_Values.minDriveRotationPower && steering_adjust > 0) 
       {
-      steering_adjust = Constants.Drivebase_Constants.PID_Values.minDriveRotationPower;
+        steering_adjust = Constants.Drivebase_Constants.PID_Values.minDriveRotationPower;
+      }
+    else if (steering_adjust < Constants.Drivebase_Constants.PID_Values.minDriveRotationPower && steering_adjust < 0)
+      {
+        steering_adjust = -Constants.Drivebase_Constants.PID_Values.minDriveRotationPower;
       }
     drivebase.tankDrive(steering_adjust, -steering_adjust);
   }

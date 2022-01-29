@@ -37,6 +37,8 @@ public final class Constants {
         public static final double openLoopRampRate = 1.0;      // seconds to go from 0 to full power
         public static final double maxTurn = 0.7;       // don't self destruct
 
+        public static final double minDriveRotationPower = 0.05;
+
         // CHARACTERIZED DRIVE VALUES
         public static final double kTrackwidthMeters = 0.6771275509857637;
         // 2020: 0.68
@@ -73,7 +75,6 @@ public final class Constants {
             // 2021.1: 16.1
             // 2021.1: 0.00742
 
-            public static final double minDriveRotationPower = 0.05;
             public static final double aimingTolerance = 0.25;
         }
     }

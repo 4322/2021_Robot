@@ -20,10 +20,8 @@ public class Limelight_AutoTurn extends CommandBase {
    private Drivebase drivebase;
    private Limelight limelight;
    private double Kp = Constants.Drivebase_Constants.PID_Values.kP; //Kp is 0 in PID_Values
-   private double min_command = 0.05;
-   private double left_command = 0;
-   private double right_command = 0;
    private double steering_adjust = 0.0;
+   private double heading_error = 0;
 
 
   public Limelight_AutoTurn(Drivebase driveSubsystem, Limelight limelightSubsystem) {
@@ -40,20 +38,15 @@ public class Limelight_AutoTurn extends CommandBase {
 
 
   @Override
-  public void execute() {
+  public void execute() { // https://docs.limelightvision.io/en/latest/cs_aiming.html
     double tx = limelight.getX_Offset();
-    double heading_error = -tx;
-    if (tx > 1.0)
+    heading_error = -tx;
+    steering_adjust = Kp*heading_error;
+    if (steering_adjust < Constants.Drivebase_Constants.PID_Values.aimingTolerance) 
       {
-        steering_adjust = Kp*heading_error - min_command;
+      steering_adjust = Constants.Drivebase_Constants.PID_Values.aimingTolerance;
       }
-    else if (tx < 1.0)
-      {
-        steering_adjust = Kp*heading_error + min_command;
-      }
-      left_command += steering_adjust;
-      right_command -= steering_adjust;
-      drivebase.tankDrive(left_command, right_command);
+    drivebase.tankDrive(steering_adjust, -steering_adjust);
   }
   // Called once the command ends or is interrupted.
   @Override
@@ -63,6 +56,11 @@ public class Limelight_AutoTurn extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (heading_error < Constants.Drivebase_Constants.PID_Values.aimingTolerance) {
+      drivebase.tankDrive(0, 0);
+      return true;
+    } else {
+      return false;
+    }
   }
 }

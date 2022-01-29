@@ -150,7 +150,7 @@ public class RobotContainer {
     // pilot.y.whenPressed(extendClimber);
     // pilot.a.whenPressed(retractClimber);
     // LIMELIGHT CONTROLS
-    pilot.b.whenPressed(limelightAutoTurn);
+    pilot.b.whileHeld(limelightAutoTurn);
   }
 
   public void disableSubsystems() {

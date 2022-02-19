@@ -47,19 +47,19 @@ public class RobotContainer {
   public final ParallelCommandGroup shootFromPos1 = new ParallelCommandGroup(
     new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos1), 
     new Enable_ShooterPower(shooter, 
-      Constants.Shooter_Constants.shooterVel1 / Constants.Shooter_Constants.wheelRatio,
+    Math.round(Constants.Shooter_Constants.shooterVel1 / Constants.Shooter_Constants.wheelRatio),
       Constants.Shooter_Constants.shooterVel1,
       coPilot));
   public final ParallelCommandGroup shootFromPos2 = new ParallelCommandGroup(
     new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2), 
     new Enable_ShooterPower(shooter, 
-      Constants.Shooter_Constants.shooterVel2 / Constants.Shooter_Constants.wheelRatio,
+      Math.round(Constants.Shooter_Constants.shooterVel2 / Constants.Shooter_Constants.wheelRatio),
       Constants.Shooter_Constants.shooterVel2,
       coPilot));
   public final ParallelCommandGroup shootFromPos3 = new ParallelCommandGroup(
     new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos3), 
     new Enable_ShooterPower(shooter, 
-      Constants.Shooter_Constants.shooterVel3 / Constants.Shooter_Constants.wheelRatio,
+    Math.round(Constants.Shooter_Constants.shooterVel3 / Constants.Shooter_Constants.wheelRatio),
       Constants.Shooter_Constants.shooterVel3,
       coPilot));
   public final Enable_ShooterPower shooterTest = 
@@ -126,15 +126,15 @@ public class RobotContainer {
     // SHOOTER CONROLS
     if (Constants.demo) {
       coPilot.y.whenPressed(new Enable_ShooterPower(shooter, 
-        Constants.Shooter_Constants.demoVel1 / Constants.Shooter_Constants.wheelRatio,
+      Math.round(Constants.Shooter_Constants.demoVel1 / Constants.Shooter_Constants.wheelRatio),
         Constants.Shooter_Constants.demoVel1,
         coPilot));
         coPilot.x.whenPressed(new Enable_ShooterPower(shooter, 
-        Constants.Shooter_Constants.demoVel2 / Constants.Shooter_Constants.wheelRatio,
+        Math.round(Constants.Shooter_Constants.demoVel2 / Constants.Shooter_Constants.wheelRatio),
         Constants.Shooter_Constants.demoVel2,
         coPilot));
         coPilot.a.whenPressed(new Enable_ShooterPower(shooter, 
-        Constants.Shooter_Constants.demoVel3 / Constants.Shooter_Constants.wheelRatio,
+        Math.round(Constants.Shooter_Constants.demoVel3 / Constants.Shooter_Constants.wheelRatio),
         Constants.Shooter_Constants.demoVel3,
         coPilot));
     } else {

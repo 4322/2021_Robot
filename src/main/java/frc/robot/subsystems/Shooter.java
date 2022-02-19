@@ -39,26 +39,26 @@ public class Shooter extends SubsystemBase {
   private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
 
     private NetworkTableEntry currentRPMBig =
-    tab.add("Current RPM", 0)
+    tab.add("Current RPM Big", 0)
     .withPosition(1,0)
     .withSize(1,1)
     .getEntry();
     
     private NetworkTableEntry currentRPMSmall =
-    tab.add("Current RPM", 0)
+    tab.add("Current RPM Small", 0)
     .withPosition(1,1)
     .withSize(1,1)
     .getEntry();
 
     private NetworkTableEntry targetRPMBig =
-    tab.add("Target RPM", 0)
+    tab.add("Target RPM Big", 0)
     .withPosition(2,0)
     .withSize(1,1)
     .getEntry();
 
     private NetworkTableEntry targetRPMSmall =
-    tab.add("Target RPM", 0)
-    .withPosition(2,0)
+    tab.add("Target RPM Small", 0)
+    .withPosition(2,1)
     .withSize(1,1)
     .getEntry();
 
@@ -67,7 +67,7 @@ public class Shooter extends SubsystemBase {
     flywheelTwo = new CANSparkMax(Constants.Shooter_Constants.flywheelTwoSpark_ID, MotorType.kBrushless);
 
     flywheelOne.restoreFactoryDefaults();
-    flywheelOne.setInverted(true);
+    flywheelOne.setInverted(false);
     flywheelTwo.restoreFactoryDefaults();
     flywheelOne.setIdleMode(IdleMode.kCoast);
     flywheelTwo.setIdleMode(IdleMode.kCoast);
@@ -123,5 +123,6 @@ public class Shooter extends SubsystemBase {
   
   public void stopShooter() {
     flywheelOne.stopMotor();
+    flywheelTwo.stopMotor();
   }
 }

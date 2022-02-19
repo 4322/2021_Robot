@@ -10,7 +10,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 import frc.robot.Constants;
-import frc.robot.XboxController;
 
 public class Auto_ShooterPower extends CommandBase {
   /**
@@ -30,7 +29,7 @@ public class Auto_ShooterPower extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setSpeed(m_rpm);
+    shooter.setSpeed(m_rpm, m_rpm);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,6 +47,6 @@ public class Auto_ShooterPower extends CommandBase {
   // Returns true when flywheel up to speed.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_rpm - shooter.getSpeed()) <= Constants.Shooter_Constants.tolerance;
+    return Math.abs(m_rpm - shooter.getSpeedBig()) <= Constants.Shooter_Constants.tolerance;
   }
 }

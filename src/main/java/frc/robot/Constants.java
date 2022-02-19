@@ -85,24 +85,36 @@ public final class Constants {
 
     public static class Shooter_Constants
     {
-        public static final int flywheelOneSpark_ID = 4;
-        public static final int flywheelTwoSpark_ID = 8;
+        public static final int flywheelOneSpark_ID = 8;
+        public static final int flywheelTwoSpark_ID = 4;
         public static final int kickerSpark_ID = 5;
 
-        public static final int shooterVel1 = 2250;     // wall
-        public static final int shooterVel2 = 3000;     // 10 foot line
-        public static final int shooterVel3 = 3500;     // trench
+        public static final int shooterVel1 = 2250; // WE ARE NOT USING THESE
+        public static final int shooterVel2 = 3000; // WE ARE NOT USING THESE
+        public static final int shooterVel3 = 3500; // WE ARE NOT USING THESE
         public static final int minEjectVel = 1000;
         public static final int demoVel1 = 2500;
-        public static final int demoVel2 = 2400;
-        public static final int demoVel3 = 2300;
+        public static final int demoVel2 = 4000;
+        public static final int demoVel3 = 5000;
         public static final int tolerance = 100;
         public static final double rumbleIntensity = 1.0;
 
         public static final double closedLoopRampRate = 1.0;  // seconds to go from stopped to full power
         public static final double kickerPower = 0.5;
 
+        public static final double wheelRatio = 1.684;
+
         public static class PID_Values  {
+            public static final double kP = .00025;
+            public static final double kI = 0.000001;
+            public static final double kD = 0.004;
+            public static final double kIz = 300;
+            public static final double kFF = 0.00015;
+            public static final int kMax = 1;
+            public static final int kMin = 0;   // let flywheel coast down, don't apply power to slow it
+        }
+
+        public static class Small_Wheel_PID_Values  {
             public static final double kP = .00025;
             public static final double kI = 0.000001;
             public static final double kD = 0.004;

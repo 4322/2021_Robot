@@ -29,25 +29,34 @@ public class Shooter extends SubsystemBase {
   private CANSparkMax flywheelOne;
   private CANSparkMax flywheelTwo;
 
-  private CANEncoder flywheelEncoder;
-  private CANPIDController flywheelPID;
+  private CANEncoder flywheelOneEncoder;
+  private CANPIDController flywheelOnePID;
+
+  private CANEncoder flywheelTwoEncoder;
+  private CANPIDController flywheelTwoPID;
   
   // SHUFFLEBOARD
   private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
-  
-  private NetworkTableEntry power =
-    tab.add("Power", 0)
-    .withPosition(0,0)
-    .withSize(1,1)
-    .getEntry();
 
-  private NetworkTableEntry currentRPM =
+    private NetworkTableEntry currentRPMBig =
     tab.add("Current RPM", 0)
     .withPosition(1,0)
     .withSize(1,1)
     .getEntry();
+    
+    private NetworkTableEntry currentRPMSmall =
+    tab.add("Current RPM", 0)
+    .withPosition(1,1)
+    .withSize(1,1)
+    .getEntry();
 
-  private NetworkTableEntry targetRPM =
+    private NetworkTableEntry targetRPMBig =
+    tab.add("Target RPM", 0)
+    .withPosition(2,0)
+    .withSize(1,1)
+    .getEntry();
+
+    private NetworkTableEntry targetRPMSmall =
     tab.add("Target RPM", 0)
     .withPosition(2,0)
     .withSize(1,1)
@@ -60,40 +69,56 @@ public class Shooter extends SubsystemBase {
     flywheelOne.restoreFactoryDefaults();
     flywheelOne.setInverted(true);
     flywheelTwo.restoreFactoryDefaults();
-    flywheelTwo.follow(flywheelOne, true);
     flywheelOne.setIdleMode(IdleMode.kCoast);
     flywheelTwo.setIdleMode(IdleMode.kCoast);
     flywheelOne.setClosedLoopRampRate(Constants.Shooter_Constants.closedLoopRampRate);  // don't eject the shooter
+    flywheelOne.setClosedLoopRampRate(Constants.Shooter_Constants.closedLoopRampRate);
 
-    flywheelEncoder = flywheelOne.getEncoder();
-    flywheelPID = flywheelOne.getPIDController();
+    flywheelOneEncoder = flywheelOne.getEncoder();
+    flywheelOnePID = flywheelOne.getPIDController();
 
-    flywheelPID.setP(Constants.Shooter_Constants.PID_Values.kP);
-    flywheelPID.setI(Constants.Shooter_Constants.PID_Values.kI);
-    flywheelPID.setD(Constants.Shooter_Constants.PID_Values.kD);
-    flywheelPID.setIZone(Constants.Shooter_Constants.PID_Values.kIz);
-    flywheelPID.setFF(Constants.Shooter_Constants.PID_Values.kFF);
-    flywheelPID.setOutputRange(Constants.Shooter_Constants.PID_Values.kMin, Constants.Shooter_Constants.PID_Values.kMax);
+    flywheelTwoEncoder = flywheelTwo.getEncoder();
+    flywheelTwoPID = flywheelTwo.getPIDController();
+
+    flywheelOnePID.setP(Constants.Shooter_Constants.PID_Values.kP);
+    flywheelOnePID.setI(Constants.Shooter_Constants.PID_Values.kI);
+    flywheelOnePID.setD(Constants.Shooter_Constants.PID_Values.kD);
+    flywheelOnePID.setIZone(Constants.Shooter_Constants.PID_Values.kIz);
+    flywheelOnePID.setFF(Constants.Shooter_Constants.PID_Values.kFF);
+    flywheelOnePID.setOutputRange(Constants.Shooter_Constants.PID_Values.kMin, Constants.Shooter_Constants.PID_Values.kMax);
+
+    flywheelTwoPID.setP(Constants.Shooter_Constants.PID_Values.kP);
+    flywheelTwoPID.setI(Constants.Shooter_Constants.PID_Values.kI);
+    flywheelTwoPID.setD(Constants.Shooter_Constants.PID_Values.kD);
+    flywheelTwoPID.setIZone(Constants.Shooter_Constants.PID_Values.kIz);
+    flywheelTwoPID.setFF(Constants.Shooter_Constants.PID_Values.kFF);
+    flywheelTwoPID.setOutputRange(Constants.Shooter_Constants.PID_Values.kMin, Constants.Shooter_Constants.PID_Values.kMax);
   }
 
   @Override
   public void periodic() {
-    power.setDouble(flywheelOne.getAppliedOutput());
-    currentRPM.setDouble(getSpeed());
+    currentRPMBig.setDouble(getSpeedBig());
+    currentRPMSmall.setDouble(getSpeedSmall());
   }
 
-  public void setSpeed(double rpm) {
-    flywheelPID.setReference(rpm, ControlType.kVelocity);
-    targetRPM.setDouble(rpm);
+  public void setSpeed(double rpm1, double rpm2) {
+    flywheelOnePID.setReference(rpm1, ControlType.kVelocity);
+    targetRPMBig.setDouble(rpm1);
+    flywheelTwoPID.setReference(rpm2, ControlType.kVelocity);
+    targetRPMSmall.setDouble(rpm2);
   }
 
-  public double getSpeed() {
-    return flywheelEncoder.getVelocity();
+  public double getSpeedBig() {
+    return flywheelOneEncoder.getVelocity();
+  }
+
+  public double getSpeedSmall() {
+    return flywheelTwoEncoder.getVelocity();
   }
 
   // don't let balls get stuck in the shooter
   public boolean isAbleToEject() {
-    return getSpeed() >= Constants.Shooter_Constants.minEjectVel;
+    return getSpeedBig() >= Constants.Shooter_Constants.minEjectVel;
   }
   
   public void stopShooter() {

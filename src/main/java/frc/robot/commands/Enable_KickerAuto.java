@@ -9,17 +9,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Kicker;
-import frc.robot.subsystems.Shooter;
 
 public class Enable_KickerAuto extends CommandBase {
 
    private Kicker kicker;
-   private Shooter shooter;
 
-  public Enable_KickerAuto(Kicker kickerSubsystem, Shooter shooterSubsystem) {
+  public Enable_KickerAuto(Kicker kickerSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     kicker = kickerSubsystem;
-    shooter = shooterSubsystem;
     addRequirements(kicker);
   }
 

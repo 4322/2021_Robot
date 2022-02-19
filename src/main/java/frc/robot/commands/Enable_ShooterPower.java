@@ -18,13 +18,15 @@ public class Enable_ShooterPower extends CommandBase {
    */
 
   private Shooter shooter;
-  private double m_rpm;
+  private double m_rpm1;
+  private double m_rpm2;
   private XboxController m_copilot;
 
 
-  public Enable_ShooterPower(Shooter shooterSubsystem, double rpm, XboxController copilot) {
+  public Enable_ShooterPower(Shooter shooterSubsystem, double rpm1, double rpm2, XboxController copilot) {
     shooter = shooterSubsystem;
-    m_rpm = rpm;
+    m_rpm1 = rpm1;
+    m_rpm2 = rpm2;
     m_copilot = copilot;
     addRequirements(shooter);
   }
@@ -32,7 +34,7 @@ public class Enable_ShooterPower extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setSpeed(m_rpm);
+    shooter.setSpeed(m_rpm1, m_rpm2);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,7 +42,7 @@ public class Enable_ShooterPower extends CommandBase {
   public void execute() {
 
     // Inform copilot that shooter is up to speed
-    if (Math.abs(m_rpm - shooter.getSpeed()) <= Constants.Shooter_Constants.tolerance) {
+    if (Math.abs(m_rpm1 - shooter.getSpeedBig()) <= Constants.Shooter_Constants.tolerance) {
       m_copilot.setRumble(Constants.Shooter_Constants.rumbleIntensity);
     }
     else {

@@ -14,5 +14,6 @@
     "**/.factorypath": true,
     "**/*~": true
   },
-  "wpilib.autoSaveOnDeploy": true
+  "wpilib.autoSaveOnDeploy": true,
+  "workbench.editor.enablePreview": false
 }

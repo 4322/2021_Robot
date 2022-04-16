@@ -7,23 +7,9 @@
 
 package frc.robot;
 
-import java.util.List;
-
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.RamseteController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -59,15 +45,15 @@ public class RobotContainer {
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
   public final ParallelCommandGroup shootFromPos1 = new ParallelCommandGroup(
     new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos1), 
-    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel1, coPilot));
+    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel1, pilot));
   public final ParallelCommandGroup shootFromPos2 = new ParallelCommandGroup(
     new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2), 
-    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2, coPilot));
+    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2, pilot));
   public final ParallelCommandGroup shootFromPos3 = new ParallelCommandGroup(
     new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos3), 
-    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel3, coPilot));
+    new Enable_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel3, pilot));
   public final Enable_ShooterPower shooterTest = 
-    new Enable_ShooterPower(shooter, 3000, coPilot);
+    new Enable_ShooterPower(shooter, 3000, pilot);
 
   public final Enable_Kicker enableKicker = new Enable_Kicker(kicker, shooter);
 
@@ -126,9 +112,9 @@ public class RobotContainer {
     
     // SHOOTER CONROLS
     if (Constants.demo) {
-      pilot.y.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel1, coPilot));
-      pilot.x.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel2, coPilot));
-      pilot.a.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel3, coPilot));
+      pilot.y.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel1, pilot));
+      pilot.x.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel2, pilot));
+      pilot.a.whenPressed(new Enable_ShooterPower(shooter, Constants.Shooter_Constants.demoVel3, pilot));
     } else {
       pilot.y.whenPressed(shootFromPos1);   // interruptable by default
       pilot.x.whenPressed(shootFromPos2);
@@ -155,7 +141,7 @@ public class RobotContainer {
     shooter.stopShooter();
     shooterHood.setCoastMode();   // allow hood to be moved manually
     limelight.setLed(Limelight.LedMode.Off);
-    coPilot.setRumble(0);
+    pilot.setRumble(0);
   }
 
   public void resetSubsystems() {

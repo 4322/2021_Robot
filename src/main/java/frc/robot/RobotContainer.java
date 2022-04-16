@@ -166,7 +166,7 @@ public class RobotContainer {
       // set for 10 foot shot:
       new Auto_ShooterPower(shooter, Constants.Shooter_Constants.shooterVel2),
       new Hood_Auto(shooterHood, Constants.Hood_Constants.Positions.pos2),
-      new Enable_KickerAuto(kicker, shooter),
+      new Enable_KickerAuto(kicker),
       new WaitCommand(5.0), // wait for balls to shoot
       // disable subsystems
       new Disable_KickerAuto(kicker),

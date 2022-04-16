@@ -38,7 +38,6 @@ public class RobotContainer {
 
   // Define controllers
   public static XboxController pilot = new XboxController(0);
-  public static XboxController coPilot = new XboxController(1);
   
   // The robot's subsystems and commands are defined here...
   public final Limelight limelight = new Limelight();

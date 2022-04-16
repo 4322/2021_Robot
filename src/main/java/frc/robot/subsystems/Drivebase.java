@@ -182,7 +182,7 @@ public class Drivebase extends SubsystemBase {
     // Set master/slave mode by having the slaves directly follow the masters.
     // This is preferred to using a SpeedControlGroup because we have a limit on the OpenLoopRampRate.
     rightSlave1.follow(rightMaster, false);   // why does this need to be false to avoid the motors fighting?
-    leftSlave1.follow(leftMaster, true);
+    leftSlave1.follow(leftMaster, false);
 
     // Configures Motors For The Drivebase Gear Ratio, Current Limit
     setPositionConversionFactor(Constants.Drivebase_Constants.distPerPulse);

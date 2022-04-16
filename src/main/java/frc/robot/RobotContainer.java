@@ -39,7 +39,8 @@ public class RobotContainer {
   // Define robot commands
   public final Drive_Manual driveManual = new Drive_Manual(drivebase);
 
-  public final Hood_Manual hoodManual = new Hood_Manual(shooterHood);
+  public final Hood_Up hoodUp = new Hood_Up(shooterHood);
+  public final Hood_Down hoodDown = new Hood_Down(shooterHood);
   public Command hoodReset;
 
   public final Disable_Shooter disableShooter = new Disable_Shooter(shooter);
@@ -84,7 +85,6 @@ public class RobotContainer {
     disableSubsystems();
 
     drivebase.setDefaultCommand(driveManual); 
-    shooterHood.setDefaultCommand(hoodManual);
     collector.setDefaultCommand(collectorStop);
     hopper.setDefaultCommand(hopperStop);
     climber.setDefaultCommand(climberManual);
@@ -97,10 +97,6 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
-    // DRIVEBASE CONTROLS
-    // pilot.dPad.up.whenPressed(() -> drivebase.changePower("up"));
-    // pilot.dPad.down.whenPressed(() -> drivebase.changePower("down"));
 
     // COLLECTOR CONTROLS
     pilot.rt.whileHeld(collectorCollect);
@@ -131,9 +127,9 @@ public class RobotContainer {
     // ARM CONTROLS
     pilot.dPad.right.whenPressed(armToggle);
   
-    // CLIMBER CONTROLS
-    // pilot.y.whenPressed(extendClimber);
-    // pilot.a.whenPressed(retractClimber);
+    // HOOD CONTROLS
+    pilot.dPad.up.whileHeld(hoodUp);
+    pilot.dPad.down.whileHeld(hoodDown);
   }
 
   public void disableSubsystems() {

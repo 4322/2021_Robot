@@ -128,8 +128,7 @@ public final class Constants {
         public static final double minForwardPower = 0.1;
         public static final double minReversePower = -0.1;
         public static final double homingPower = -0.4;
-        public static final double manualDeadband = 0.05;
-
+        public static final double manualPower = 0.2;
 
         public static final int kPIDLoopIdx = 0;
         public static final int kTimeoutMs = 30;

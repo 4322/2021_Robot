@@ -9,25 +9,26 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter_Hood;
+import frc.robot.Constants;
 
-public class Hood_Manual extends CommandBase {
+public class Hood_Down extends CommandBase {
   /**
    * Creates a new Hood_Manual.
    */
 
    private Shooter_Hood shooterHood;
 
-  public Hood_Manual(Shooter_Hood shooterHoodSubsystem) {
+  public Hood_Down(Shooter_Hood shooterHoodSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     shooterHood = shooterHoodSubsystem;
     addRequirements(shooterHood);
-  
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    shooterHood.setHoodPower(-Constants.Hood_Constants.manualPower);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,6 +39,7 @@ public class Hood_Manual extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    shooterHood.setHoodPower(0);
   }
 
   // Returns true when the command should end.

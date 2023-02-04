@@ -55,6 +55,7 @@ public final class Constants {
         public static final double velocityConversion = .0007780154; // In Meters
 
         public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
+		public static final double disableBreakSec = 2.0;
 
         public static class PID_Values {
 

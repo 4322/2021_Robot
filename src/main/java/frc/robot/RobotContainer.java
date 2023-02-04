@@ -9,6 +9,7 @@ package frc.robot;
 
 import java.util.List;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -35,6 +36,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
+  private Timer disableTimer = new Timer();
 
   // Define controllers
   public static XboxController pilot = new XboxController(0);
@@ -152,8 +155,10 @@ public class RobotContainer {
   }
 
   public void disableSubsystems() {
-    drivebase.setCoastMode();
+    drivebase.setBrakeMode();
     shooter.stopShooter();
+    disableTimer.reset();
+    disableTimer.start();
     shooterHood.setCoastMode();   // allow hood to be moved manually
     limelight.setLed(Limelight.LedMode.Off);
     coPilot.setRumble(0);
@@ -163,6 +168,8 @@ public class RobotContainer {
     drivebase.setBrakeMode();
     shooterHood.setBrakeMode();   // don't let hood move while shooting
     limelight.setLed(Limelight.LedMode.On);
+    disableTimer.stop();
+    disableTimer.reset();
   }
 
   /**
@@ -253,4 +260,13 @@ public class RobotContainer {
       hoodReset.schedule(false);   // move to limit switch without any interrupts
     }
   }
+
+public void disabledPeriodic() {
+  if (disableTimer.hasElapsed(Constants.Drivebase_Constants.disableBreakSec)) {
+    drivebase.setCoastMode();  // robot has stopped, safe to enter coast mode
+    disableTimer.stop();
+    disableTimer.reset();
+  }
+}
+
 }

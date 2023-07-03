@@ -35,7 +35,7 @@ public final class Constants {
 
         public static final int SparkMax_CurrentLimit = 60;
         public static final double openLoopRampRate = 1.0;      // seconds to go from 0 to full power
-        public static final double maxTurn = 0.7;       // don't self destruct
+        public static final double maxTurn = 1.0;  // fast rotation while defending against Nemo
 
         // CHARACTERIZED DRIVE VALUES
         public static final double kTrackwidthMeters = 0.6771275509857637;
@@ -55,6 +55,7 @@ public final class Constants {
         public static final double velocityConversion = .0007780154; // In Meters
 
         public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
+		public static final double disableBreakSec = 2.0;
 
         public static class PID_Values {
 

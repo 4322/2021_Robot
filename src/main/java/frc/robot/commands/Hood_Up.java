@@ -28,12 +28,12 @@ public class Hood_Up extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterHood.setHoodPower(Constants.Hood_Constants.manualPower);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    shooterHood.setHoodPower(Constants.Hood_Constants.manualPower);
   }
 
   // Called once the command ends or is interrupted.

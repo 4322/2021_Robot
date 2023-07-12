@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
   /**
@@ -19,14 +20,16 @@ public class Arm extends SubsystemBase {
   private DoubleSolenoid dSolenoid;
 
   public Arm() {
-
-    dSolenoid = new DoubleSolenoid(0, 1);
-    dSolenoid.set(Value.kForward);
-
+    if (Constants.pcmEnabled) {
+      dSolenoid = new DoubleSolenoid(0, 1);
+      dSolenoid.set(Value.kForward);
+    }
   }
 
   public void toggle(){
-    dSolenoid.toggle();
+    if (Constants.pcmEnabled) {
+      dSolenoid.toggle();
+    }
   }
 
   @Override

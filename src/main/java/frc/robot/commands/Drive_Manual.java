@@ -41,7 +41,7 @@ public class Drive_Manual extends CommandBase {
     
     power = RobotContainer.pilot.leftStick.getY();
     turn = RobotContainer.pilot.rightStick.getX();
-    if (Constants.demo) {
+    if (Constants.demo || !Constants.driveEnabled) {
       power = 0;
       turn = 0;
     }

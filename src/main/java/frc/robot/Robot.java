@@ -24,7 +24,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  private Compressor compressor = new Compressor(0);
+  //private Compressor compressor = new Compressor(0);
+  private Compressor compressor;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -35,13 +36,19 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
    
+    if(Constants.pcmEnabled){
+      compressor =  new Compressor(0);
+      if(Constants.demo){
+        compressor.stop();
+      }else{
+        compressor.start();
+      }
+    }
+
     if (Constants.demo) {
-      compressor.stop();
       Constants.Hood_Constants.maxForwardPower = 0.4;
       Constants.Hood_Constants.maxReversePower = -0.4;
       Constants.Hood_Constants.hoodMinPosition = 4500;
-    } else {
-      compressor.start();
     } 
     m_robotContainer = new RobotContainer();    //instantiate after constants are overridden
   }

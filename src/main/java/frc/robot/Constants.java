@@ -23,7 +23,9 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 public final class Constants {
 
     public static final boolean debug = false;
-    public static final boolean demo = true;
+    public static final boolean demo = false;
+    public static final boolean pcmEnabled = false;
+    public static final boolean driveEnabled = true;
 
     public static class Drivebase_Constants {
 
@@ -80,7 +82,7 @@ public final class Constants {
     {
         public static final int leftMotor_ID = 7; // remove after climber is reworked
         public static final int rightMotor_ID = 6; // this too
-        public static final int collectorTalon_ID = 30;  // should be 15, use for bad hopper Talon
+        public static final int collectorTalon_ID = 15;  // should be 15, use for bad hopper Talon
         public static final double collector_speed = 0.85;
     }
 
@@ -153,7 +155,7 @@ public final class Constants {
 
     public static class Hopper_Constants
     {
-        public static final int hopperMasterTalon_ID = 15;  // should be 13
+        public static final int hopperMasterTalon_ID = 19;  // should be 13
         public static final int hopperSlaveTalon_ID = 14;  // should be 14
         public static final double hopperIntakePower = 0.6;
         public static final double hopperEjectPower = -0.6;

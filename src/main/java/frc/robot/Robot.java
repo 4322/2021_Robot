@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     if (Constants.demo) {
       Constants.Hood_Constants.maxForwardPower = 0.4;
       Constants.Hood_Constants.maxReversePower = -0.4;
-      Constants.Hood_Constants.hoodMinPosition = 4500;
+      Constants.Hood_Constants.hoodMinPosition = 3500;
     } 
     m_robotContainer = new RobotContainer();    //instantiate after constants are overridden
   }

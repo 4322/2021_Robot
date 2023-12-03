@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 public final class Constants {
 
     public static final boolean debug = false;
-    public static final boolean demo = false;
+    public static final boolean demo = true;
     public static final boolean pcmEnabled = false;
     public static final boolean driveEnabled = true;
 
@@ -119,7 +119,7 @@ public final class Constants {
     public static class Hood_Constants
     {
         public static final int hoodTalon_ID = 12;
-        public static final int hoodMaxPosition = 9300;
+        public static final int hoodMaxPosition = 9000;
         public static int hoodMinPosition = 0;     //allows to be changed in demo mode
         public static final int hoodDecellerationDistance = 500;
         public static final int hoodTolerance = 20;

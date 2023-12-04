@@ -102,8 +102,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // COLLECTOR CONTROLS
-    pilot.rt.whileHeld(collectorCollect);
-    pilot.rb.whileHeld(collectorEject);
+    if (!Constants.demo) {
+      pilot.rt.whileHeld(collectorCollect);
+      pilot.rb.whileHeld(collectorEject);
+    }
 
     // HOPPER CONTROLS
     pilot.lb.whileHeld(hopperEject);

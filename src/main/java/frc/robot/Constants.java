@@ -96,9 +96,9 @@ public final class Constants {
         public static final int shooterVel2 = 3000;     // 10 foot line
         public static final int shooterVel3 = 3500;     // trench
         public static final int minEjectVel = 1000;
-        public static final int demoVel1 = 2150;
-        public static final int demoVel2 = 1900;
-        public static final int demoVel3 = 1750;
+        public static final int demoVel1 = 2200;
+        public static final int demoVel2 = 2100;
+        public static final int demoVel3 = 2000;
         public static final int tolerance = 100;
         public static final double rumbleIntensity = 1.0;
 

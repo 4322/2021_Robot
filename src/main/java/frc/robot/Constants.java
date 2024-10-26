@@ -25,12 +25,12 @@ public final class Constants {
     public static final boolean debug = false;
     public static final boolean demo = true;
     public static final boolean pcmEnabled = false;
-    public static final boolean driveEnabled = true;
+    public static final boolean driveEnabled = false;  // breakers are pulled, so don't report errors
 
     public static class Drivebase_Constants {
 
         public static final int rightMasterSpark_ID = 1;
-        public static final int rightSlave1Spark_ID = 3;
+        public static final int rightSlave1Spark_ID = 5;  // this SPARK MAX isn't physically on the robot
       
         public static final int leftMasterSpark_ID = 9;
         public static final int leftSlave1Spark_ID = 11;
@@ -90,7 +90,7 @@ public final class Constants {
     {
         public static final int flywheelOneSpark_ID = 4;
         public static final int flywheelTwoSpark_ID = 8;
-        public static final int kickerSpark_ID = 5;
+        public static final int kickerSpark_ID = 3;  // re-purposed drive SPARK MAX since we're short one
 
         public static final int shooterVel1 = 2250;     // wall
         public static final int shooterVel2 = 3000;     // 10 foot line
